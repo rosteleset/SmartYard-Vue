@@ -30,7 +30,6 @@ interface Extension {
 
 export const getAddresses = async () => {
     const res = await response({ path: 'address/getAddressList' })
-    console.log(res)
 
     return res.data.data as Building[]
 }
