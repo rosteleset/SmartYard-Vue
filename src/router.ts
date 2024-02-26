@@ -3,7 +3,7 @@ import Addresses from "./components/Addresses.vue";
 
 const routes = [
     {
-        path: '/saved',
+        path: '/addresses',
         name: 'Addresses',
         component: Addresses
     }
