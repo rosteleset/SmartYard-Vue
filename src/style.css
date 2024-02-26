@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+
+body {
+    margin: 0;
+    font-family: "Source Sans 3", sans-serif;
+    background: radial-gradient(189.5% 116.38% at 111.33% -32.22%, #4DA6F9 8.92%, #084EB6 77.97%);
+}
+
+#app {
+    display:flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content {
+    background-color: #F3F4FA;
+    border-radius: 24px 24px 0 0;
+    flex: 1;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    
+}

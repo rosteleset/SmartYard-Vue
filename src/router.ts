@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Addresses from "./components/Addresses.vue";
+import AddressesList from "./components/AddressesList.vue";
 
 const routes = [
     {
         path: '/addresses',
-        name: 'Addresses',
-        component: Addresses
+        name: 'AddressesList',
+        component: AddressesList
     }
 ];
 
