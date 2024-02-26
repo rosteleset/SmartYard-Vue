@@ -488,6 +488,11 @@ he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
+hls.js@^1.5.6:
+  version "1.5.6"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.5.6.tgz#af342933b70bf1938cacf7961a1308406fb7b774"
+  integrity sha512-rmlaIEfLuSwqRtYLeTk30ebYli5qNK2urdkEcqYoBezRpV+MFHhZnMX77lHWW+EMjNlwr2sx2apfqq54E3yXnA==
+
 immutable@^4.0.0:
   version "4.3.5"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.3.5.tgz#f8b436e66d59f99760dc577f5c99a4fd2a5cc5a0"

@@ -4,6 +4,7 @@ import { Building } from '../api/addresses';
 import { Camera, getCameras } from '../api/cameras';
 import cameraIcon from '../assets/camera.svg'
 import arrowIcon from '../assets/arrowRight.svg'
+import Video from './Video.vue';
 
 const props = defineProps<{ house: Building }>();
 const isOpen = ref(false)
@@ -31,7 +32,7 @@ const labelClickHandler = () => {
         </div>
     </div>
     <div class="cameras__list" v-if="isOpen">
-        
+        <Video v-for="camera in data" :key="camera.id" :camera="camera" />
     </div>
 </template>
 

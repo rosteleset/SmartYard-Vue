@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const SERVER = '/api/mobile'
-const TMP_TOKEN = '71548ef5-0c50-4e48-a14a-96972609758a'
+const TMP_TOKEN = 'dcd9324a-12ae-4874-ab27-2c5eee734329'
 
 export const response = ({ path, body = "" }: { path: string, body?: string }) => {
     const headers = {

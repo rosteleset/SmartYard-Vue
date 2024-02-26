@@ -6,6 +6,8 @@ export interface Camera {
     name: string;
     lat: number;
     lon: number;
+    serverType:string;
+    hlsMode:string;
     url: string;
     token: string;
 }

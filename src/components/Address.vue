@@ -21,6 +21,7 @@ const { doors } = props.data
 .address {
   background-color: #fff;
   border-radius: 12px;
+  margin-bottom: 24px;
 
   &__label {
     padding: 24px;
