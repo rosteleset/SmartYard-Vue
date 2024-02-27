@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { getAddresses } from '../api/addresses';
-import { Building } from '../api/addresses'
+import { onMounted } from 'vue';
 import Address from './Address.vue'
+import { useAdresses } from '../store/addresses';
 
-const data = ref<Building[]>([])
+const { addresses, load } = useAdresses()
 
 onMounted(() => {
-  getAddresses()
-    .then(r => data.value = r)
+  if (addresses.value.length === 0)
+    load()
 })
 
 </script>
@@ -16,7 +15,7 @@ onMounted(() => {
 <template>
   <div class="container">
     <h1>Адреса</h1>
-    <Address v-for="item in data" :key="item.houseId" :data="item" />
+    <Address v-for="item in addresses" :key="item.houseId" :data="item" />
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 import Hls from "hls.js";
-import { Camera } from "../api/cameras";
+import { Camera } from "../types/camera";
 
 const getLiveURL = (camera: Camera) => {
     const { serverType, url, hlsMode, token } = camera

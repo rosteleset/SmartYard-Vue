@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { StyleValue, onMounted, ref, watch } from 'vue';
-import { Camera } from '../api/cameras';
 import { getLiveURL, getPreviewURL, initializeVideoStream } from '../lib/video';
+import { Camera } from '../types/camera';
 
 // Определение пропсов
 const props = defineProps<{ camera: Camera }>();

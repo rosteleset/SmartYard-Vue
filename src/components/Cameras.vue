@@ -1,20 +1,14 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { Building } from '../api/addresses';
-import { Camera, getCameras } from '../api/cameras';
+import { ref } from 'vue';
+import { useCameras } from '../store/cameras'
 import cameraIcon from '../assets/camera.svg'
 import arrowIcon from '../assets/arrowRight.svg'
 import Video from './Video.vue';
+import { Building } from '../types/building';
 
 const props = defineProps<{ house: Building }>();
 const isOpen = ref(false)
-const data = ref<Camera[]>([])
-
-onMounted(() => {
-    getCameras(props.house.houseId)
-        .then(r => data.value = r)
-})
-
+const { cameras } = useCameras(props.house.houseId)
 const labelClickHandler = () => {
     isOpen.value = !isOpen.value
 }
@@ -32,7 +26,7 @@ const labelClickHandler = () => {
         </div>
     </div>
     <div class="cameras__list" v-if="isOpen">
-        <Video v-for="camera in data" :key="camera.id" :camera="camera" />
+        <Video v-for="camera in cameras" :key="camera.id" :camera="camera" />
     </div>
 </template>
 
@@ -51,6 +45,7 @@ const labelClickHandler = () => {
         margin-left: auto;
         transform: rotateZ(90deg);
         transition: .3s;
+
         &.open {
             transform: rotateZ(-90deg);
         }
