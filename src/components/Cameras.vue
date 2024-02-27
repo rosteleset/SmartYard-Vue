@@ -27,7 +27,7 @@ const labelClickHandler = () => {
             <img :src="cameraIcon" alt="camera icon">
         </div>
         <div class="cameras__text">Видеокамеры</div>
-        <div class="cameras__arrow" aria-hidden="true">
+        <div class="cameras__arrow" :class="{ open: isOpen }" aria-hidden="true">
             <img :src="arrowIcon" alt="arrow icon">
         </div>
     </div>
@@ -49,10 +49,18 @@ const labelClickHandler = () => {
 
     &__arrow {
         margin-left: auto;
+        transform: rotateZ(90deg);
+        transition: .3s;
+        &.open {
+            transform: rotateZ(-90deg);
+        }
     }
 
     &__list {
         padding: 24px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
     }
 }
 </style>

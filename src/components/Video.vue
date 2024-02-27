@@ -1,50 +1,101 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { StyleValue, onMounted, ref, watch } from 'vue';
 import { Camera } from '../api/cameras';
-import Hls from 'hls.js';
+import { getLiveURL, getPreviewURL, initializeVideoStream } from '../lib/video';
 
+// Определение пропсов
 const props = defineProps<{ camera: Camera }>();
+
+// Реактивные переменные
+const isFullScreen = ref(false);
+const isPlaying = ref(false);
+const videoContainer = ref<HTMLVideoElement | null>(null);
 const videoElement = ref<HTMLVideoElement | null>(null);
-const streamUrl = ref("")
+const previewElement = ref<HTMLVideoElement | null>(null);
+const elementRect = ref<DOMRect | null>(null);
+const styles = ref<StyleValue>();
+const preview = ref<string>();
 
-
-const getLiveURL = () => {
-    const { serverType, url, hlsMode, token } = props.camera
-    switch (serverType) {
-        case 'nimble':
-            return `${url}/playlist.m3u8?wmsAuthSign=${token}`;
-        case 'flussonic':
-            return hlsMode === 'fmp4' ?
-                `${url}/index.fmp4.m3u8?token=${token}` :
-                `${url}/index.m3u8?token=${token}`;
-        default:
-            return 'empty';
-    }
-}
-
+// Получение URL для предпросмотра при монтировании компонента
 onMounted(() => {
-    streamUrl.value = getLiveURL()
+    preview.value = getPreviewURL(props.camera);
+});
 
-    if (Hls.isSupported() && videoElement.value) {
-        const hls = new Hls();
-        hls.loadSource(streamUrl.value);
-        hls.attachMedia(videoElement.value);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            videoElement.value?.play();
-        });
-    } else if (videoElement.value?.canPlayType('application/vnd.apple.mpegurl')) {
-        videoElement.value.src = streamUrl.value;
-        videoElement.value.addEventListener('loadedmetadata', () => {
-            videoElement.value?.play();
+// Слежение за изменениями в элементе видео
+watch(videoElement, (newValue) => {
+    if (newValue) {
+        const streamUrl = getLiveURL(props.camera);
+        initializeVideoStream(streamUrl, newValue).then(() => {
+            isPlaying.value = true;
         });
     }
-})
+});
 
+// Обработчик открытия полноэкранного режима
+const openHandler = () => {
+    if (videoContainer.value) {
+        const rect = videoContainer.value.getBoundingClientRect();
+        elementRect.value = rect;
+        styles.value = {
+            top: `${rect?.top}px`,
+            left: `${rect?.left}px`,
+            width: `${rect?.width}px`,
+            height: `${rect?.height}px`
+        };
+        setTimeout(() => {
+            styles.value = {
+                top: `5vh`,
+                left: `5vw`,
+                width: `90vw`,
+                height: `90vh`
+            };
+        }, 1);
+    }
+    isFullScreen.value = true;
+};
+
+// Обработчик закрытия полноэкранного режима
+const closeHandler = () => {
+    isFullScreen.value = false;
+};
 </script>
 
 <template>
-    <video controls autoplay ref="videoElement"></video>
+    <div ref="videoContainer" class="video">
+        <video autoplay ref="previewElement" class="video__preview" :src="preview" v-on:click="openHandler"></video>
+        <div v-if="isFullScreen" class="pop-up" v-on:click="closeHandler">
+            <video v-if="isPlaying === false" :style="styles" :src="preview"></video>
+            <video ref="videoElement" :style="styles"></video>
+        </div>
+    </div>
 </template>
 
 <style scoped lang="scss">
+.video {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.5s;
+
+    .pop-up {
+        position: fixed;
+        transition: 1s;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 100;
+        background-color: transparentize($color: #000000, $amount: .7);
+
+        video {
+            transition: 1s;
+            position: absolute;
+        }
+    }
+
+    &__preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
 </style>
