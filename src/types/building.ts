@@ -15,3 +15,4 @@ interface Extension {
     extId: string;
     highlight?: 't' | 'f';
 }
+

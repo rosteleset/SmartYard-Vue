@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useCameras } from '../store/cameras'
-import cameraIcon from '../assets/camera.svg'
-import arrowIcon from '../assets/arrowRight.svg'
-import Video from './Video.vue';
 import { Building } from '../types/building';
+import eventIcon from '../assets/events.svg'
+import arrowIcon from '../assets/arrowRight.svg'
+import { useEvents } from '../store/events';
+import Event from './Event.vue';
 
-const props = defineProps<{ house: Building }>();
+const { house,flatId } = defineProps<{ house: Building, flatId: number }>();
 const isOpen = ref(false)
 
-const { cameras } = useCameras(props.house.houseId)
+const { events } = useEvents(flatId)
 
 const labelClickHandler = () => {
     isOpen.value = !isOpen.value
@@ -18,25 +18,28 @@ const labelClickHandler = () => {
 </script>
 
 <template>
-    <div class="cameras__label" v-on:click="labelClickHandler">
-        <div class="cameras__icon">
-            <img :src="cameraIcon" alt="camera icon">
+    <div class="events__label" v-on:click="labelClickHandler">
+        <div class="events__icon">
+            <img :src="eventIcon" alt="event icon">
         </div>
-        <div class="cameras__text">Видеокамеры</div>
-        <div class="cameras__arrow" :class="{ open: isOpen }" aria-hidden="true">
+        <div class="events__text">События</div>
+        <div class="events__arrow" :class="{ open: isOpen }" aria-hidden="true">
             <img :src="arrowIcon" alt="arrow icon">
         </div>
     </div>
-    <div class="cameras__list" v-if="isOpen">
-        <Video v-for="camera in cameras" :key="camera.id" :camera="camera" />
+    <div class="events__list" v-if="isOpen">
+        <div class="day" v-for="day of events">
+            <Event v-for="event of day.events" :event="event" />
+        </div>
     </div>
 </template>
 
 <style scoped lang="scss">
-.cameras {
+.events {
     &__icon {
         width: 30px;
     }
+
     &__label {
         display: flex;
         align-items: center;
@@ -59,7 +62,7 @@ const labelClickHandler = () => {
     &__list {
         padding: 24px;
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(1, 1fr);
         gap: 12px;
     }
 }
