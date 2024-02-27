@@ -21,6 +21,21 @@ const getPreviewURL = (camera: Camera) => {
     return `${url}/preview.mp4?token=${token}`;
 }
 
+const getIframe = (camera: Camera, from?: string, to?: string) => {
+    const { serverType, url, token } = camera
+
+    switch (serverType) {
+        case 'flussonic':
+            let timeMark: string | undefined
+            if (from && to)
+                timeMark = `&from=${from}&to=${to}`
+            return `${url}/embed.html?dvr=true&token=${token}`;
+        default:
+            return 'empty';
+    }
+
+}
+
 const initializeVideoStream = (streamUrl: string, videoElement: HTMLVideoElement): Promise<string> => {
     return new Promise((resolve, reject) => {
         if (Hls.isSupported()) {
@@ -47,4 +62,4 @@ const initializeVideoStream = (streamUrl: string, videoElement: HTMLVideoElement
     });
 }
 
-export { getLiveURL, getPreviewURL, initializeVideoStream }
+export { getLiveURL, getPreviewURL, initializeVideoStream, getIframe }
