@@ -4,11 +4,7 @@ export interface EventDay {
     events: number
 }
 
-interface EventDetailFlags {
-    canLike?: void;
-    canDislike?: void;
-    liked?: void;
-}
+type EventDetailFlag = "canLike" | "canDislike" | "liked"
 
 interface EventFaceCoordinates {
     left: number;
@@ -25,7 +21,7 @@ interface EventDetail {
     code?: string;
     phoneFrom?: string;
     phoneTo?: string;
-    flags?: EventDetailFlags;
+    flags?: EventDetailFlag[];
     face?: EventFaceCoordinates;
 }
 

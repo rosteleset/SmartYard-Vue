@@ -13,8 +13,6 @@ const userStore = useUserStore()
 const flatId = ref<number>()
 
 watch(userStore, () => {
-  console.log(userStore.settings);
-  
   flatId.value = getSettingsByBuilding(props.building)?.flatId
 })
 

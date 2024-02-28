@@ -16,12 +16,16 @@ export const useEvents = (flatId: number) => {
     onMounted(() => {
         get<EventDay[]>('address/plogDays', { flatId })
             .then(async response => {
+                
                 const result: EventStoreItem[] = response.map(date => ({ date, events: [] }));
 
                 // Запускаем все запросы параллельно
                 await Promise.all(result.map(async item => {
                     try {
+                        console.log(`${flatId} - ${item.date.day}`);
                         const _events = await get<Event[]>('address/plog', { flatId, day: item.date.day });
+                        console.log(_events.map(i=>i.detailX.flags));
+                        
                         item.events = _events;
                     } catch (error) {
                         console.error('Ошибка при получении событий', error);

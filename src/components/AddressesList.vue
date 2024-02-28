@@ -14,4 +14,3 @@ const adressesStore = useAdressesStore()
 </template>
 
 <style scoped></style>
-../stores/addresses
