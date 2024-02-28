@@ -1,3 +1,6 @@
+// Это не глобальный стор. имеет свой набор камер для каждого экземпляра
+// !!! Возможно стоит переместить 
+
 import { onMounted, ref } from "vue";
 import { get } from "../api";
 import { Camera } from "../types/camera";

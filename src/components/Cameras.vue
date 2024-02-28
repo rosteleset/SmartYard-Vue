@@ -34,4 +34,4 @@ const handleToggle = (open: boolean) => {
     }
 }
 </style>
-  
+  ../stores/cameras

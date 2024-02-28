@@ -1,4 +1,7 @@
-import { Events, onMounted, ref, watch } from "vue";
+// Это не глобальный стор. имеет свой набор событий для каждого экземпляра
+// !!! Возможно стоит переместить 
+
+import { onMounted, ref } from "vue";
 import { get } from "../api";
 import { Event, EventDay } from "../types/events";
 
@@ -7,9 +10,9 @@ interface EventStoreItem {
     events: Event[]
 }
 
-const events = ref<EventStoreItem[]>([])
-
 export const useEvents = (flatId: number) => {
+    const events = ref<EventStoreItem[]>([])
+
     onMounted(() => {
         get<EventDay[]>('address/plogDays', { flatId })
             .then(async response => {

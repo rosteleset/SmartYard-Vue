@@ -38,7 +38,7 @@ export interface Event {
     objectType: 0; // тип объекта, 0 - домофон
     objectMechanizma: 0 | 1 | 2; // идентификатор нагрузки (двери)
     mechanizmaDescription: string; // описание нагрузки (двери)
-    event: 1 | 2 | 3 | 4 | 5 | 6 | 7; // тип события
+    event: string // 1 | 2 | 3 | 4 | 5 | 6 | 7; // тип события
     preview: string; // URL картинки
     previewType: 0 | 1 | 2; // тип картинки
     detail: string; // непонятная фигня
