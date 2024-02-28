@@ -14,7 +14,7 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <h1>Адреса</h1>
+    <h1>{{ $t('addresses.label') }}</h1>
     <Address v-for="item in addresses" :key="item.houseId" :data="item" />
   </div>
 </template>

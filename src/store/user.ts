@@ -8,8 +8,8 @@ export const useUser = () => {
 
     onMounted(() => {
         get<Settings[]>('address/getSettingsList')
-            .then((r) => {
-                settings.value = r
+            .then((response) => {
+                settings.value = response
             })
     })
 

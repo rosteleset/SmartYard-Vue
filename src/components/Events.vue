@@ -1,64 +1,31 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Building } from '../types/building';
-import eventIcon from '../assets/events.svg'
-import arrowIcon from '../assets/arrowRight.svg'
 import { useEvents } from '../store/events';
+import Label from './Label.vue';
 import Event from './Event.vue';
+import { Building } from '../types/building';
+import eventIcon from '../assets/events.svg';
 
-const { house,flatId } = defineProps<{ house: Building, flatId: number }>();
-const isOpen = ref(false)
+const { flatId } = defineProps<{ house: Building, flatId: number }>();
+const isOpen = ref(false);
+const { events } = useEvents(flatId);
 
-const { events } = useEvents(flatId)
-
-const labelClickHandler = () => {
-    isOpen.value = !isOpen.value
-}
-
+const handleToggle = (open:boolean) => {
+    isOpen.value = open;
+};
 </script>
 
 <template>
-    <div class="events__label" v-on:click="labelClickHandler">
-        <div class="events__icon">
-            <img :src="eventIcon" alt="event icon">
-        </div>
-        <div class="events__text">События</div>
-        <div class="events__arrow" :class="{ open: isOpen }" aria-hidden="true">
-            <img :src="arrowIcon" alt="arrow icon">
-        </div>
-    </div>
+    <Label :icon="eventIcon" alt="event icon" :text="$t('addresses.events')" @toggle="handleToggle" />
     <div class="events__list" v-if="isOpen">
-        <div class="day" v-for="day of events">
-            <Event v-for="event of day.events" :event="event" />
+        <div class="day" v-for="day in events" :key="day.date.timezone">
+            <Event v-for="event in day.events" :key="event.uuid" :event="event" />
         </div>
     </div>
 </template>
-
+  
 <style scoped lang="scss">
 .events {
-    &__icon {
-        width: 30px;
-    }
-
-    &__label {
-        display: flex;
-        align-items: center;
-        gap: 24px;
-        border-top: solid 1px #F0F0F1;
-        padding: 24px;
-        cursor: pointer;
-    }
-
-    &__arrow {
-        margin-left: auto;
-        transform: rotateZ(90deg);
-        transition: .3s;
-
-        &.open {
-            transform: rotateZ(-90deg);
-        }
-    }
-
     &__list {
         padding: 24px;
         display: grid;
@@ -67,3 +34,4 @@ const labelClickHandler = () => {
     }
 }
 </style>
+  

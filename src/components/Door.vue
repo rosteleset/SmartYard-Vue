@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { Domophone } from '../api/addresses'
+
 import entranceIcon from '../assets/entrance.svg'
 import gateIcon from '../assets/gate.svg'
 import barrierIcon from '../assets/barrier.svg'
+import { Domophone } from '../types/domophone';
 const props = defineProps<{ data: Domophone }>()
 
 const iconMap: Record<Domophone['icon'], string> = {
@@ -19,7 +20,7 @@ const iconMap: Record<Domophone['icon'], string> = {
             <img :src="iconMap[props.data.icon]" :alt="props.data.icon">
         </div>
         <div class="door__label">{{ props.data.name }}</div>
-        <button>Открыть</button>
+        <button>{{ $t('addresses.open') }}</button>
     </div>
 </template>
 
