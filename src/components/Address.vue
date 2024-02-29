@@ -10,7 +10,7 @@ import getSettingsByBuilding from '../lib/getSettingsByBuilding'
 const props = defineProps<{ building: Building }>();
 const { doors } = props.building
 const userStore = useUserStore()
-const flatId = ref<number>()
+const flatId = ref<string>()
 
 watch(userStore, () => {
   flatId.value = getSettingsByBuilding(props.building)?.flatId

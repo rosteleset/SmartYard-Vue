@@ -5,12 +5,12 @@ import { onMounted, ref } from "vue";
 import { get } from "../api";
 import { Event, EventDay } from "../types/events";
 
-interface EventStoreItem {
+export interface EventStoreItem {
     date: EventDay,
     events: Event[]
 }
 
-export const useEvents = (flatId: number) => {
+export const useEvents = (flatId: string) => {
     const events = ref<EventStoreItem[]>([])
 
     onMounted(() => {
@@ -22,9 +22,7 @@ export const useEvents = (flatId: number) => {
                 // Запускаем все запросы параллельно
                 await Promise.all(result.map(async item => {
                     try {
-                        console.log(`${flatId} - ${item.date.day}`);
                         const _events = await get<Event[]>('address/plog', { flatId, day: item.date.day });
-                        console.log(_events.map(i=>i.detailX.flags));
                         
                         item.events = _events;
                     } catch (error) {

@@ -2,16 +2,16 @@
 import { Event } from '../types/events';
 import { useLocaleStore } from '../store/locale'
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 import informationIcon from '../assets/information.svg'
 import Modal from './Modal.vue';
 import Button from './Button.vue';
 import { ref } from 'vue';
+import useEventNames from '../lib/useEventNames';
 
 // Определение пропсов
 const props = defineProps<{ event: Event }>()
 const localeStore = useLocaleStore()
-const { t } = useI18n()
+const {eventNames} = useEventNames()
 
 // Вычисляемые свойства
 const label = computed(() => getEventName(props.event.event))
@@ -31,17 +31,8 @@ const closeModal = () => {
 
 // Функция для получения названия события
 const getEventName = (event: string) => {
-    const eventNames: { [key: string]: string } = {
-        '1': t('events.call_unanswered'),
-        '2': t('events.сall_answered'),
-        '3': t('events.open_by_key'),
-        '4': t('events.open_from_app'),
-        '5': t('events.open_by_face'),
-        '6': t('events.open_by_code'),
-        '7': t('events.open_gates_by_call'),
-        default: t('events.unknown')
-    };
-    return eventNames[event] || eventNames.default;
+    
+    return eventNames.value[event] || eventNames.value.default;
 };
 </script>
 
@@ -84,4 +75,4 @@ const getEventName = (event: string) => {
     }
 }
 </style>
-  
+  ../lib/useEventNames

@@ -14,7 +14,7 @@ export interface Settings {
     contractOwner: 't' | 'f';
     hasGates: 't' | 'f';
     houseId: number;
-    flatId: number;
+    flatId: string;
     flatNumber: number;
     hasPlog: 't' | 'f';
     address: string;
