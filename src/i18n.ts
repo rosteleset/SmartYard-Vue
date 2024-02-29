@@ -11,6 +11,7 @@ const messages = {
 // Создаем экземпляр i18n без установки начальной локали
 const i18n = createI18n({
     legacy: false,
+    fallbackLocale:'ru',
     locale: 'ru',
     messages,
 });

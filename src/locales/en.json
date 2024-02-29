@@ -1,8 +1,21 @@
 {
   "addresses": {
-    "label": "",
-    "open": "",
-    "cameras": "",
-    "events": ""
+    "label": "Адреса",
+    "open": "Открыть",
+    "cameras": "Видеокамеры",
+    "events": "События"
+  },
+  "events": {
+    "call_unanswered": "Пропущенный звонок в домофон",
+    "сall_answered": "Звонок в домофон",
+    "open_by_key": "Открывание ключом",
+    "open_from_app": "Открытие из приложения",
+    "open_by_face": "Открывание по лицу",
+    "open_by_code": "Открывание по коду",
+    "open_gates_by_call": "Открытие ворот звонком",
+    "unknown": "Неизвестное событие"
+  },
+  "select": {
+    "all": "Все"
   }
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import plusIcon from '../assets/plus.svg'
+import closeIcon from '../assets/close.svg'
 const props = defineProps<{
     title: string,
     isOpen: boolean
@@ -19,7 +19,7 @@ const close = () => {
                 <div class="modal__header">
                     <h3>{{ props.title }}</h3>
                     <button class="modal__close" @click="close">
-                        <img :src="plusIcon" alt="close">
+                        <img :src="closeIcon" alt="close">
                     </button>
                 </div>
                 <div class="modal__body">
@@ -80,7 +80,6 @@ const close = () => {
         justify-content: center;
         img {
             display: block;
-            transform: rotateZ(45deg);
         }
     }
 }

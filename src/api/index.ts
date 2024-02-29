@@ -11,7 +11,8 @@ const axiosInstance = axios.create({
     },
 });
 
-export const response = ({ path, body = "" }: { path: string, body?: string }) => {
+export const request = (path: string, params?: object) => {
+    const body = JSON.stringify(params)
     return axiosInstance.post(
         path,
         body,
