@@ -7,6 +7,7 @@ import Modal from './Modal.vue';
 import Button from './Button.vue';
 import { ref } from 'vue';
 import useEventNames from '../lib/useEventNames';
+import ImageWithFace from './ImageWithFace.vue';
 
 // Определение пропсов
 const props = defineProps<{ event: Event }>()
@@ -20,6 +21,8 @@ const dateTime = computed(() => localeStore.localizedDayjs(props.event.date).for
 const isModalOpen = ref(false);
 const canLike = computed(() => props.event.detailX.flags?.includes('canLike'))
 const canDislike = computed(() => props.event.detailX.flags?.includes('canDislike'))
+const liked = computed(() => props.event.detailX.flags?.includes('liked'))
+const color = computed(() => liked ? '#1FBC62' : "#FF3B30")
 
 // Функции для работы с модальным окном
 const openModal = () => {
@@ -45,7 +48,7 @@ const getEventName = (event: string) => {
         </button>
         <Modal :title="props.event.mechanizmaDescription" :is-open="isModalOpen" @on-close="closeModal">
             <p>{{ dateTime }}</p>
-            <img v-if="props.event.preview" :src="props.event.preview" :alt="label">
+            <ImageWithFace v-if="props.event.preview" :image-url="props.event.preview" :face="props.event.detailX.face" :color="color" />
             <div class="event__buttons">
                 <Button variant="sucsses" v-if="canLike">свой</Button>
                 <Button variant="error" v-if="canDislike">чужой</Button>

@@ -6,7 +6,7 @@ export interface EventDay {
 
 type EventDetailFlag = "canLike" | "canDislike" | "liked"
 
-interface EventFaceCoordinates {
+export interface EventFaceCoordinates {
     left: number;
     top: number;
     width: number;

@@ -65,10 +65,8 @@ const close = () => {
 
     &__body {
         padding: 10px 0;
-        :deep(img) {
-            display: block;
-            max-width: 600px;
-        }
+        min-width: 40vw;
+        max-width: 100vw;
     }
 
     &__close {
