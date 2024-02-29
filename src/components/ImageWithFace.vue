@@ -19,19 +19,12 @@ const updateCanvasSize = () => {
         return
 
     const containerWidth = container.clientWidth;
-    const containerHeight = container.clientHeight;
 
     const imgAspectRatio = img.naturalWidth / img.naturalHeight;
-    const containerAspectRatio = containerWidth / containerHeight;
 
     let newWidth, newHeight;
-    // if (imgAspectRatio > containerAspectRatio) {
-        newWidth = containerWidth;
-        newHeight = newWidth / imgAspectRatio;
-    // } else {
-    //     newHeight = containerHeight;
-    //     newWidth = newHeight * imgAspectRatio;
-    // }
+    newWidth = containerWidth;
+    newHeight = newWidth / imgAspectRatio;
 
     canvas.width = newWidth;
     canvas.height = newHeight;

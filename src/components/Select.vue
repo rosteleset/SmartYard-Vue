@@ -30,7 +30,7 @@ const toggleDropdown = () => {
     dropdownOpen.value = !dropdownOpen.value;
 };
 
-const selectOption = (option: T) => {
+const selectOption = (option: T | null) => {
     proxy.value = option;
     // dropdownOpen.value = false;
 };
@@ -44,10 +44,14 @@ const handleOutsideClick = (event: MouseEvent) => {
 
 <template>
     <div>
-        <div @click="toggleDropdown" class="select-box">
-            <span>{{ proxy ? proxy.name : 'Все' }}</span>
+        <div @click="toggleDropdown" class="select-box" :class="{ open: dropdownOpen }">
+            <span>{{ proxy ? proxy.name : $t('select.all') }}</span>
         </div>
         <div v-if="dropdownOpen" @click="handleOutsideClick" class="dropdown">
+            <div @click="selectOption(null)">
+                <input type="radio" :id="'dropdown-option'" :value="null">
+                <label :for="'dropdown-option'">{{ $t('select.all') }}</label>
+            </div>
             <div v-for="(option, index) in props.options" :key="index" @click="selectOption(option)">
                 <input type="radio" :id="'dropdown-option-' + index" :value="option" v-model="proxy">
                 <label :for="'dropdown-option-' + index">{{ option.name }}</label>
@@ -58,13 +62,23 @@ const handleOutsideClick = (event: MouseEvent) => {
 
 <style scoped>
 .select-box {
-    border: 1px solid #ccc;
+    border: 1px solid #F0F0F1;
+    border-radius: 12px;
     padding: 10px;
     cursor: pointer;
+    width: max-content;
+
+    &.open {
+        border-color: transparent;
+    }
 }
 
 .dropdown {
-    border: 1px solid #ccc;
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #F0F0F1;
+    border-radius: 12px;
     padding: 10px;
+    width: max-content;
 }
 </style>
