@@ -1,7 +1,7 @@
 import { Domophone } from "./domophone";
 
 export interface Building {
-    houseId: number;
+    houseId: string;
     address: string;
     doors?: Domophone[];
     hasPlog?: 't' | 'f';

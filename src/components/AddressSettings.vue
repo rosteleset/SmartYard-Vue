@@ -9,6 +9,8 @@ import Button from './Button.vue';
 import reloadIcon from '../assets/reload.svg';
 import { ref } from 'vue';
 import { watch } from 'vue';
+import Modal from './Modal.vue';
+import Events from './Events.vue';
 
 // определение свойств
 const { flatId } = defineProps<{
@@ -23,6 +25,12 @@ const doorCode = ref(settings.value?.doorCode)
 
 // вычисление значения isAutoOpen
 const isAutoOpen = computed(() => dayjs().isBefore(dayjs(settings.value?.autoOpen)))
+
+const isFacesOpen = ref(false)
+
+const togleIsFacesOpen = () => {
+    isFacesOpen.value = !isFacesOpen.value
+}
 
 // функции для проверки настроек
 const isFRSSetting = (key: string) => {
@@ -48,7 +56,7 @@ const regenerateCode = () => {
 
 // функция для установки автоматического открытия
 const setAutoOpen = () => {
-    if (!isAutoOpen)
+    if (!isAutoOpen.value)
         save({ autoOpen: dayjs().add(1, 'hour').format('YYYY-MM-DD HH:mm:ss') })
 }
 
@@ -80,6 +88,23 @@ watch(settings, (newSettings) => {
             <div>{{ $t('settings.whiteRabbit') }}</div>
             <Switch :initial-value="settings.whiteRabbit !== '0'" @update:model-value="update('whiteRabbit', $event)" />
         </template>
+
+        <template v-if="settings?.hiddenPlog !== undefined">
+            <div>{{ $t('settings.hiddenPlog') }}</div>
+            <Switch :initial-value="settings.hiddenPlog === 't'" @update:model-value="update('hiddenPlog', $event)" />
+        </template>
+
+        <template v-if="settings?.disablePlog !== undefined">
+            <div>{{ $t('settings.disablePlog') }}</div>
+            <Switch :initial-value="settings.disablePlog === 't'" @update:model-value="update('disablePlog', $event)" />
+        </template>
+
+        <template v-if="settings?.paperBill !== undefined">
+            <div>{{ $t('settings.paperBill') }}</div>
+            <Switch :initial-value="settings.paperBill === 't'" @update:model-value="update('paperBill', $event)" />
+        </template>
+
+
         <h4>{{ $t('settings.access') }}</h4>
         <template v-if="settings?.allowDoorCode === 't'">
             <div>
@@ -95,7 +120,12 @@ watch(settings, (newSettings) => {
                 {{ isAutoOpen ? 'открыто' : 'открыть' }}
             </Button>
         </template>
+
+        <Button variant="primary" @click="togleIsFacesOpen">Упрвление лицами</Button>
     </div>
+    <Modal :title="'Зарегистрированные лица'" :is-open="isFacesOpen" @on-close="togleIsFacesOpen">
+        <Events/>
+    </Modal>
 </template>
 
 <style scoped lang="scss">

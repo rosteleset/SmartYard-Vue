@@ -78,4 +78,3 @@ const getEventName = (event: string) => {
     }
 }
 </style>
-  ../lib/useEventNames

@@ -5,7 +5,7 @@ import { onMounted, ref } from "vue";
 import { get } from "../api";
 import { Camera } from "../types/camera";
 
-export const useCameras = (houseId: number) => {
+export const useCameras = (houseId: string) => {
     const cameras = ref<Camera[]>([])
     const current = ref<Camera>()
 

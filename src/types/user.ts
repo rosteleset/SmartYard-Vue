@@ -11,13 +11,13 @@ export interface Client {
     clientId: number;
     clientName: string;
     contractName: string;
-    flatOwner: 't' | 'f';
-    contractOwner: 't' | 'f';
-    hasGates: 't' | 'f';
-    houseId: number;
+    flatOwner: SettingsBoolean;
+    contractOwner: SettingsBoolean;
+    hasGates: SettingsBoolean;
+    houseId: string;
     flatId: string;
     flatNumber: number;
-    hasPlog: 't' | 'f';
+    hasPlog: SettingsBoolean;
     address: string;
     services: ('internet' | 'iptv' | 'ctv' | 'phone' | 'cctv' | 'domophone' | 'gsm')[]; // список подключенных услуг
     lcab: string;

@@ -9,7 +9,7 @@ const adressesStore = useAdressesStore()
 <template>
   <div class="container">
     <h1>{{ $t('addresses.label') }}</h1>
-    <Address v-for="item in adressesStore.addresses" :key="item.houseId" :building="item" />
+    <Address v-for="item in adressesStore.addresses" :key="item.houseId" :houseId="item.houseId" />
   </div>
 </template>
 

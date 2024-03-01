@@ -3,13 +3,16 @@ import { ref } from 'vue';
 import { useCameras } from '../store/cameras';
 import Label from './Label.vue';
 import Video from './Video.vue';
-import { Building } from '../types/building';
 import cameraIcon from '../assets/camera.svg';
+import { inject } from 'vue';
 
-const props = defineProps<{ house: Building }>();
+const houseId = inject<string>('houseId')
 const isOpen = ref(false);
 
-const { cameras } = useCameras(props.house.houseId);
+if (houseId === undefined)
+    throw new Error("not find houseId");
+
+const { cameras } = useCameras(houseId);
 
 const handleToggle = (open: boolean) => {
     isOpen.value = open;

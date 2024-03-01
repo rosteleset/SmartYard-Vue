@@ -1,7 +1,7 @@
 export interface EventDay {
     day: string;
-    timezone: number;
-    events: number
+    timezone?: number;
+    events: string
 }
 
 type EventDetailFlag = "canLike" | "canDislike" | "liked"

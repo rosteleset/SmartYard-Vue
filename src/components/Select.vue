@@ -32,7 +32,7 @@ const toggleDropdown = () => {
 
 const selectOption = (option: T | null) => {
     proxy.value = option;
-    // dropdownOpen.value = false;
+    dropdownOpen.value = false;
 };
 
 const handleOutsideClick = (event: MouseEvent) => {

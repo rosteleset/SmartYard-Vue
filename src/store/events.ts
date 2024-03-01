@@ -1,7 +1,7 @@
 // Это не глобальный стор. имеет свой набор событий для каждого экземпляра
 // !!! Возможно стоит переместить 
 
-import { onMounted, ref } from "vue";
+import { Ref, onMounted, ref, watch } from "vue";
 import { get } from "../api";
 import { Event, EventDay } from "../types/events";
 
@@ -10,37 +10,38 @@ export interface EventStoreItem {
     events: Event[]
 }
 
-export const useEvents = (flatId: string) => {
-    const events = ref<EventStoreItem[]>([])
+export const useEvents = (flatIds: Ref<string[]>) => {
+    const days = ref<EventDay[]>([])
+    const events = ref<Event[]>([])
+    const eventsMap = ref<{ [key: string]: Event[] }>({})
 
-    onMounted(() => {
-        get<EventDay[]>('address/plogDays', { flatId })
-            .then(async response => {
-                
-                const result: EventStoreItem[] = response.map(date => ({ date, events: [] }));
+    const load = async () => {
 
-                // Запускаем все запросы параллельно
-                await Promise.all(result.map(async item => {
-                    try {
-                        const _events = await get<Event[]>('address/plog', { flatId, day: item.date.day });
-                        
-                        item.events = _events;
-                    } catch (error) {
-                        console.error('Ошибка при получении событий', error);
-                        // Обработка ошибок для каждого запроса
-                    }
-                }));
+        await Promise.all(flatIds.value.map(flatId =>
+            get<EventDay[]>('address/plogDays', { flatId })
+                .then(days => days.forEach(day => eventsMap.value[day.day] = []))
 
-                // Обновляем значение один раз после завершения всех запросов
-                events.value = result;
-            })
-            .catch(error => {
-                console.error('Ошибка при получении дней событий', error);
-                // Общая обработка ошибок
-            });
-    });
+        ))
+
+
+
+        await Promise.all(flatIds.value.map(flatId =>
+            Promise.all(Object.keys(eventsMap.value).map(day =>
+                get<Event[]>('address/plog', { flatId, day })
+                    .then(_events => _events && eventsMap.value[day]?.push(..._events))
+            ))
+        ));
+
+        console.log(eventsMap.value);
+
+
+    }
+
+    onMounted(load)
+    watch(flatIds, load)
 
     return {
-        events,
+        eventsMap,
+        load
     }
 }

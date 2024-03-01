@@ -37,6 +37,10 @@ const close = () => {
     background-color: white;
     padding: 20px;
     border-radius: 5px;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
 
     &__overlay {
         position: fixed;
@@ -65,7 +69,8 @@ const close = () => {
 
     &__body {
         padding: 10px 0;
-        max-width: 100vw;
+        height: 100%;
+        overflow: auto;
     }
 
     &__close {
@@ -77,6 +82,7 @@ const close = () => {
         display: flex;
         align-items: center;
         justify-content: center;
+
         img {
             display: block;
         }

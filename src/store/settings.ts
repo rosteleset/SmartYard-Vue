@@ -16,7 +16,7 @@ export const useSettings = (flatId: string) => {
     }
 
     const save = (updated: Settings) => {
-
+        
         get<Settings>(url, { flatId, settings: updated })
             .then(response => {
                 settings.value = response

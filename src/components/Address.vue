@@ -10,20 +10,22 @@ import settingsIcon from '../assets/settings.svg'
 import Modal from './Modal.vue';
 import AddressSettings from './AddressSettings.vue'
 import { computed } from 'vue';
+import { useAdressesStore } from '../store/addresses';
+import { provide } from 'vue';
+import { useUserStore } from '../store/user';
 
-const props = defineProps<{ building: Building }>();
-const { doors } = props.building
-const settings = getClientByBuilding(props.building)
-const flatId = computed<string | undefined>(() => settings.value?.flatId)
+const { houseId } = defineProps<{ houseId: string }>();
+provide('houseId', houseId)
+const { getAdressByHouseId, getClientsByHouseId } = useAdressesStore()
+const userStore = useUserStore()
+const building = getAdressByHouseId(houseId)
+const clients = getClientsByHouseId(houseId)
 const isOpen = ref(true)
 const isSettingsOpen = ref(false)
 
-const handlerOpen = () => {
-  isOpen.value = true
-}
 
-const toggleOpen = () => {
-  isOpen.value = !isOpen.value
+const handlerOpen = (status: boolean) => {
+  isOpen.value = status
 }
 
 const toggleSettingsOpen = () => {
@@ -35,27 +37,29 @@ const toggleSettingsOpen = () => {
 
 <template>
   <div class="address">
-    <div class="address__header" :class="{ open: isOpen }" @click="handlerOpen">
-      <div class="address__label">{{ props.building.address }}</div>
+    <div class="address__header" :class="{ open: isOpen }" @click="handlerOpen(true)">
+      <div class="address__label">{{ building.address }}</div>
       <div class="address__buttons" @click.stop>
         <button @click="toggleSettingsOpen">
           <img :src="settingsIcon" alt="settings">
         </button>
-        <button class="address__more" :class="{ open: isOpen }" @click="toggleOpen">
+        <button class="address__more" :class="{ open: isOpen }" @click="handlerOpen(!isOpen)">
           <img :src="arrowIcon" alt="">
         </button>
       </div>
     </div>
     <div v-if="isOpen">
       <div class="address__doors">
-        <Door v-for="item in doors" :key="item.doorId" :data="item" />
+        <Door v-for="item in building.doors" :key="item.doorId" :data="item" />
       </div>
-      <Cameras :house="props.building" />
-      <Events v-if="flatId" :house="props.building" :flat-id="flatId" />
+      <Cameras />
+      <Events v-if="userStore.isLoaded" />
     </div>
   </div>
   <Modal :title="$t('settings.title')" :is-open="isSettingsOpen" @on-close="toggleSettingsOpen">
-    <AddressSettings v-if="flatId" :flat-id="flatId" />
+    <div style="display: flex;">
+      <AddressSettings v-if="userStore.isLoaded" v-for="client of clients" :flat-id="client.flatId" />
+    </div>
   </Modal>
 </template>
 
@@ -121,4 +125,4 @@ const toggleSettingsOpen = () => {
     }
   }
 }
-</style>../lib/getClientByBuilding
+</style>
