@@ -36,7 +36,7 @@ const toggleSettingsOpen = () => {
 <template>
   <div class="address">
     <div class="address__header" :class="{ open: isOpen }" @click="handlerOpen">
-      <div class="address__label" >{{ props.building.address }}</div>
+      <div class="address__label">{{ props.building.address }}</div>
       <div class="address__buttons" @click.stop>
         <button @click="toggleSettingsOpen">
           <img :src="settingsIcon" alt="settings">
@@ -54,8 +54,8 @@ const toggleSettingsOpen = () => {
       <Events v-if="flatId" :house="props.building" :flat-id="flatId" />
     </div>
   </div>
-  <Modal :title="'settings'" :is-open="isSettingsOpen" @on-close="toggleSettingsOpen">
-    <AddressSettings v-if="flatId" :flat-id="flatId"/>
+  <Modal :title="$t('settings.title')" :is-open="isSettingsOpen" @on-close="toggleSettingsOpen">
+    <AddressSettings v-if="flatId" :flat-id="flatId" />
   </Modal>
 </template>
 
@@ -98,6 +98,7 @@ const toggleSettingsOpen = () => {
       display: block;
       transition: .3s;
     }
+
     &.open {
       img {
         transform: rotateX(180deg);

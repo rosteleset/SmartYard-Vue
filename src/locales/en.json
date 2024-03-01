@@ -1,21 +1,29 @@
 {
   "addresses": {
-    "label": "Адреса",
-    "open": "Открыть",
-    "cameras": "Видеокамеры",
-    "events": "События"
+    "cameras": "",
+    "events": "",
+    "label": "",
+    "open": ""
   },
   "events": {
-    "call_unanswered": "Пропущенный звонок в домофон",
-    "сall_answered": "Звонок в домофон",
-    "open_by_key": "Открывание ключом",
-    "open_from_app": "Открытие из приложения",
-    "open_by_face": "Открывание по лицу",
-    "open_by_code": "Открывание по коду",
-    "open_gates_by_call": "Открытие ворот звонком",
-    "unknown": "Неизвестное событие"
+    "call_unanswered": "",
+    "open_by_code": "",
+    "open_by_face": "",
+    "open_by_key": "",
+    "open_from_app": "",
+    "open_gates_by_call": "",
+    "unknown": "",
+    "сall_answered": ""
   },
   "select": {
-    "all": "Все"
+    "all": ""
+  },
+  "settings": {
+    "CMS": "",
+    "FRSDisabled": "",
+    "VoIP": "",
+    "disablePlog": "",
+    "hiddenPlog": "",
+    "paperBill": ""
   }
 }

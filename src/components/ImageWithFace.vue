@@ -75,13 +75,13 @@ onBeforeUnmount(() => {
 </script>
   
 <template>
-    <div ref="containerRef">
+    <div ref="containerRef" class="container">
         <canvas ref="canvasRef"></canvas>
     </div>
 </template>
 
 <style scoped lang="scss">
 .container {
-    width: 100%;
+    min-width: 40vw;
 }
 </style>

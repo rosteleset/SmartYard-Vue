@@ -1,7 +1,11 @@
 import axios from 'axios'
 
 const SERVER_URL = '/api/mobile'
-const TMP_TOKEN = 'dcd9324a-12ae-4874-ab27-2c5eee734329'
+const TMP_TOKEN = '71548ef5-0c50-4e48-a14a-96972609758a'
+
+// const SERVER_URL = '/api/mobile'
+// const TMP_TOKEN = 'f3d1ac97-e805-4baa-bb7c-14899711e2f8'
+
 
 const axiosInstance = axios.create({
     baseURL: SERVER_URL,
@@ -11,15 +15,16 @@ const axiosInstance = axios.create({
     },
 });
 
-export const request = (path: string, params?: object) => {
+export const request = async (path: string, params?: object) => {
     const body = JSON.stringify(params)
-    return axiosInstance.post(
+    const response = await axiosInstance.post(
         path,
         body,
     )
+    return response.data
 }
 
-export async function get<T>(path: string, params?: object): Promise<T> {
+export const get = async <T>(path: string, params?: object): Promise<T> => {
     try {
         const body = JSON.stringify(params)
         const response = await axiosInstance.post(path, body);

@@ -1,17 +1,13 @@
 
 <script setup lang="ts">
-import { ref, defineProps, defineEmits } from 'vue';
 
 const { label, initialValue } = defineProps<{
-    label: string;
+    label?: string;
     initialValue: boolean;
 }>()
 
-const isChecked = ref(initialValue);
-
-const handleChange = () => {
-    isChecked.value = !isChecked.value;
-    emit('update:modelValue', isChecked.value);
+const handleChange = (value:boolean) => {
+    emit('update:modelValue', value);
 };
 
 // const emit = defineEmits(['update:modelValue']);
@@ -22,9 +18,9 @@ const emit = defineEmits<{
 
 <template>
     <div class="toggle-switch__container">
-        <div class="toggle-switch__label">{{ label }}</div>
-        <label class="toggle-switch" :class="{ 'toggle-switch--checked': isChecked }" @change="handleChange">
-            <input type="checkbox" v-model="isChecked" @change="handleChange" />
+        <div v-if="label" class="toggle-switch__label">{{ label }}</div>
+        <label class="toggle-switch" :class="{ 'toggle-switch--checked': initialValue }">
+            <input type="checkbox" :checked="initialValue" @change="handleChange(!initialValue)" />
             <span class="toggle-switch__slider"></span>
         </label>
     </div>
@@ -45,6 +41,7 @@ const emit = defineEmits<{
     &__container {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 12px;
     }
 

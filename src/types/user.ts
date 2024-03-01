@@ -27,6 +27,7 @@ export interface Client {
 export interface Settings {
     allowDoorCode?: SettingsBoolean; // разрешить код открытия двери
     enableDoorCode	?: SettingsBoolean; // разрешить код открытия двери
+    doorCode?: string;
     CMS?: SettingsBoolean; // разрешить КМС
     VoIP?: SettingsBoolean; // разрешить VoIP
     autoOpen?: string; // автооткрытие двери

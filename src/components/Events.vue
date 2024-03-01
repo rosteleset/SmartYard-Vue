@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Импорт необходимых зависимостей
-import { ref, computed, defineProps } from 'vue';
+import { ref, computed } from 'vue';
 import { useEvents } from '../store/events';
 import { useLocaleStore } from '../store/locale';
 import useEventNames from '../lib/useEventNames';

@@ -65,7 +65,6 @@ const close = () => {
 
     &__body {
         padding: 10px 0;
-        min-width: 40vw;
         max-width: 100vw;
     }
 

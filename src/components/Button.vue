@@ -7,12 +7,19 @@ const props = defineProps<{
     disabled?: boolean
 }>()
 
+const emit = defineEmits<{
+    (e: 'click'): void
+}>()
+
 </script>
 
 <template>
-    <button class="button" :class="{'button-bordered': bordered, [`button-${props.variant}`]: variant}" :disabled="props.disabled">
-    <slot></slot>
-</button>
+    <button class="button" :class="{ 'button-bordered': bordered, [`button-${props.variant}`]: variant }"
+        :disabled="props.disabled"
+        @click="emit('click')"
+        >
+        <slot></slot>
+    </button>
 </template>
 
 <style scoped lang="scss">
@@ -21,9 +28,11 @@ const props = defineProps<{
     border: solid 1px #298BFF;
     border-radius: 12px;
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 300;
+    letter-spacing: 1px;
     text-align: center;
-    padding: 12px 24px;
+    padding: 6px 24px;
+    cursor: pointer;
 
     &-primary {
         background-color: #298BFF;
@@ -50,6 +59,7 @@ const props = defineProps<{
     &:disabled {
         background-color: #F3F4FA;
         border-color: #F3F4FA;
+        cursor: not-allowed;
     }
 
     &:not(.button-bordered) {

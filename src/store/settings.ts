@@ -5,26 +5,20 @@ import { onMounted, ref } from "vue";
 import { get } from "../api";
 import { Settings } from "../types/user";
 
+const url = 'address/intercom';
+
 export const useSettings = (flatId: string) => {
     const settings = ref<Settings>()
 
     const load = () => {
-        get<Settings>('address/intercom', { flatId })
+        get<Settings>(url, { flatId })
             .then(response => settings.value = response)
     }
 
     const save = (updated: Settings) => {
-        const _updated = { ...updated }
-        if (_updated.allowDoorCode) {
-            _updated.enableDoorCode = _updated.allowDoorCode
-            delete _updated.allowDoorCode
-        }
-        console.log(updated);
 
-        get<Settings>('address/intercom', { flatId, settings: _updated })
+        get<Settings>(url, { flatId, settings: updated })
             .then(response => {
-                console.log(response);
-
                 settings.value = response
             })
     }

@@ -17,5 +17,19 @@
   },
   "select": {
     "all": "Все"
+  },
+  "settings": {
+    "CMS": "Интерком включен",
+    "VoIP": "Принимать вызовы",
+    "paperBill": "Печатать бумажные платежки",
+    "disablePlog": "disablePlog",
+    "hiddenPlog": "Показывать журнал только владельцу",
+    "FRSDisabled": "Распознование лиц",
+    "whiteRabbit": "Белый кролик",
+    "title": "Настройки",
+    "intercom": "Домофон",
+    "access": "Доступ",
+    "reset-code": "Код открытия",
+    "guest-access": "гостевой доступ на час"
   }
 }
