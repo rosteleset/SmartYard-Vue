@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import Door from './Door.vue';
 import Cameras from './Cameras.vue';
-import { Building } from '../types/building';
 import Events from './Events.vue';
 import { ref } from 'vue';
-import getClientByBuilding from '../lib/getClientByBuilding'
 import arrowIcon from '../assets/ArrowBottom.svg'
 import settingsIcon from '../assets/settings.svg'
 import Modal from './Modal.vue';
 import AddressSettings from './AddressSettings.vue'
-import { computed } from 'vue';
 import { useAdressesStore } from '../store/addresses';
 import { provide } from 'vue';
 import { useUserStore } from '../store/user';

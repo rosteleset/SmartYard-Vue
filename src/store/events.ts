@@ -1,7 +1,7 @@
 // Это не глобальный стор. имеет свой набор событий для каждого экземпляра
 // !!! Возможно стоит переместить 
 
-import { Ref, onMounted, ref, watch } from "vue";
+import { Ref, computed, onMounted, ref, watch } from "vue";
 import { get } from "../api";
 import { Event, EventDay } from "../types/events";
 
@@ -10,10 +10,14 @@ export interface EventStoreItem {
     events: Event[]
 }
 
-export const useEvents = (flatIds: Ref<string[]>) => {
-    const days = ref<EventDay[]>([])
-    const events = ref<Event[]>([])
+export const useEvents = (flatIds: Ref<string[]>, eventType?: Ref<string | undefined>) => {
+
     const eventsMap = ref<{ [key: string]: Event[] }>({})
+
+    const events = computed(() => Object.keys(eventsMap.value).map(key => ({
+        date: key,
+        events: eventsMap.value[key].filter(event => !eventType?.value || event.event === eventType?.value)
+    })))
 
     const load = async () => {
 
@@ -23,8 +27,6 @@ export const useEvents = (flatIds: Ref<string[]>) => {
 
         ))
 
-
-
         await Promise.all(flatIds.value.map(flatId =>
             Promise.all(Object.keys(eventsMap.value).map(day =>
                 get<Event[]>('address/plog', { flatId, day })
@@ -32,15 +34,17 @@ export const useEvents = (flatIds: Ref<string[]>) => {
             ))
         ));
 
-        console.log(eventsMap.value);
-
-
     }
 
     onMounted(load)
     watch(flatIds, load)
+    watch(events, ()=>{
+        console.log(events);
+        
+    })
 
     return {
+        events,
         eventsMap,
         load
     }
