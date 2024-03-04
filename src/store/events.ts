@@ -38,10 +38,6 @@ export const useEvents = (flatIds: Ref<string[]>, eventType?: Ref<string | undef
 
     onMounted(load)
     watch(flatIds, load)
-    watch(events, ()=>{
-        console.log(events);
-        
-    })
 
     return {
         events,

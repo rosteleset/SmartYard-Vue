@@ -71,31 +71,33 @@ const handleToggle = (open: boolean) => {
     :text="$t('addresses.events')"
     @toggle="handleToggle"
   />
-  <div class="events__list" v-if="isOpen">
-    <div class="filters">
-      <Select
-        :options="options"
-        :model-value="selectedOption"
-        @update:model-value="updateOption"
-      />
-      <Select
-        :options="
-          clients.map((client) => ({
-            id: client.flatId,
-            name: client.flatNumber.toString(),
-          }))
-        "
-        :model-value="selectedClient"
-        @update:model-value="updateClient"
-      />
-    </div>
-    <div class="events__day" v-for="day in events" :key="day.date">
-      <div class="events__title" v-if="day.events.length > 0">
-        {{ localeStore.localizedDayjs(day.date).format("dddd, D MMMM") }}
+  <Transition>
+    <div class="events__list" v-if="isOpen">
+      <div class="filters">
+        <Select
+          :options="options"
+          :model-value="selectedOption"
+          @update:model-value="updateOption"
+        />
+        <Select
+          :options="
+            clients.map((client) => ({
+              id: client.flatId,
+              name: client.flatNumber.toString(),
+            }))
+          "
+          :model-value="selectedClient"
+          @update:model-value="updateClient"
+        />
       </div>
-      <Event v-for="event in day.events" :key="event.uuid" :event="event" />
+      <div class="events__day" v-for="day in events" :key="day.date">
+        <div class="events__title" v-if="day.events.length > 0">
+          {{ localeStore.localizedDayjs(day.date).format("dddd, D MMMM") }}
+        </div>
+        <Event v-for="event in day.events" :key="event.uuid" :event="event" />
+      </div>
     </div>
-  </div>
+  </Transition>
 </template>
 <style scoped lang="scss">
 .events {
@@ -115,5 +117,15 @@ const handleToggle = (open: boolean) => {
 .filters {
   display: flex;
   gap: 24px;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

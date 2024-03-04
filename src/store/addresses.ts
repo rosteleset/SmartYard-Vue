@@ -23,6 +23,8 @@ export const useAdressesStore = defineStore('addresses', () => {
     }
 
     const getClientsByHouseId = (houseId: string) => {
+        console.log(userStore.clients);
+        
         return computed(()=>userStore.clients.filter(client => client.houseId === houseId))
     }
 

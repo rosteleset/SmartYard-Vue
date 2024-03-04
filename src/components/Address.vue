@@ -1,47 +1,53 @@
 <script setup lang="ts">
-import Door from './Door.vue';
-import Cameras from './Cameras.vue';
-import Events from './Events.vue';
-import { ref } from 'vue';
-import arrowIcon from '../assets/ArrowBottom.svg'
-import settingsIcon from '../assets/settings.svg'
-import Modal from './Modal.vue';
-import AddressSettings from './AddressSettings.vue'
-import { useAdressesStore } from '../store/addresses';
-import { provide } from 'vue';
-import { useUserStore } from '../store/user';
+import Door from "./Door.vue";
+import Cameras from "./Cameras.vue";
+import Events from "./Events.vue";
+import { ref } from "vue";
+import arrowIcon from "../assets/ArrowBottom.svg";
+import settingsIcon from "../assets/settings.svg";
+import Modal from "./Modal.vue";
+import AddressSettings from "./AddressSettings.vue";
+import { useAdressesStore } from "../store/addresses";
+import { provide } from "vue";
+import { useUserStore } from "../store/user";
+import Tabs from "./Tabs.vue";
 
 const { houseId } = defineProps<{ houseId: string }>();
-provide('houseId', houseId)
-const { getAdressByHouseId, getClientsByHouseId } = useAdressesStore()
-const userStore = useUserStore()
-const building = getAdressByHouseId(houseId)
-const clients = getClientsByHouseId(houseId)
-const isOpen = ref(true)
-const isSettingsOpen = ref(false)
-
+provide("houseId", houseId);
+const { getAdressByHouseId, getClientsByHouseId } = useAdressesStore();
+const userStore = useUserStore();
+const building = getAdressByHouseId(houseId);
+const clients = getClientsByHouseId(houseId);
+const isOpen = ref(true);
+const isSettingsOpen = ref(false);
 
 const handlerOpen = (status: boolean) => {
-  isOpen.value = status
-}
+  isOpen.value = status;
+};
 
 const toggleSettingsOpen = () => {
-  isSettingsOpen.value = !isSettingsOpen.value
-}
-
-
+  isSettingsOpen.value = !isSettingsOpen.value;
+};
 </script>
 
 <template>
   <div class="address">
-    <div class="address__header" :class="{ open: isOpen }" @click="handlerOpen(true)">
+    <div
+      class="address__header"
+      :class="{ open: isOpen }"
+      @click="handlerOpen(true)"
+    >
       <div class="address__label">{{ building.address }}</div>
       <div class="address__buttons" @click.stop>
         <button @click="toggleSettingsOpen">
-          <img :src="settingsIcon" alt="settings">
+          <img :src="settingsIcon" alt="settings" />
         </button>
-        <button class="address__more" :class="{ open: isOpen }" @click="handlerOpen(!isOpen)">
-          <img :src="arrowIcon" alt="">
+        <button
+          class="address__more"
+          :class="{ open: isOpen }"
+          @click="handlerOpen(!isOpen)"
+        >
+          <img :src="arrowIcon" alt="" />
         </button>
       </div>
     </div>
@@ -53,10 +59,26 @@ const toggleSettingsOpen = () => {
       <Events v-if="userStore.isLoaded" />
     </div>
   </div>
-  <Modal :title="$t('settings.title')" :is-open="isSettingsOpen" @on-close="toggleSettingsOpen">
-    <div style="display: flex;">
-      <AddressSettings v-if="userStore.isLoaded" v-for="client of clients" :flat-id="client.flatId" />
-    </div>
+  <Modal
+    :title="$t('settings.title')"
+    :is-open="isSettingsOpen"
+    @on-close="toggleSettingsOpen"
+  >
+    <Tabs
+      v-if="userStore.isLoaded"
+      :tabs="
+        clients.map((client) => ({
+          tabId: client.flatId,
+          tabTitle: `кв ${client.flatId}`,
+        }))
+      "
+    >
+      <template v-for="client of clients" v-slot:[client.flatId]>
+        <AddressSettings :flat-id="client.flatId" />
+      </template>
+    </Tabs>
+
+    <!-- <AddressSettings v-if="userStore.isLoaded" v-for="client of clients" :flat-id="client.flatId" /> -->
   </Modal>
 </template>
 
@@ -80,7 +102,6 @@ const toggleSettingsOpen = () => {
 
   &__label {
     font-size: 20px;
-
   }
 
   &__buttons {
@@ -97,7 +118,7 @@ const toggleSettingsOpen = () => {
   &__more {
     img {
       display: block;
-      transition: .3s;
+      transition: 0.3s;
     }
 
     &.open {
@@ -113,11 +134,11 @@ const toggleSettingsOpen = () => {
     gap: 12px;
     padding: 24px;
 
-    @media (max-width:1024px) {
+    @media (max-width: 1024px) {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    @media (max-width:480px) {
+    @media (max-width: 480px) {
       grid-template-columns: repeat(1, 1fr);
     }
   }
