@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useCameras } from '../store/cameras';
 import Label from './Label.vue';
 import Video from './Video.vue';
+import Map from './Map.vue';
 import cameraIcon from '../assets/camera.svg';
 import { inject } from 'vue';
 
@@ -25,6 +26,7 @@ const handleToggle = (open: boolean) => {
     <div class="cameras__list" v-if="isOpen">
         <Video v-for="camera in cameras" :key="camera.id" :camera="camera" />
     </div>
+    <Map v-if="cameras.length > 0" :cameras="cameras" />
 </template>
   
 <style scoped lang="scss">
