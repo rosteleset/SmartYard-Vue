@@ -4,7 +4,7 @@ import { getPreviewURL } from "../lib/video";
 import { Camera } from "../types/camera";
 import VideoModal from "./VideoModal.vue";
 
-const props = defineProps<{ camera: Camera }>();
+const props = defineProps<{ camera: Camera, index?:number }>();
 const previewContainer = ref<HTMLVideoElement | null>(null);
 const previewElement = ref<HTMLVideoElement | null>(null);
 const preview = ref<string>(getPreviewURL(props.camera));
@@ -32,7 +32,7 @@ const closeHandler = () => {
 </script>
 
 <template>
-  <div ref="previewContainer" class="video" :id="`camera-${props.camera.id}`">
+  <div v-if="camera.url" ref="previewContainer" class="video" :id="`camera-${props.camera.id}`">
     <video
       autoplay
       ref="previewElement"
@@ -40,6 +40,7 @@ const closeHandler = () => {
       :src="preview"
       v-on:click="openHandler"
     ></video>
+    <div v-if="index" class="number">{{ index }}</div>
     <VideoModal
       :camera="camera"
       :is-open="isOpen"
@@ -56,10 +57,26 @@ const closeHandler = () => {
   overflow: hidden;
   transition: all 0.5s;
 
+  position: relative;
+
   &__preview {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
+}
+
+.number {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #298BFF;
+  color: #FFFFFF;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
 }
 </style>

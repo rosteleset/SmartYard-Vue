@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import "leaflet/dist/leaflet.css";
-import {
-  LIcon,
-  LMap,
-  LMarker,
-  LTileLayer,
-} from "@vue-leaflet/vue-leaflet";
-import { StyleValue, ref  } from "vue";
+import { LIcon, LMap, LMarker, LTileLayer } from "@vue-leaflet/vue-leaflet";
+import { StyleValue, ref } from "vue";
 import { Camera } from "../types/camera";
 import cameraIcon from "../assets/camera.svg";
 import VideoModal from "./VideoModal.vue";
@@ -21,7 +16,11 @@ const map = ref();
 const openCamera = ref<number | null>(null);
 const styles = ref<StyleValue>();
 const TILE_SERVER = import.meta.env.VITE_TILE_SERVER;
-const CRS = import.meta.env.VITE_CRS
+const CRS = import.meta.env.VITE_CRS;
+
+const getCameraIndex = (camera: Camera): number => {
+  return props.cameras.indexOf(camera) + 1;
+};
 
 const getCenter = (): PointExpression => {
   const length = props.cameras.length;
@@ -44,7 +43,7 @@ const onReady = (e: Map) => {
     bounds.push([Number(camera.lat), Number(camera.lon)]);
   });
 
-  const padding = new Point(50, 50); 
+  const padding = new Point(50, 50);
 
   const _zoom = e.getBoundsZoom(bounds, false, padding);
 
@@ -91,7 +90,7 @@ const handler = (event: any, camera: Camera) => {
           :iconSize="[45, 45]"
         >
           <img class="map-icon__icon" :src="cameraIcon" alt="" />
-          <div class="map-icon__label">{{ camera.id }}</div>
+          <div class="map-icon__label">{{ getCameraIndex(camera) }}</div>
         </LIcon>
       </LMarker>
     </LMap>

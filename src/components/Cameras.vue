@@ -13,7 +13,7 @@ const isOpen = ref(false);
 if (houseId === undefined)
     throw new Error("not find houseId");
 
-const { cameras } = useCameras(houseId);
+const { cameras } = useCameras({houseId});
 
 const handleToggle = (open: boolean) => {
     isOpen.value = open;
@@ -24,7 +24,7 @@ const handleToggle = (open: boolean) => {
 <template>
     <Label :icon="cameraIcon" alt="camera icon" :text="$t('addresses.cameras')" @toggle="handleToggle" />
     <div class="cameras__list" v-if="isOpen">
-        <Video v-for="camera in cameras" :key="camera.id" :camera="camera" />
+        <Video v-for="camera in cameras" :key="camera.id" :camera="camera" :index="cameras.indexOf(camera) + 1" />
     </div>
     <Map v-if="isOpen" :cameras="cameras" />
     
