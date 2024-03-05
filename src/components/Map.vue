@@ -23,6 +23,7 @@ const map = ref();
 const openCamera = ref<number | null>(null);
 const styles = ref<StyleValue>();
 const TILE_SERVER = import.meta.env.VITE_TILE_SERVER;
+const CRS = import.meta.env.VITE_CRS
 
 const getCenter = (): PointExpression => {
   const length = props.cameras.length;
@@ -74,6 +75,7 @@ const handler = (event: any, camera: Camera) => {
       :center="getCenter()"
       :use-global-leaflet="false"
       :options="{ attributionControl: false }"
+      :crs="CRS"
       style="z-index: 10"
       @ready="onReady"
     >
@@ -108,6 +110,7 @@ const handler = (event: any, camera: Camera) => {
 <style lang="scss">
 .map {
   height: 500px;
+  padding: 24px;
   z-index: 10;
   .map-icon {
     &__container {
