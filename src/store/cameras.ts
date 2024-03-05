@@ -18,6 +18,7 @@ export const useCameras = ({
   onMounted(() => {
     const url = overview ? "cctv/overview" : "cctv/all";
     get<Camera[]>(url, { houseId }).then((r) => (cameras.value = r));
+    
   });
 
   const select = (camera?: Camera) => {
