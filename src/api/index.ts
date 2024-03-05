@@ -1,10 +1,7 @@
 import axios from 'axios'
 
-const SERVER_URL = '/api/mobile'
-const TMP_TOKEN = '71548ef5-0c50-4e48-a14a-96972609758a'
-
-// const SERVER_URL = '/api/mobile'
-// const TMP_TOKEN = 'f3d1ac97-e805-4baa-bb7c-14899711e2f8'
+const SERVER_URL = import.meta.env.VITE_SERVER_URL
+const TMP_TOKEN = import.meta.env.VITE_TMP_TOKEN
 
 
 const axiosInstance = axios.create({

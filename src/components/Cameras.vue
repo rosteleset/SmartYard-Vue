@@ -26,7 +26,8 @@ const handleToggle = (open: boolean) => {
     <div class="cameras__list" v-if="isOpen">
         <Video v-for="camera in cameras" :key="camera.id" :camera="camera" />
     </div>
-    <Map v-if="cameras.length > 0" :cameras="cameras" />
+    <Map v-if="isOpen" :cameras="cameras" />
+    
 </template>
   
 <style scoped lang="scss">

@@ -1,93 +1,137 @@
 <script setup lang="ts">
-import {
-  LatLngExpression,
-  Layer,
-  Map,
-  divIcon,
-  layerGroup,
-  marker,
-  tileLayer,
-} from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { computed, onMounted, ref, watch } from "vue";
-import cameraIcon from "../assets/camera.svg";
-
+import {
+  LCircleMarker,
+  LIcon,
+  LMap,
+  LMarker,
+  LPopup,
+  LTileLayer,
+} from "@vue-leaflet/vue-leaflet";
+import { StyleValue, onMounted, ref, watch } from "vue";
 import { Camera } from "../types/camera";
+import cameraIcon from "../assets/camera.svg";
+import VideoModal from "./VideoModal.vue";
+import { LatLngBoundsExpression, Map, Point, PointExpression } from "leaflet";
 
-const { cameras } = defineProps<{ cameras: Camera[] }>();
+const props = defineProps<{
+  cameras: Camera[];
+}>();
 
-const mapElement = ref<HTMLDivElement | null>(null);
-const map = ref<Map>();
-const points = computed(() => cameras);
-const initMap = () => {
-  if (!mapElement.value) return null;
-  const _map = new Map(mapElement.value, { attributionControl: false }).setView(
-    [52.770935, 41.404545],
-    13
-  ); // Установка центра карты и масштаба
+const zoom = ref(10);
+const map = ref();
+const openCamera = ref<number | null>(null);
+const styles = ref<StyleValue>();
+const TILE_SERVER = import.meta.env.VITE_TILE_SERVER;
 
-  tileLayer("https://tile.lanta.me/osm/{z}/{x}/{y}.png", {}).addTo(_map);
+const getCenter = (): PointExpression => {
+  const length = props.cameras.length;
 
-  map.value = _map;
+  const sum = props.cameras.reduce(
+    (prev, camera) => [
+      Number(camera.lat) + prev[0],
+      Number(camera.lon) + prev[1],
+    ],
+    [0, 0]
+  );
+
+  return [sum[0] / length, sum[1] / length];
 };
 
-// Функция для создания маркера с иконкой и текстом внутри круга
-const createCustomMarker = (cords: LatLngExpression, text: string) => {
-  const icon = divIcon({
-    iconSize: [40, 40],
-    className: "map-icon__container",
-    html: `
-        <img src="${cameraIcon}" class="map-icon__icon" />
-        <div class="map-icon__label">${text}</div>
-        `,
+const onReady = (e: Map) => {
+  const bounds: LatLngBoundsExpression = [];
+
+  props.cameras.forEach((camera) => {
+    bounds.push([Number(camera.lat), Number(camera.lon)]);
   });
-  return marker(cords, { icon });
+
+  const padding = new Point(50, 50); 
+
+  const _zoom = e.getBoundsZoom(bounds, false, padding);
+
+  zoom.value = _zoom;
 };
 
-onMounted(() => {
-  initMap();
-});
-
-watch([cameras, map], () => {
-  console.log(cameras);
-  
-  if (map.value)
-    for (const point of cameras) {
-      createCustomMarker(
-        { lat: point.lat, lng: point.lon },
-        point.id.toString()
-      ).addTo(map.value);
-    }
-});
+const handler = (event: any, camera: Camera) => {
+  if (event.target) {
+    const rect = event.target._icon.getBoundingClientRect();
+    styles.value = {
+      top: `${rect?.top}px`,
+      left: `${rect?.left}px`,
+      width: `${rect?.width}px`,
+      height: `${rect?.height}px`,
+    };
+  }
+  openCamera.value = camera.id;
+};
 </script>
 
 <template>
-  <div id="map" ref="mapElement"></div>
+  <div class="map">
+    <LMap
+      ref="map"
+      v-model:zoom="zoom"
+      :center="getCenter()"
+      :use-global-leaflet="false"
+      :options="{ attributionControl: false }"
+      style="z-index: 10"
+      @ready="onReady"
+    >
+      <LTileLayer :url="TILE_SERVER" />
+      <LMarker
+        v-for="camera in cameras"
+        :key="camera.id"
+        :lat-lng="{ lat: camera.lat, lng: camera.lon }"
+        :name="'test'"
+        @click="handler($event, camera)"
+      >
+        <LIcon
+          :ref="`camera_${camera.id}`"
+          class-name="map-icon__container"
+          :icon-size="[45, 45]"
+        >
+          <img class="map-icon__icon" :src="cameraIcon" alt="" />
+          <div class="map-icon__label">{{ camera.id }}</div>
+        </LIcon>
+      </LMarker>
+    </LMap>
+    <VideoModal
+      v-for="camera in cameras"
+      :camera="camera"
+      :start-styles="styles"
+      :is-open="openCamera === camera.id"
+      @on-close="openCamera = null"
+    />
+  </div>
 </template>
 
 <style lang="scss">
-#map {
+.map {
   height: 500px;
-
+  z-index: 10;
   .map-icon {
     &__container {
       box-sizing: border-box;
       background-color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+      display: grid;
+      grid-template-areas: "icon ." ". label";
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
       border-radius: 50%;
-      padding: 10px;
+      padding: 5px;
     }
-
     &__icon {
-      width: 20px;
+      grid-area: icon;
+      display: block;
+      width: 20px !important;
       align-self: flex-start;
     }
     &__label {
+      grid-area: label;
       color: #298bff;
       align-self: flex-end;
+      line-height: 1;
+      font-size: 18px;
     }
   }
 }
