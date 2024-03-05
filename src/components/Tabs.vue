@@ -38,7 +38,7 @@ const activeTab = ref(0);
   cursor: pointer;
   border: solid 1px #f0f0f1;
   border-bottom: none;
-  border-radius: 5px 5px 0 0;
+  border-radius: 12px 12px 0 0;
   margin-right: 5px;
   transition: .5s;
 }
@@ -52,7 +52,7 @@ const activeTab = ref(0);
 .tab-content {
   position: relative;
   border: 1px solid #298bff;
-  border-radius: 0 5px 5px 5px;
+  border-radius: 0 12px 12px 12px;
   padding: 20px;
   margin-top: -1px;
 }

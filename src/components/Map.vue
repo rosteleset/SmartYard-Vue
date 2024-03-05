@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import "leaflet/dist/leaflet.css";
 import {
-  LCircleMarker,
   LIcon,
   LMap,
   LMarker,
-  LPopup,
   LTileLayer,
 } from "@vue-leaflet/vue-leaflet";
-import { StyleValue, onMounted, ref, watch } from "vue";
+import { StyleValue, ref  } from "vue";
 import { Camera } from "../types/camera";
 import cameraIcon from "../assets/camera.svg";
 import VideoModal from "./VideoModal.vue";
@@ -73,7 +71,7 @@ const handler = (event: any, camera: Camera) => {
       ref="map"
       v-model:zoom="zoom"
       :center="getCenter()"
-      :use-global-leaflet="false"
+      :useGlobalLeaflet="false"
       :options="{ attributionControl: false }"
       :crs="CRS"
       style="z-index: 10"
@@ -83,14 +81,14 @@ const handler = (event: any, camera: Camera) => {
       <LMarker
         v-for="camera in cameras"
         :key="camera.id"
-        :lat-lng="{ lat: camera.lat, lng: camera.lon }"
+        :latLng="{ lat: camera.lat, lng: camera.lon }"
         :name="'test'"
         @click="handler($event, camera)"
       >
         <LIcon
           :ref="`camera_${camera.id}`"
-          class-name="map-icon__container"
-          :icon-size="[45, 45]"
+          className="map-icon__container"
+          :iconSize="[45, 45]"
         >
           <img class="map-icon__icon" :src="cameraIcon" alt="" />
           <div class="map-icon__label">{{ camera.id }}</div>
@@ -100,8 +98,8 @@ const handler = (event: any, camera: Camera) => {
     <VideoModal
       v-for="camera in cameras"
       :camera="camera"
-      :start-styles="styles"
-      :is-open="openCamera === camera.id"
+      :startStyles="styles"
+      :isOpen="openCamera === camera.id"
       @on-close="openCamera = null"
     />
   </div>
