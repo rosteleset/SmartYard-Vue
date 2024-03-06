@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@vue-leaflet/vue-leaflet": "^0.10.1",
+    "@vuepic/vue-datepicker": "^8.2.0",
     "axios": "^1.6.7",
     "dayjs": "^1.11.10",
     "hls.js": "^1.5.6",

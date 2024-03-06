@@ -21,6 +21,7 @@ const openHandler = () => {
       left: `${rect?.left}px`,
       width: `${rect?.width}px`,
       height: `${rect?.height}px`,
+      opacity:0,
     };
     isOpen.value = true;
   }
