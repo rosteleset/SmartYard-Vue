@@ -1,25 +1,21 @@
 <script setup lang="ts">
 import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
-import {
-  getIframe,
-  getLiveURL,
-  getPreviewURL,
-  initializeVideoStream,
-} from "../lib/video";
+import { getIframe, getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
 import { Camera, FormatedRange } from "../types/camera";
-import { relative } from "path";
 import { useRanges } from "../store/ranges";
 import RangeSelect from "./RangeSelect.vue";
+import Hls from "hls.js";
 
+// Определение пропсов и эмиттера
 const props = defineProps<{
   camera: Camera;
   isOpen: boolean;
   startStyles?: StyleValue;
   response?: number;
 }>();
-
 const emit = defineEmits(["onClose"]);
 
+// Реактивные переменные
 const isPlaying = ref(false);
 const isOpenInfo = ref(false);
 const previewElement = ref<HTMLVideoElement | null>(null);
@@ -27,10 +23,11 @@ const videoElement = ref<HTMLVideoElement | null>(null);
 const styles = ref<StyleValue>();
 const preview = ref<string>(getPreviewURL(props.camera));
 const response = ref<number | undefined>(props.response);
-
+const hls = ref<Hls>();
 const { streams } = useRanges(props.camera.id);
 const range = ref<FormatedRange>();
 
+// Слежение за открытием/закрытием окна
 watch(
   () => props.isOpen,
   () => {
@@ -39,21 +36,14 @@ watch(
   }
 );
 
+// Функция изменения размеров видео
 const resize = () => {
   if (previewElement.value !== null) {
-    response.value =
-      previewElement.value.videoWidth / previewElement.value.videoHeight;
-
-    // Вычисляем соотношение сторон
+    response.value = previewElement.value.videoWidth / previewElement.value.videoHeight;
     const aspectRatio = response.value;
-
-    // Получаем размеры контейнера (например, размеры окна браузера)
     const containerWidth = window.innerWidth;
     const containerHeight = window.innerHeight;
-
-    // Вычисляем новые размеры видео
     let newVideoWidth, newVideoHeight;
-
     if (containerWidth / aspectRatio > containerHeight) {
       newVideoWidth = containerHeight * 0.9 * aspectRatio;
       newVideoHeight = containerHeight * 0.9;
@@ -61,56 +51,61 @@ const resize = () => {
       newVideoWidth = containerWidth * 0.9;
       newVideoHeight = (containerWidth * 0.9) / aspectRatio;
     }
-
     styles.value = {
       top: `${(containerHeight - newVideoHeight) / 2}px`,
       left: `${(containerWidth - newVideoWidth) / 2}px`,
-      width: `${newVideoWidth}px`, // Преобразуем в пиксели
-      height: `${newVideoHeight}px`, // Преобразуем в пиксели
+      width: `${newVideoWidth}px`,
+      height: `${newVideoHeight}px`,
     };
   }
 };
 
+// Функция загрузки видео и инициализации потока
 const onLoad = () => {
   resize();
   if (videoElement.value)
     initializeVideoStream(getLiveURL(props.camera), videoElement.value);
 };
 
+// Функция готовности видео
 const ready = () => {
   isPlaying.value = true;
 };
 
+// Обработчики событий
 onMounted(() => {
   window.addEventListener("resize", resize);
 });
-
 onUnmounted(() => {
   window.removeEventListener("resize", resize);
+  hls.value?.destroy();
 });
-
 watch(range, () => {
   isPlaying.value = false;
-  if (videoElement.value)
+  if (videoElement.value) {
+    hls.value?.destroy() 
     initializeVideoStream(
       getLiveURL(props.camera, range.value?.from, range.value?.duration),
       videoElement.value
     );
+  }
 });
 </script>
-
 <template>
   <div class="pop-up" v-if="isOpen" v-on:click="emit('onClose')">
     <div class="video-container" :style="styles" @click.stop>
-      <video ref="videoElement" v-on:canplay="ready" :controls="range != undefined"></video>
+      <video
+        ref="videoElement"
+        v-on:canplay="ready"
+        :controls="range != undefined"
+      ></video>
       <video
         ref="previewElement"
         class="previewElement"
-        :class="{active:isPlaying}"
+        :class="{ active: isPlaying }"
         :src="preview"
         v-on:canplay="onLoad"
       />
-
       <div class="info" :class="{ open: isOpenInfo }">
         <button class="togle-info" @click="isOpenInfo = !isOpenInfo"><</button>
         <div class="info__label">{{ camera.name }}</div>
@@ -123,7 +118,6 @@ watch(range, () => {
     </div>
   </div>
 </template>
-
 <style scoped lang="scss">
 .pop-up {
   position: fixed;
@@ -137,13 +131,11 @@ watch(range, () => {
   display: flex;
   align-items: center;
   justify-content: center;
-
   .video-container {
     transition: 1s;
     position: absolute;
     overflow: hidden;
     border-radius: 12px;
-
     video {
       display: block;
       width: 100%;
@@ -155,18 +147,17 @@ watch(range, () => {
       left: 0;
       opacity: 1;
       &.active {
+        z-index: -1;
         opacity: 0;
       }
     }
   }
 }
-
 .togle-info {
   position: absolute;
   right: 100%;
   top: 50%;
 }
-
 .info {
   position: absolute;
   top: 0;
@@ -180,10 +171,10 @@ watch(range, () => {
   &.open {
     transform: translateX(0);
   }
-
   &__label {
     font-size: 20px;
     margin-bottom: 12px;
   }
 }
 </style>
+  

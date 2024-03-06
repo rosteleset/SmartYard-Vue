@@ -3,7 +3,7 @@ import { Camera } from "../types/camera";
 
 const getLiveURL = (camera: Camera, from?: number, length?: number) => {
   const { serverType, url, hlsMode, token } = camera;
-  let time="";
+  let time = "";
   if (from && length) time = `-${from}-${length}`;
   switch (serverType) {
     case "nimble":
@@ -39,23 +39,19 @@ const getIframe = (camera: Camera, from?: string, to?: string) => {
 const initializeVideoStream = (
   streamUrl: string,
   videoElement: HTMLVideoElement
-): Promise<string> => {
+): Promise<Hls | undefined> => {
   return new Promise((resolve, reject) => {
     if (Hls.isSupported()) {
       const hls = new Hls();
       hls.loadSource(streamUrl);
       hls.attachMedia(videoElement);
-      videoElement.addEventListener("playing", () => {
-        resolve("Video playback started");
-      });
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         videoElement.play();
       });
+      resolve(hls);
     } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
       videoElement.src = streamUrl;
-      videoElement.addEventListener("playing", () => {
-        resolve("Video playback started");
-      });
+      resolve(undefined);
       videoElement.addEventListener("loadedmetadata", () => {
         videoElement.play();
       });
