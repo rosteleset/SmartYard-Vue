@@ -31,5 +31,11 @@
     "access": "Доступ",
     "reset-code": "Код открытия",
     "guest-access": "гостевой доступ на час"
+  },
+  "routes": {
+    "AddressesList": "Адреса",
+    "Settings": "Настройки",
+    "CityCameras": "Камеры",
+    "Chat": "Уведомления"
   }
 }
