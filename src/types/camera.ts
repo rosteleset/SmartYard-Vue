@@ -10,12 +10,17 @@ export interface Camera {
   token: string;
 }
 
-interface Range {
+export interface Range {
   from: number;
   duration: number;
 }
 
-export interface Ranges {
+export interface Stream {
   stream: string;
   ranges: Range[];
+}
+
+export interface FormatedRange extends Range {
+  date: Date;
+  streamUrl: string;
 }

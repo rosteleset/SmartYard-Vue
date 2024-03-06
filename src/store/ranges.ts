@@ -3,18 +3,17 @@
 
 import { onMounted, ref } from "vue";
 import { get } from "../api";
-import { Ranges } from "../types/camera";
+import { Stream } from "../types/camera";
 
 export const useRanges = (cameraId: number) => {
-  const ranges = ref<Ranges[]>([]);
+  const streams = ref<Stream[]>([]);
 
   onMounted(() => {
     const url = "cctv/ranges";
-    get<Ranges[]>(url, { cameraId }).then((response)=>ranges.value = response);
-    console.log(ranges.value);
+    get<Stream[]>(url, { cameraId }).then((response)=>streams.value = response);
   });
 
   return {
-    ranges,
+    streams,
   };
 };
