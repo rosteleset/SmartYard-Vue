@@ -8,7 +8,7 @@ const route = useRoute()
   <header>
     <div class="container">
       <div class="header__grid">
-        <div class="header__label">SmartYard-WEB : {{ route.name && $t(`routes.${route.name as string}`) }}</div>
+        <div class="header__label">SmartYard-WEB {{ route.name && ': ' + $t(`routes.${route.name as string}`) }}</div>
         <div class="nav">
           <Nav />
         </div>

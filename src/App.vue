@@ -15,9 +15,10 @@ const userStore = useUserStore();
   <Header />
   <div class="content" :class="{ 'menu-open': isMenuOpen }">
     <div class="container">
-      <router-view
-        v-if="userStore.isLoaded && adressesStore.isLoaded"
-      ></router-view>
+      <router-view v-if="userStore.isLoaded && adressesStore.isLoaded" />
+      <template v-else-if="userStore.error">
+        <div class="global-error">{{ userStore.error }}</div>
+      </template>
     </div>
   </div>
 </template>

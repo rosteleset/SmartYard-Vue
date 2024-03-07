@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { computed, defineProps, provide, ref } from "vue";
+import { computed, provide, ref } from "vue";
+import { useRoute } from "vue-router";
 import arrowIcon from "../assets/ArrowBottom.svg";
 import settingsIcon from "../assets/settings.svg";
 import { useAdressesStore } from "../store/addresses";
-import { useUserStore } from "../store/user";
 import AddressSettings from "./AddressSettings.vue";
 import Cameras from "./Cameras.vue";
 import Door from "./Door.vue";
 import Events from "./Events.vue";
 import Modal from "./Modal.vue";
 import Tabs from "./Tabs.vue";
-import { useRoute } from "vue-router";
 
 // Определение свойств компонента
 const props = defineProps<{ houseId: string }>();

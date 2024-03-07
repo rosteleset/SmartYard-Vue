@@ -16,7 +16,7 @@ const route = useRoute();
 const houseId: string | undefined =
   typeof route.params.houseId === "string"
     ? route.params.houseId
-    : inject<string>("houseId");
+    : inject<string>("houseId") || undefined;
 
 const { getAdressByHouseId } = useAdressesStore();
 
