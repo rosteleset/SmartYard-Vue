@@ -10,16 +10,22 @@ import Door from "./Door.vue";
 import Events from "./Events.vue";
 import Modal from "./Modal.vue";
 import Tabs from "./Tabs.vue";
+import { useRoute } from "vue-router";
 
 // Определение свойств компонента
-const { houseId } = defineProps<{ houseId: string }>();
+const props = defineProps<{ houseId: string }>();
+
+const route = useRoute();
+const houseId: string =
+  typeof route.params.houseId === "string"
+    ? route.params.houseId
+    : props.houseId;
 
 // Предоставление houseId через инъекцию
 provide("houseId", houseId);
 
 // Использование хранилища адресов и пользователей
 const { getAdressByHouseId, getClientsByHouseId } = useAdressesStore();
-const userStore = useUserStore();
 
 // Получение данных о здании и клиентах
 const building = getAdressByHouseId(houseId);
@@ -40,16 +46,15 @@ const toggleSettingsOpen = () => {
 
 // Вычисляемое свойство для добавления заголовков клиентов
 const clientsWithTitles = computed(() =>
-  clients.value.map(client => ({
+  clients.value.map((client) => ({
     tabId: client.flatId,
     tabTitle: `кв ${client.flatId}`,
   }))
 );
 </script>
 
-
 <template>
-  <div class="address" :class="{ 'address--open': isOpen }">
+  <div v-if="building" class="address" :class="{ 'address--open': isOpen }">
     <div class="address__header" @click="toggleOpen(true)">
       <div class="address__label">{{ building.address }}</div>
       <div class="address__buttons">
@@ -57,7 +62,11 @@ const clientsWithTitles = computed(() =>
           <img :src="settingsIcon" alt="Settings" />
         </button>
         <button class="address__more" @click="toggleOpen(!isOpen)">
-          <img :src="arrowIcon" alt="More" :class="{ 'address__more--open': isOpen }" />
+          <img
+            :src="arrowIcon"
+            alt="More"
+            :class="{ 'address__more--open': isOpen }"
+          />
         </button>
       </div>
     </div>
@@ -65,16 +74,27 @@ const clientsWithTitles = computed(() =>
       <div class="address__doors">
         <Door v-for="door in building.doors" :key="door.doorId" :data="door" />
       </div>
-      <Cameras />
-      <Events v-if="userStore.isLoaded" compact />
+      <Cameras compact />
+      <Events compact />
     </div>
-    <Modal :title="$t('settings.title')" :is-open="isSettingsOpen" @on-close="toggleSettingsOpen">
-      <Tabs v-if="userStore.isLoaded" :tabs="clientsWithTitles">
-        <template v-for="client in clientsWithTitles" v-slot:[client.tabId] :key="client.tabId">
+    <Modal
+      :title="$t('settings.title')"
+      :is-open="isSettingsOpen"
+      @on-close="toggleSettingsOpen"
+    >
+      <Tabs :tabs="clientsWithTitles">
+        <template
+          v-for="client in clientsWithTitles"
+          v-slot:[client.tabId]
+          :key="client.tabId"
+        >
           <AddressSettings :flat-id="client.tabId" />
         </template>
       </Tabs>
     </Modal>
+  </div>
+  <div v-else>
+    <div class="global-error">дом не найден</div>
   </div>
 </template>
 

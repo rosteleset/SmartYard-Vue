@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import { useSettings } from "../hooks/settings";
-import Switch from "./Switch.vue";
 import dayjs from "dayjs";
+import { computed, ref, watch } from "vue";
 import resetCode from "../api/resetCode";
-import { computed } from "vue";
-import Button from "./Button.vue";
 import reloadIcon from "../assets/reload.svg";
-import { ref } from "vue";
-import { watch } from "vue";
-import Modal from "./Modal.vue";
-import Events from "./Events.vue";
+import { useSettings } from "../hooks/settings";
+import Button from "./Button.vue";
 import Faces from "./Faces.vue";
+import Switch from "./Switch.vue";
 
 // определение свойств
 const { flatId } = defineProps<{
@@ -153,17 +149,17 @@ watch(settings, (newSettings) => {
         </Button>
       </template>
 
-      <Button v-if="settings?.FRSDisabled === 'f'" variant="primary" @click="togleIsFacesOpen"
-        >Упрвление лицами</Button
-      >
+      <div class="faces-block">
+        <Button
+          v-if="settings?.FRSDisabled === 'f' && !isFacesOpen"
+          variant="primary"
+          @click="togleIsFacesOpen"
+        >
+          Упрвление лицами
+        </Button>
+        <Faces v-if="isFacesOpen" :flatId="flatId" />
+      </div>
     </div>
-    <Modal
-      :title="'Зарегистрированные лица'"
-      :is-open="isFacesOpen"
-      @on-close="togleIsFacesOpen"
-    >
-      <Faces :flatId="flatId" />
-    </Modal>
   </div>
 </template>
 
@@ -198,4 +194,11 @@ watch(settings, (newSettings) => {
     }
   }
 }
-</style>../hooks/settings
+.faces-block {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+</style>

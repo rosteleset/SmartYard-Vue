@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, ref } from "vue";
+import { useRoute } from "vue-router";
 import eventIcon from "../assets/events.svg";
 import { useEvents } from "../hooks/events";
 import useEventNames from "../lib/useEventNames";
@@ -19,13 +20,16 @@ const {} = defineProps<{
   compact?: boolean;
 }>();
 
-// Получение houseId через инъекцию
-const houseId = inject<string>("houseId");
-if (houseId === undefined) throw new Error("not find houseId");
+// Получение houseId через роутер или инъекцию
+const route = useRoute();
+const houseId: string | undefined =
+  typeof route.params.houseId === "string"
+    ? route.params.houseId
+    : inject<string>("houseId");
 
 // Использование сторов и реактивных переменных
-const addressesStore = useAdressesStore();
-const clients = addressesStore.getClientsByHouseId(houseId);
+const { getClientsByHouseId } = useAdressesStore();
+const clients = getClientsByHouseId(houseId || ""); // inject может вернуть undefined !!на подумать
 const eventNames = ref(useEventNames().eventNames);
 const options = computed(() => {
   return Object.entries(eventNames.value)
@@ -58,40 +62,45 @@ const handleToggle = (open: boolean) => {
 </script>
 
 <template>
-  <Label
-    v-if="compact"
-    :icon="eventIcon"
-    alt="event icon"
-    :text="$t('addresses.events')"
-    @toggle="handleToggle"
-  />
-  <Transition>
-    <div class="events__list" v-if="isOpen || !compact">
-      <div class="filters">
-        <Select
-          :options="options"
-          :model-value="selectedOption"
-          @update:model-value="updateOption"
-        />
-        <Select
-          :options="
-            clients.map((client) => ({
-              id: client.flatId,
-              name: client.flatNumber.toString(),
-            }))
-          "
-          :model-value="selectedClient"
-          @update:model-value="updateClient"
-        />
-      </div>
-      <div class="events__day" v-for="day in events" :key="day.date">
-        <div class="events__title" v-if="day.events.length > 0">
-          {{ localeStore.localizedDayjs(day.date).format("dddd, D MMMM") }}
+  <template v-if="houseId && clients.length > 0">
+    <Label
+      v-if="compact"
+      :icon="eventIcon"
+      alt="event icon"
+      :text="$t('addresses.events')"
+      @toggle="handleToggle"
+    />
+    <Transition>
+      <div class="events__list" v-if="isOpen || !compact">
+        <div class="filters">
+          <Select
+            :options="options"
+            :model-value="selectedOption"
+            @update:model-value="updateOption"
+          />
+          <Select
+            :options="
+              clients.map((client) => ({
+                id: client.flatId,
+                name: client.flatNumber.toString(),
+              }))
+            "
+            :model-value="selectedClient"
+            @update:model-value="updateClient"
+          />
         </div>
-        <Event v-for="event in day.events" :key="event.uuid" :event="event" />
+        <div class="events__day" v-for="day in events" :key="day.date">
+          <div class="events__title" v-if="day.events.length > 0">
+            {{ localeStore.localizedDayjs(day.date).format("dddd, D MMMM") }}
+          </div>
+          <Event v-for="event in day.events" :key="event.uuid" :event="event" />
+        </div>
       </div>
-    </div>
-  </Transition>
+    </Transition>
+  </template>
+  <template v-else>
+    <div class="global-error">дом не найден</div>
+  </template>
 </template>
 
 <style scoped lang="scss">

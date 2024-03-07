@@ -29,7 +29,7 @@ const routes = getRoutes()
     </svg>
   </button>
   <div class="menu">
-    <RouterLink v-for="route in routes" :to="route.path" >{{ $t(`routes.${route.name as string}`) }}</RouterLink>
+    <RouterLink v-for="route in routes.filter(route=>route.name)" :to="route.path" >{{ $t(`routes.${route.name as string}`) }}</RouterLink>
   </div>
 </template>
 <style scoped lang="scss">

@@ -10,9 +10,7 @@ onMounted(() => {
 
 </script>
 <template>
-  <div class="container">
     <h1>chat</h1>
     <div v-html="inbox" />
-  </div>
 </template>
 <style scoped lang="scss"></style>

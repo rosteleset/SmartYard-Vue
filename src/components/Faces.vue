@@ -1,22 +1,21 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import deleteIcon from "../assets/delete.svg";
 import plusIcon from "../assets/plus.svg";
 import { useFaces } from "../hooks/faces";
 import { Face } from "../types/faces";
 import Button from "./Button.vue";
-import Events from "./Events.vue";
 import Modal from "./Modal.vue";
+import { useRouter } from "vue-router";
 
 const props = defineProps<{
   flatId: string;
 }>();
-
+const houseId = inject<string>("houseId")
+const router = useRouter()
 const { faces, remove } = useFaces(props.flatId);
-
 const selectedFace = ref<Face>();
 const removedFace = ref<Face>();
-const isOpenEvents = ref(false);
 
 const removeHandler = () => {
   if (removedFace.value) {
@@ -24,6 +23,10 @@ const removeHandler = () => {
     removedFace.value = undefined;
   }
 };
+
+const openEventsHandler = () => {
+  router.push(`/events/${houseId}`)
+}
 </script>
 <template>
   <div class="list">
@@ -38,7 +41,7 @@ const removeHandler = () => {
         <img :src="deleteIcon" alt="delete" />
       </button>
     </div>
-    <div class="face__plus" @click="isOpenEvents = true">
+    <div class="face__plus" @click="openEventsHandler">
       <img :src="plusIcon" alt="add" />
     </div>
   </div>
@@ -61,10 +64,6 @@ const removeHandler = () => {
       >
     </div>
   </Modal>
-  <Modal :isOpen="isOpenEvents" @onClose="isOpenEvents = false" title="События">
-    <Events />
-  </Modal>
-  <!-- <Events :house="house" :flat-id="flatId" /> -->
 </template>
 <style scoped lang="scss">
 .list {

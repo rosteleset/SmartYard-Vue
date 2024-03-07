@@ -65,7 +65,7 @@ const handler = (event: any, camera: Camera) => {
 </script>
 
 <template>
-  <div class="map">
+  <div v-if="cameras.length>0" class="map">
     <LMap
       ref="map"
       v-model:zoom="zoom"

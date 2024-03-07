@@ -23,5 +23,11 @@ body {
     width: 80%;
     margin: 0 auto;
     padding: 20px;
-    
+}
+
+.global-error {
+    text-align: center;
+    font-size: 36px;
+    margin: 24px 0;
+    text-transform: uppercase;
 }
