@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { StyleValue, onMounted, ref } from "vue";
+import { StyleValue, ref } from "vue";
 import { getPreviewURL } from "../lib/video";
 import { Camera } from "../types/camera";
 import VideoModal from "./VideoModal.vue";
 
-const props = defineProps<{ camera: Camera, index?:number }>();
+const props = defineProps<{ camera: Camera; index?: number }>();
 const previewContainer = ref<HTMLVideoElement | null>(null);
 const previewElement = ref<HTMLVideoElement | null>(null);
 const preview = ref<string>(getPreviewURL(props.camera));
@@ -21,7 +21,7 @@ const openHandler = () => {
       left: `${rect?.left}px`,
       width: `${rect?.width}px`,
       height: `${rect?.height}px`,
-      opacity:0,
+      opacity: 0,
     };
     isOpen.value = true;
   }
@@ -33,7 +33,12 @@ const closeHandler = () => {
 </script>
 
 <template>
-  <div v-if="camera.url" ref="previewContainer" class="video" :id="`camera-${props.camera.id}`">
+  <div
+    v-if="camera.url"
+    ref="previewContainer"
+    class="video"
+    :id="`camera-${props.camera.id}`"
+  >
     <video
       autoplay
       ref="previewElement"
@@ -74,8 +79,8 @@ const closeHandler = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #298BFF;
-  color: #FFFFFF;
+  background-color: #298bff;
+  color: #ffffff;
   width: 36px;
   height: 36px;
   border-radius: 50%;

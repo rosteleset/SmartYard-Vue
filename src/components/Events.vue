@@ -1,15 +1,13 @@
 <script setup lang="ts">
-// Импорт необходимых зависимостей
-import { ref, computed } from "vue";
+import { computed, inject, ref } from "vue";
+import eventIcon from "../assets/events.svg";
+import useEventNames from "../lib/useEventNames";
+import { useAdressesStore } from "../store/addresses";
 import { useEvents } from "../store/events";
 import { useLocaleStore } from "../store/locale";
-import useEventNames from "../lib/useEventNames";
-import Label from "./Label.vue";
 import Event from "./Event.vue";
+import Label from "./Label.vue";
 import Select from "./Select.vue";
-import eventIcon from "../assets/events.svg";
-import { inject } from "vue";
-import { useAdressesStore } from "../store/addresses";
 
 // Интерфейс для опций
 interface OptionType {
@@ -17,53 +15,44 @@ interface OptionType {
   name: string;
 }
 
+// Получение houseId через инъекцию
 const houseId = inject<string>("houseId");
 if (houseId === undefined) throw new Error("not find houseId");
 
+// Использование сторов и реактивных переменных
 const addressesStore = useAdressesStore();
 const clients = addressesStore.getClientsByHouseId(houseId);
 const eventNames = ref(useEventNames().eventNames);
-
 const options = computed(() => {
   return Object.entries(eventNames.value)
     .filter(([id]) => id !== "default")
     .map(([id, name]) => ({ id, name }));
 });
-
 const selectedOption = ref<OptionType | null>(null);
 const selectedClient = ref<OptionType | null>(null);
-
 const flatIds = computed(() => {
   if (selectedClient.value) return [selectedClient.value.id];
   else return clients.value.map((client) => client.flatId);
 });
-
 const selectedOptionId = computed(() => selectedOption.value?.id);
-
-// Реактивная переменная для открытия/закрытия списка
 const isOpen = ref(false);
-
-// Получение событий для определенного flatId
 const { events } = useEvents(flatIds, selectedOptionId);
-
-// Локализация
 const localeStore = useLocaleStore();
 
-// Функция обновления выбранной опции
+// Функции для обновления опций и клиентов
 const updateOption = (newOption: OptionType | null) => {
   selectedOption.value = newOption;
 };
-
-// Функция обновления выбранной опции
 const updateClient = (newClient: OptionType | null) => {
   selectedClient.value = newClient;
 };
 
-// Функция обработки открытия/закрытия списка
+// Обработчик для открытия/закрытия списка событий
 const handleToggle = (open: boolean) => {
   isOpen.value = open;
 };
 </script>
+
 <template>
   <Label
     :icon="eventIcon"
@@ -99,6 +88,7 @@ const handleToggle = (open: boolean) => {
     </div>
   </Transition>
 </template>
+
 <style scoped lang="scss">
 .events {
   &__list {
@@ -118,12 +108,10 @@ const handleToggle = (open: boolean) => {
   display: flex;
   gap: 24px;
 }
-
 .v-enter-active,
 .v-leave-active {
   transition: opacity 0.5s ease;
 }
-
 .v-enter-from,
 .v-leave-to {
   opacity: 0;

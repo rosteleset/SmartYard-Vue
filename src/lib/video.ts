@@ -1,6 +1,7 @@
 import Hls from "hls.js";
 import { Camera } from "../types/camera";
 
+// Функция для получения URL прямого эфира
 const getLiveURL = (camera: Camera, from?: number, length?: number) => {
   const { serverType, url, hlsMode, token } = camera;
   let time = "";
@@ -17,15 +18,15 @@ const getLiveURL = (camera: Camera, from?: number, length?: number) => {
   }
 };
 
+// Функция для получения URL превью
 const getPreviewURL = (camera: Camera) => {
   const { url, token } = camera;
-
   return `${url}/preview.mp4?token=${token}`;
 };
 
+// Функция для получения iframe
 const getIframe = (camera: Camera, from?: string, to?: string) => {
   const { serverType, url, token } = camera;
-
   switch (serverType) {
     case "flussonic":
       let timeMark: string | undefined;
@@ -36,6 +37,7 @@ const getIframe = (camera: Camera, from?: string, to?: string) => {
   }
 };
 
+// Функция для инициализации видеопотока
 const initializeVideoStream = (
   streamUrl: string,
   videoElement: HTMLVideoElement
@@ -61,4 +63,4 @@ const initializeVideoStream = (
   });
 };
 
-export { getLiveURL, getPreviewURL, initializeVideoStream, getIframe };
+export { getIframe, getLiveURL, getPreviewURL, initializeVideoStream };

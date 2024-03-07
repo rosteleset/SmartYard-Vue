@@ -26,11 +26,6 @@ const routes = [
     name: "Chat",
     component: Chat,
   },
-  {
-    path: "/test",
-    name: "test",
-    component: Test,
-  },
 ];
 
 const router = createRouter({

@@ -1,50 +1,48 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { EventFaceCoordinates } from '../types/events';
 
+// Определение пропсов
 const { imageUrl, face, color } = defineProps<{ imageUrl: string, face?: EventFaceCoordinates, color: string }>()
 
+// Создание ссылок на элементы
 const containerRef = ref<HTMLDivElement | null>(null);
 const canvasRef = ref<HTMLCanvasElement | null>(null);
-
 const img = new Image();
 
+// Функция для обновления размеров canvas
 const updateCanvasSize = () => {
     const container = containerRef.value;
     const canvas = canvasRef.value;
-    if (!canvas || !container)
-        return
+    if (!canvas || !container) return;
+
     const ctx = canvas.getContext('2d');
-    if (!ctx)
-        return
+    if (!ctx) return;
 
     const containerWidth = container.clientWidth;
-
     const imgAspectRatio = img.naturalWidth / img.naturalHeight;
-
     let newWidth, newHeight;
     newWidth = containerWidth;
     newHeight = newWidth / imgAspectRatio;
-
     canvas.width = newWidth;
     canvas.height = newHeight;
-
     drawCanvas(ctx);
 };
 
+// Функция для отрисовки изображения на canvas
 const drawCanvas = (ctx: CanvasRenderingContext2D) => {
     if (!img.complete) return;
 
     const scaleX = ctx.canvas.width / img.naturalWidth;
     const scaleY = ctx.canvas.height / img.naturalHeight;
-
     ctx.drawImage(img, 0, 0, ctx.canvas.width, ctx.canvas.height);
     drawFaceRectangle(ctx, scaleX, scaleY);
 };
 
+// Функция для отрисовки прямоугольника лица на canvas
 const drawFaceRectangle = (ctx: CanvasRenderingContext2D, scaleX: number, scaleY: number) => {
-    if (!face)
-        return
+    if (!face) return;
+
     const scaledFace = {
         left: face.left * scaleX,
         top: face.top * scaleY,
@@ -59,27 +57,26 @@ const drawFaceRectangle = (ctx: CanvasRenderingContext2D, scaleX: number, scaleY
     ctx.closePath();
 };
 
+// Отрисовка изображения и создание слушателя при монтировании компонента
 onMounted(() => {
     img.onload = () => {
         updateCanvasSize();
     };
     img.src = imageUrl;
-
     window.addEventListener('resize', updateCanvasSize);
     updateCanvasSize();
 });
 
+// Удаление слушателя перед размонтированием компонента
 onBeforeUnmount(() => {
     window.removeEventListener('resize', updateCanvasSize);
 });
 </script>
-  
 <template>
     <div ref="containerRef" class="container">
         <canvas ref="canvasRef"></canvas>
     </div>
 </template>
-
 <style scoped lang="scss">
 .container {
     min-width: 40vw;

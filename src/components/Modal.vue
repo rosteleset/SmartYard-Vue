@@ -7,15 +7,15 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(["onClose"]);
-const bodyVisible = ref(false)
+const bodyVisible = ref(false);
 
 const close = () => {
   emit("onClose");
 };
 
 const initClose = () => {
-    bodyVisible.value = false
-}
+  bodyVisible.value = false;
+};
 </script>
 
 <template>
@@ -108,7 +108,7 @@ const initClose = () => {
 .modal-enter-active,
 .modal-leave-active {
   transform: scale(1);
-  transition:  .5s ease;
+  transition: 0.5s ease;
 }
 
 .modal-enter-from,

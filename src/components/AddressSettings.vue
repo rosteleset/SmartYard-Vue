@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// импорт необходимых модулей
 import { useSettings } from "../store/settings";
 import Switch from "./Switch.vue";
 import dayjs from "dayjs";
@@ -23,7 +22,7 @@ const { settings, save } = useSettings(flatId);
 // установка значения doorCode
 const doorCode = ref(settings.value?.doorCode);
 
-// вычисление значения isAutoOpen
+// вычисление текущего состояния autoOpen
 const isAutoOpen = computed(() =>
   dayjs().isBefore(dayjs(settings.value?.autoOpen))
 );
@@ -67,7 +66,7 @@ const setAutoOpen = () => {
     save({ autoOpen: dayjs().add(1, "hour").format("YYYY-MM-DD HH:mm:ss") });
 };
 
-// отслеживание изменений в настройках
+// отслеживание изменений кода открытия в общем обьекте настроек
 watch(settings, (newSettings) => {
   if (newSettings && newSettings.doorCode !== doorCode.value) {
     doorCode.value = newSettings.doorCode;

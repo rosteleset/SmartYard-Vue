@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
-import entranceIcon from '../assets/entrance.svg'
-import gateIcon from '../assets/gate.svg'
-import barrierIcon from '../assets/barrier.svg'
-import { Domophone } from '../types/domophone';
 import openDoor from '../api/openDoor';
+import barrierIcon from '../assets/barrier.svg';
+import entranceIcon from '../assets/entrance.svg';
+import gateIcon from '../assets/gate.svg';
+import { Domophone } from '../types/domophone';
 
 const props = defineProps<{ data: Domophone }>()
 

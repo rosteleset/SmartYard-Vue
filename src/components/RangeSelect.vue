@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { useLocaleStore } from "../store/locale";
-import { Stream, Range, FormatedRange } from "../types/camera";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import dayjs from "dayjs";
-
-
+import { computed, ref } from "vue";
+import { useLocaleStore } from "../store/locale";
+import { FormatedRange, Range, Stream } from "../types/camera";
 
 const { streams } = defineProps<{
   streams: Stream[];
 }>();
-const model = defineModel<FormatedRange>()
+const model = defineModel<FormatedRange>();
 
 const { locale, localizedDayjs } = useLocaleStore();
 
@@ -19,7 +17,7 @@ const ranges = streams.flatMap((stream) =>
   stream.ranges.flatMap((range) => splitRangeIntoParts(range, stream.stream))
 );
 
-function splitRangeIntoParts(range: Range, stream:string): FormatedRange[] {
+function splitRangeIntoParts(range: Range, stream: string): FormatedRange[] {
   const parts: FormatedRange[] = [];
   const maxDuration = 3 * 60 * 60; // 3 часа в секундах
 
@@ -32,7 +30,7 @@ function splitRangeIntoParts(range: Range, stream:string): FormatedRange[] {
       from: currentFrom,
       duration: partDuration,
       date: timestampToDate(currentFrom),
-      streamUrl:stream
+      streamUrl: stream,
     });
 
     currentFrom += partDuration;
@@ -65,7 +63,14 @@ const date = ref();
     autoApply
   />
   <ul class="list">
-    <li v-for="range in ranges.filter(range=> date && dayjs(range.date).isSame(date, 'day'))" class="range" :class="{active: model?.from === range.from}" @click="model = range">
+    <li
+      v-for="range in ranges.filter(
+        (range) => date && dayjs(range.date).isSame(date, 'day')
+      )"
+      class="range"
+      :class="{ active: model?.from === range.from }"
+      @click="model = range"
+    >
       {{ localizedDayjs(range.from * 1000).format("HH:mm") }} -
       {{
         localizedDayjs(range.from * 1000)
@@ -83,12 +88,12 @@ const date = ref();
   gap: 12px;
 }
 .range {
-  border: solid 1px #F0F0F1;
+  border: solid 1px #f0f0f1;
   padding: 6px;
   cursor: pointer;
   &.active {
-    background-color: #298BFF;
-    color: #FFFFFF;
+    background-color: #298bff;
+    color: #ffffff;
   }
 }
 </style>

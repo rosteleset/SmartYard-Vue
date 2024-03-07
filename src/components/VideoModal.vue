@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
-import { getIframe, getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
-import { Camera, FormatedRange } from "../types/camera";
-import { useRanges } from "../store/ranges";
-import RangeSelect from "./RangeSelect.vue";
 import Hls from "hls.js";
+import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
+import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
+import { useRanges } from "../store/ranges";
+import { Camera, FormatedRange } from "../types/camera";
+import RangeSelect from "./RangeSelect.vue";
 
 // Определение пропсов и эмиттера
 const props = defineProps<{
@@ -39,7 +39,8 @@ watch(
 // Функция изменения размеров видео
 const resize = () => {
   if (previewElement.value !== null) {
-    response.value = previewElement.value.videoWidth / previewElement.value.videoHeight;
+    response.value =
+      previewElement.value.videoWidth / previewElement.value.videoHeight;
     const aspectRatio = response.value;
     const containerWidth = window.innerWidth;
     const containerHeight = window.innerHeight;
@@ -83,7 +84,7 @@ onUnmounted(() => {
 watch(range, () => {
   isPlaying.value = false;
   if (videoElement.value) {
-    hls.value?.destroy() 
+    hls.value?.destroy();
     initializeVideoStream(
       getLiveURL(props.camera, range.value?.from, range.value?.duration),
       videoElement.value
@@ -177,4 +178,3 @@ watch(range, () => {
   }
 }
 </style>
-  

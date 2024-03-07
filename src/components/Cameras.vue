@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
+import cameraIcon from '../assets/camera.svg';
 import { useCameras } from '../store/cameras';
 import Label from './Label.vue';
-import Video from './Video.vue';
 import Map from './Map.vue';
-import cameraIcon from '../assets/camera.svg';
-import { inject } from 'vue';
+import Video from './Video.vue';
 
 const houseId = inject<string>('houseId')
 const isOpen = ref(false);

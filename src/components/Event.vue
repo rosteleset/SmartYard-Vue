@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { Event } from '../types/events';
-import { useLocaleStore } from '../store/locale'
-import { computed } from 'vue';
-import informationIcon from '../assets/information.svg'
-import Modal from './Modal.vue';
-import Button from './Button.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import informationIcon from '../assets/information.svg';
 import useEventNames from '../lib/useEventNames';
+import { useLocaleStore } from '../store/locale';
+import { Event } from '../types/events';
+import Button from './Button.vue';
 import ImageWithFace from './ImageWithFace.vue';
+import Modal from './Modal.vue';
 
 // Определение пропсов
 const props = defineProps<{ event: Event }>()

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Address from './Address.vue'
 import { useAdressesStore } from '../store/addresses';
+import Address from './Address.vue';
 
 const adressesStore = useAdressesStore()
 

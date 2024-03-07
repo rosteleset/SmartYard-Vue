@@ -1,9 +1,8 @@
+import { defineStore } from "pinia";
 import { computed, onMounted, ref } from "vue";
 import { get } from "../api";
 import { Building } from "../types/building";
-import { defineStore } from "pinia";
 import { useUserStore } from "./user";
-import { Client } from "../types/user";
 
 
 export const useAdressesStore = defineStore('addresses', () => {

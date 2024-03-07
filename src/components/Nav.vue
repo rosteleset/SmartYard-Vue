@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { inject } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 const isMenuOpen = inject("isMenuOpen");

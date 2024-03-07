@@ -40,7 +40,7 @@ const activeTab = ref(0);
   border-bottom: none;
   border-radius: 12px 12px 0 0;
   margin-right: 5px;
-  transition: .5s;
+  transition: 0.5s;
 }
 
 .tabs > div.active {
