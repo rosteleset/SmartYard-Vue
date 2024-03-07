@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCameras } from "../store/cameras";
+import { useCameras } from "../hooks/cameras";
 import Map from "./Map.vue";
 import Video from "./Video.vue";
 

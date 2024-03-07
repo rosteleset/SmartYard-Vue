@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import closeIcon from "../assets/close.svg";
 const props = defineProps<{
-  title: string;
+  title?: string;
   isOpen: boolean;
 }>();
 
@@ -25,8 +25,12 @@ const initClose = () => {
         <Transition name="modal" @leave="close">
           <div v-if="bodyVisible" class="modal" @click.stop>
             <div class="modal__header">
-              <h3>{{ props.title }}</h3>
-              <button class="modal__close" @click="initClose">
+              <h3 v-if="title">{{ props.title }}</h3>
+              <button
+                class="modal__close"
+                :class="{ absolute: !title }"
+                @click="initClose"
+              >
                 <img :src="closeIcon" alt="close" />
               </button>
             </div>
@@ -49,6 +53,7 @@ const initClose = () => {
   max-height: 90vh;
   display: flex;
   flex-direction: column;
+  position: relative;
 
   &__overlay {
     position: fixed;
@@ -89,6 +94,13 @@ const initClose = () => {
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+
+    &.absolute {
+      position: absolute;
+      bottom: 100%;
+      left: 100%;
+    }
 
     img {
       display: block;

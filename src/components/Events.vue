@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, inject, ref } from "vue";
 import eventIcon from "../assets/events.svg";
+import { useEvents } from "../hooks/events";
 import useEventNames from "../lib/useEventNames";
 import { useAdressesStore } from "../store/addresses";
-import { useEvents } from "../store/events";
 import { useLocaleStore } from "../store/locale";
 import Event from "./Event.vue";
 import Label from "./Label.vue";
@@ -14,6 +14,10 @@ interface OptionType {
   id: string;
   name: string;
 }
+
+const {} = defineProps<{
+  compact?: boolean;
+}>();
 
 // Получение houseId через инъекцию
 const houseId = inject<string>("houseId");
@@ -55,13 +59,14 @@ const handleToggle = (open: boolean) => {
 
 <template>
   <Label
+    v-if="compact"
     :icon="eventIcon"
     alt="event icon"
     :text="$t('addresses.events')"
     @toggle="handleToggle"
   />
   <Transition>
-    <div class="events__list" v-if="isOpen">
+    <div class="events__list" v-if="isOpen || !compact">
       <div class="filters">
         <Select
           :options="options"

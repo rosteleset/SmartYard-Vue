@@ -66,7 +66,7 @@ const clientsWithTitles = computed(() =>
         <Door v-for="door in building.doors" :key="door.doorId" :data="door" />
       </div>
       <Cameras />
-      <Events v-if="userStore.isLoaded" />
+      <Events v-if="userStore.isLoaded" compact />
     </div>
     <Modal :title="$t('settings.title')" :is-open="isSettingsOpen" @on-close="toggleSettingsOpen">
       <Tabs v-if="userStore.isLoaded" :tabs="clientsWithTitles">

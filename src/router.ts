@@ -1,9 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import AddressesList from "./components/AddressesList.vue";
-import Test from "./components/Test.vue";
-import Settings from "./components/Settings.vue";
 import Chat from "./components/Chat.vue";
 import CityCameras from "./components/CityCameras.vue";
+import Settings from "./components/Settings.vue";
 
 const routes = [
   {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSettings } from "../store/settings";
+import { useSettings } from "../hooks/settings";
 import Switch from "./Switch.vue";
 import dayjs from "dayjs";
 import resetCode from "../api/resetCode";
@@ -10,6 +10,7 @@ import { ref } from "vue";
 import { watch } from "vue";
 import Modal from "./Modal.vue";
 import Events from "./Events.vue";
+import Faces from "./Faces.vue";
 
 // определение свойств
 const { flatId } = defineProps<{
@@ -152,7 +153,7 @@ watch(settings, (newSettings) => {
         </Button>
       </template>
 
-      <Button variant="primary" @click="togleIsFacesOpen"
+      <Button v-if="settings?.FRSDisabled === 'f'" variant="primary" @click="togleIsFacesOpen"
         >Упрвление лицами</Button
       >
     </div>
@@ -161,7 +162,7 @@ watch(settings, (newSettings) => {
       :is-open="isFacesOpen"
       @on-close="togleIsFacesOpen"
     >
-      <Events />
+      <Faces :flatId="flatId" />
     </Modal>
   </div>
 </template>
@@ -197,4 +198,4 @@ watch(settings, (newSettings) => {
     }
   }
 }
-</style>
+</style>../hooks/settings

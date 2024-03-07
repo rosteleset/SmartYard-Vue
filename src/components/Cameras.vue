@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import cameraIcon from '../assets/camera.svg';
-import { useCameras } from '../store/cameras';
+import { useCameras } from '../hooks/cameras';
 import Label from './Label.vue';
 import Map from './Map.vue';
 import Video from './Video.vue';

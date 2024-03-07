@@ -10,6 +10,7 @@ export default defineConfig({
       "/api": {
         target: "https://rbt-demo.lanta.me",
         changeOrigin: true,
+        secure: false,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },

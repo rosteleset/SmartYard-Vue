@@ -2,7 +2,7 @@
 import Hls from "hls.js";
 import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
 import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
-import { useRanges } from "../store/ranges";
+import { useRanges } from "../hooks/ranges";
 import { Camera, FormatedRange } from "../types/camera";
 import RangeSelect from "./RangeSelect.vue";
 
@@ -178,3 +178,4 @@ watch(range, () => {
   }
 }
 </style>
+../hooks/ranges

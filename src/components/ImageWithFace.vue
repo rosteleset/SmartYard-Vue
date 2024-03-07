@@ -73,12 +73,12 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-    <div ref="containerRef" class="container">
+    <div ref="containerRef" class="cancas-container">
         <canvas ref="canvasRef"></canvas>
     </div>
 </template>
 <style scoped lang="scss">
-.container {
+.cancas-container {
     min-width: 40vw;
 }
 </style>
