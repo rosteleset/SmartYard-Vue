@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { inject } from "vue";
+import { Ref, inject, ref, watch } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
-const isMenuOpen = inject("isMenuOpen");
+const isMenuOpen: Ref<boolean> = inject("isMenuOpen") || ref(false);
 
-const {getRoutes} = useRouter()
-const routes = getRoutes()
+const { getRoutes, currentRoute } = useRouter();
+const routes = getRoutes();
 
+watch(currentRoute, () => (isMenuOpen.value = false));
 </script>
 <template>
   <button class="nav">
@@ -29,7 +30,11 @@ const routes = getRoutes()
     </svg>
   </button>
   <div class="menu">
-    <RouterLink v-for="route in routes.filter(route=>route.name)" :to="route.path" >{{ $t(`routes.${route.name as string}`) }}</RouterLink>
+    <RouterLink
+      v-for="route in routes.filter((route) => route.name)"
+      :to="route.path"
+      >{{ $t(`routes.${route.name as string}`) }}</RouterLink
+    >
   </div>
 </template>
 <style scoped lang="scss">
@@ -43,12 +48,12 @@ const routes = getRoutes()
   justify-content: center;
   gap: 24px;
   a {
-    color: #FFFFFF;
+    color: #ffffff;
     font-size: 24px;
     text-decoration: none;
-    transition: .5s ease-out;
+    transition: 0.5s ease-out;
     &:hover {
-        transform: translateY(-6px);
+      transform: translateY(-6px);
     }
   }
 }

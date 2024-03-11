@@ -56,34 +56,32 @@ const getEventName = (event: string) => {
 </script>
 
 <template>
-  <div class="event">
+  <div class="event" v-on:click="openModal">
     <span>{{ label }}</span>
     <span>{{ time }}</span>
-    <button class="event__button" v-on:click="openModal">
-      <img :src="informationIcon" alt="information" />
-    </button>
-    <Modal
-      :title="props.event.mechanizmaDescription"
-      :is-open="isModalOpen"
-      @on-close="closeModal"
-    >
-      <p>{{ dateTime }}</p>
-      <ImageWithFace
-        v-if="props.event.preview"
-        :image-url="props.event.preview"
-        :face="props.event.detailX.face"
-        :color="color"
-      />
-      <div v-if="!isUpdated" class="event__buttons">
-        <Button variant="sucsses" v-if="canLike" @click="likeHandler"
-          >свой</Button
-        >
-        <Button variant="error" v-if="canDislike" @click="disLikeHandler"
-          >чужой</Button
-        >
-      </div>
-    </Modal>
+    <img :src="informationIcon" alt="information" class="event__button" />
   </div>
+  <Modal
+    :title="props.event.mechanizmaDescription"
+    :is-open="isModalOpen"
+    @on-close="closeModal"
+  >
+    <p>{{ dateTime }}</p>
+    <ImageWithFace
+      v-if="props.event.preview"
+      :image-url="props.event.preview"
+      :face="props.event.detailX.face"
+      :color="color"
+    />
+    <div v-if="!isUpdated" class="event__buttons">
+      <Button variant="sucsses" v-if="canLike" @click="likeHandler"
+        >свой</Button
+      >
+      <Button variant="error" v-if="canDislike" @click="disLikeHandler"
+        >чужой</Button
+      >
+    </div>
+  </Modal>
 </template>
 
 <style scoped lang="scss">
@@ -93,6 +91,7 @@ const getEventName = (event: string) => {
   gap: 12px;
   padding: 12px;
   border-bottom: solid 1px #f0f0f1;
+  cursor: pointer;
 
   &__button {
     background: none;

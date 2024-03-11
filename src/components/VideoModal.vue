@@ -5,6 +5,8 @@ import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
 import { useRanges } from "../hooks/ranges";
 import { Camera, FormatedRange } from "../types/camera";
 import RangeSelect from "./RangeSelect.vue";
+import arrowIcon from "../assets/arrowRight.svg";
+
 
 // Определение пропсов и эмиттера
 const props = defineProps<{
@@ -108,7 +110,9 @@ watch(range, () => {
         v-on:canplay="onLoad"
       />
       <div class="info" :class="{ open: isOpenInfo }">
-        <button class="togle-info" @click="isOpenInfo = !isOpenInfo"><</button>
+        <button class="togle-info" @click="isOpenInfo = !isOpenInfo">
+        <img :src="arrowIcon" alt="arrow">
+        </button>
         <div class="info__label">{{ camera.name }}</div>
         <RangeSelect
           v-if="streams.length > 0"
@@ -155,9 +159,17 @@ watch(range, () => {
   }
 }
 .togle-info {
+  background-color: #ffffff;
+  border: 0;
+  box-shadow: 0;
+  padding: 12px;
   position: absolute;
   right: 100%;
   top: 50%;
+  img {
+    display: block;
+    transform: rotateZ(180deg);
+  }
 }
 .info {
   position: absolute;

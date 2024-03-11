@@ -1,22 +1,19 @@
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { ref } from "vue";
+import { useRoute } from "vue-router";
 import cameraIcon from "../assets/camera.svg";
 import { useCameras } from "../hooks/cameras";
+import { useAdressesStore } from "../store/addresses";
 import Label from "./Label.vue";
 import Map from "./Map.vue";
 import Video from "./Video.vue";
-import { useRoute } from "vue-router";
-import { useAdressesStore } from "../store/addresses";
 
-const {} = defineProps<{
+const { houseId } = defineProps<{
+  houseId?: string;
   compact?: boolean;
 }>();
 
 const route = useRoute();
-const houseId: string | undefined =
-  typeof route.params.houseId === "string"
-    ? route.params.houseId
-    : inject<string>("houseId") || undefined;
 
 const { getAdressByHouseId } = useAdressesStore();
 
@@ -41,15 +38,19 @@ const handleToggle = (open: boolean) => {
       :text="$t('addresses.cameras')"
       @toggle="handleToggle"
     />
-    <div class="cameras__list" v-if="isOpen || !compact">
-      <Video
-        v-for="camera in cameras"
-        :key="camera.id"
-        :camera="camera"
-        :index="cameras.indexOf(camera) + 1"
-      />
-    </div>
-    <Map v-if="isOpen || !compact" :cameras="cameras" />
+    <Transition name="cameras">
+      <div v-if="isOpen || !compact">
+        <div class="cameras__list">
+          <Video
+            v-for="camera in cameras"
+            :key="camera.id"
+            :camera="camera"
+            :index="cameras.indexOf(camera) + 1"
+          />
+        </div>
+        <Map :cameras="cameras" />
+      </div>
+    </Transition>
   </template>
   <template v-else>
     <div class="global-error">404</div>
@@ -72,5 +73,14 @@ const handleToggle = (open: boolean) => {
       grid-template-columns: repeat(1, 1fr);
     }
   }
+}
+
+.cameras-enter-active,
+.cameras-leave-active {
+  transition: 0.5s ease;
+}
+.cameras-enter-from,
+.cameras-leave-to {
+  opacity: 0;
 }
 </style>

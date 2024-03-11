@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, provide, ref } from "vue";
-import { useRoute } from "vue-router";
 import arrowIcon from "../assets/ArrowBottom.svg";
 import settingsIcon from "../assets/settings.svg";
 import { useAdressesStore } from "../store/addresses";
@@ -12,13 +11,7 @@ import Modal from "./Modal.vue";
 import Tabs from "./Tabs.vue";
 
 // Определение свойств компонента
-const props = defineProps<{ houseId: string }>();
-
-const route = useRoute();
-const houseId: string =
-  typeof route.params.houseId === "string"
-    ? route.params.houseId
-    : props.houseId;
+const { houseId } = defineProps<{ houseId: string }>();
 
 // Предоставление houseId через инъекцию
 provide("houseId", houseId);
@@ -73,8 +66,8 @@ const clientsWithTitles = computed(() =>
       <div class="address__doors">
         <Door v-for="door in building.doors" :key="door.doorId" :data="door" />
       </div>
-      <Cameras compact />
-      <Events compact />
+      <Cameras :houseId="houseId" compact />
+      <Events :houseId="houseId" compact />
     </div>
     <Modal
       :title="$t('settings.title')"

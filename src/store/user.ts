@@ -12,6 +12,7 @@ export const useUserStore = defineStore("user", () => {
 
   const load = () => {
     Promise.all([
+      
       get<Client[]>("address/getSettingsList"),
       // get<Names>("user/getName"),
       get<Notifications>("user/notification"),

@@ -5,16 +5,24 @@ import Cameras from "./components/Cameras.vue";
 import Chat from "./components/Chat.vue";
 import Settings from "./components/Settings.vue";
 import Events from "./components/Events.vue";
+import { useAdressesStore } from "./store/addresses";
 
 const routes: RouteRecordRaw[] = [
   {
     path: "/addresses",
     name: "AddressesList",
     component: AddressesList,
+    beforeEnter: () => {
+      useAdressesStore();
+    },
   },
   {
     path: "/addresses/:houseId",
-    component:Address
+    component: Address,
+    beforeEnter: () => {
+      useAdressesStore();
+    },
+    props: route=> ({houseId: route.params.houseId})
   },
   {
     path: "/settings",
@@ -29,6 +37,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/cameras/:houseId",
     component: Cameras,
+    props: route=> ({houseId: route.params.houseId})
   },
   {
     path: "/chat",
@@ -38,6 +47,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/events/:houseId",
     component: Events,
+    props: route=> ({houseId: route.params.houseId})
   },
 ];
 

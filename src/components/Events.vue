@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, ref } from "vue";
-import { useRoute } from "vue-router";
+import { computed, ref } from "vue";
 import eventIcon from "../assets/events.svg";
 import { useEvents } from "../hooks/events";
 import useEventNames from "../lib/useEventNames";
@@ -16,20 +15,14 @@ interface OptionType {
   name: string;
 }
 
-const {} = defineProps<{
+const { houseId } = defineProps<{
   compact?: boolean;
+  houseId: string;
 }>();
-
-// Получение houseId через роутер или инъекцию
-const route = useRoute();
-const houseId: string | undefined =
-  typeof route.params.houseId === "string"
-    ? route.params.houseId
-    : inject<string>("houseId");
 
 // Использование сторов и реактивных переменных
 const { getClientsByHouseId } = useAdressesStore();
-const clients = getClientsByHouseId(houseId || ""); // inject может вернуть undefined !!на подумать
+const clients = getClientsByHouseId(houseId);
 const eventNames = ref(useEventNames().eventNames);
 const options = computed(() => {
   return Object.entries(eventNames.value)

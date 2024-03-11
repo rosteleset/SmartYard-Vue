@@ -62,7 +62,7 @@ const closeHandler = () => {
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.5s;
-
+  background-color: #6D7A8A;
   position: relative;
 
   &__preview {

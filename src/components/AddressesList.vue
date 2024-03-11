@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { useAdressesStore } from '../store/addresses';
-import Address from './Address.vue';
+import { useAdressesStore } from "../store/addresses";
+import Address from "./Address.vue";
 
-const adressesStore = useAdressesStore()
-
+const adressesStore = useAdressesStore();
 </script>
 
 <template>
-    <Address v-for="item in adressesStore.addresses" :key="item.houseId" :houseId="item.houseId" />
-
+  <Address
+    v-for="item in adressesStore.addresses"
+    :key="item.houseId"
+    :houseId="item.houseId"
+  />
 </template>
 
 <style scoped></style>
