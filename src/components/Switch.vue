@@ -1,30 +1,17 @@
 <script setup lang="ts">
-const { label, initialValue } = defineProps<{
+const { label } = defineProps<{
   label?: string;
-  initialValue: boolean;
+  justify?: string;
 }>();
 
-const handleChange = (value: boolean) => {
-  emit("update:modelValue", value);
-};
-
-const emit = defineEmits<{
-  "update:modelValue": [value: boolean];
-}>();
+const model = defineModel<boolean>();
 </script>
 
 <template>
-  <div class="toggle-switch__container">
+  <div class="toggle-switch__container" :style="justify && { justifyContent: justify }">
     <div v-if="label" class="toggle-switch__label">{{ label }}</div>
-    <label
-      class="toggle-switch"
-      :class="{ 'toggle-switch--checked': initialValue }"
-    >
-      <input
-        type="checkbox"
-        :checked="initialValue"
-        @change="handleChange(!initialValue)"
-      />
+    <label class="toggle-switch" :class="{ 'toggle-switch--checked': model }">
+      <input type="checkbox" v-model="model" />
       <span class="toggle-switch__slider"></span>
     </label>
   </div>

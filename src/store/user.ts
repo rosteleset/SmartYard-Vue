@@ -1,28 +1,38 @@
 import { onMounted, ref } from "vue";
 import { get } from "../api";
-import { Client } from "../types/user";
+import { Client, Names, Notifications } from "../types/user";
 import { defineStore } from "pinia";
 
 export const useUserStore = defineStore("user", () => {
   const isLoaded = ref(false);
   const clients = ref<Client[]>([]);
+  const names = ref<Names>({} as Names);
+  const notifications = ref<Notifications>({});
   const error = ref<string>();
 
   const load = () => {
-    get<Client[]>("address/getSettingsList")
-      .then((response) => {
-        clients.value = response;
+    Promise.all([
+      get<Client[]>("address/getSettingsList"),
+      // get<Names>("user/getName"),
+      get<Notifications>("user/notification"),
+    ])
+      .then(([clientsResponse, namesResponse]) => {
+        clients.value = clientsResponse;
+        // names.value = namesResponse;
         isLoaded.value = true;
-        console.log(response);
       })
-      .catch((e) => (error.value = e.message));
+      .catch((error) => {
+        error.value = error.message;
+      });
   };
 
   onMounted(load);
 
   return {
     clients,
+    names,
+    notifications,
     isLoaded,
-    error
+    error,
   };
 });

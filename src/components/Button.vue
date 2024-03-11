@@ -33,6 +33,7 @@ const emit = defineEmits<{
     text-align: center;
     padding: 6px 24px;
     cursor: pointer;
+    transition: .5s ease-out;
 
     &-primary {
         background-color: #298BFF;

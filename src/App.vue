@@ -28,7 +28,7 @@ const userStore = useUserStore();
   transition: 0.5s ease-out;
   z-index: 1;
   &.menu-open {
-    transform: translateY(100px);
+    margin-top: 50px;
   }
 }
 </style>

@@ -7,6 +7,7 @@ import { useSettings } from "../hooks/settings";
 import Button from "./Button.vue";
 import Faces from "./Faces.vue";
 import Switch from "./Switch.vue";
+import convertSettingsBoolean from "../lib/convertSettingsBoolean";
 
 // определение свойств
 const { flatId } = defineProps<{
@@ -73,63 +74,64 @@ watch(settings, (newSettings) => {
 
 <template>
   <div>
-    <div class="grid">
+    <div class="grid" v-if="settings">
       <h4>{{ $t("settings.intercom") }}</h4>
-      <template v-if="settings?.CMS !== undefined">
+      <template v-if="settings.CMS !== undefined">
         <div>{{ $t("settings.CMS") }}</div>
         <Switch
-          :initial-value="settings.CMS === 't'"
-          @update:model-value="update('CMS', $event)"
+          :modelValue="convertSettingsBoolean(settings.CMS)"
+          @update:modelValue="update('CMS', $event)"
         />
       </template>
-      <template v-if="settings?.VoIP !== undefined">
+      <template v-if="settings.VoIP !== undefined">
         <div>{{ $t("settings.VoIP") }}</div>
         <Switch
-          :initial-value="settings.VoIP === 't'"
-          @update:model-value="update('VoIP', $event)"
+          :modelValue="convertSettingsBoolean(settings.VoIP)"
+          @update:modelValue="update('VoIP', $event)"
         />
       </template>
-      <template v-if="settings?.FRSDisabled !== undefined">
+      <!-- Для FRSDisabled значение инвертируем -->
+      <template v-if="settings.FRSDisabled !== undefined">
         {{ $t("settings.FRSDisabled") }}
         <Switch
-          :initial-value="settings.FRSDisabled === 'f'"
-          @update:model-value="update('FRSDisabled', $event)"
+          :modelValue="!convertSettingsBoolean(settings.FRSDisabled)"
+          @update:modelValue="update('FRSDisabled', $event)"
         />
       </template>
-      <template v-if="settings?.whiteRabbit !== undefined">
+      <template v-if="settings.whiteRabbit !== undefined">
         <div>{{ $t("settings.whiteRabbit") }}</div>
         <Switch
-          :initial-value="settings.whiteRabbit !== '0'"
-          @update:model-value="update('whiteRabbit', $event)"
+          :modelValue="settings.whiteRabbit !== '0'"
+          @update:modelValue="update('whiteRabbit', $event)"
         />
       </template>
 
-      <template v-if="settings?.hiddenPlog !== undefined">
+      <template v-if="settings.hiddenPlog !== undefined">
         <div>{{ $t("settings.hiddenPlog") }}</div>
         <Switch
-          :initial-value="settings.hiddenPlog === 't'"
-          @update:model-value="update('hiddenPlog', $event)"
+          :modelValue="convertSettingsBoolean(settings.hiddenPlog)"
+          @update:modelValue="update('hiddenPlog', $event)"
         />
       </template>
 
-      <template v-if="settings?.disablePlog !== undefined">
+      <template v-if="settings.disablePlog !== undefined">
         <div>{{ $t("settings.disablePlog") }}</div>
         <Switch
-          :initial-value="settings.disablePlog === 't'"
-          @update:model-value="update('disablePlog', $event)"
+          :modelValue="convertSettingsBoolean(settings.disablePlog)"
+          @update:modelValue="update('disablePlog', $event)"
         />
       </template>
 
-      <template v-if="settings?.paperBill !== undefined">
+      <template v-if="settings.paperBill !== undefined">
         <div>{{ $t("settings.paperBill") }}</div>
         <Switch
-          :initial-value="settings.paperBill === 't'"
-          @update:model-value="update('paperBill', $event)"
+          :modelValue="convertSettingsBoolean(settings.paperBill)"
+          @update:modelValue="update('paperBill', $event)"
         />
       </template>
 
       <h4>{{ $t("settings.access") }}</h4>
-      <template v-if="settings?.allowDoorCode === 't'">
+      <template v-if="settings.allowDoorCode === 't'">
         <div>
           {{ $t("settings.reset-code") }} <strong>{{ doorCode }}</strong>
         </div>
@@ -137,7 +139,7 @@ watch(settings, (newSettings) => {
           <img :src="reloadIcon" alt="" />
         </button>
       </template>
-      <template v-if="settings?.autoOpen !== undefined">
+      <template v-if="settings.autoOpen !== undefined">
         <div>
           {{ $t("settings.guest-access") }}
         </div>
@@ -151,7 +153,7 @@ watch(settings, (newSettings) => {
 
       <div class="faces-block">
         <Button
-          v-if="settings?.FRSDisabled === 'f' && !isFacesOpen"
+          v-if="settings.FRSDisabled === 'f' && !isFacesOpen"
           variant="primary"
           @click="togleIsFacesOpen"
         >
