@@ -39,5 +39,7 @@ header {
 }
 .nav {
   grid-area: menu;
+  display: flex;
+  justify-content: end;
 }
 </style>

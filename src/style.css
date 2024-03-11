@@ -1,38 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
 
+* {
+  box-sizing: border-box;
+}
 body {
-    margin: 0;
-    font-family: "Source Sans 3", sans-serif;
-    
+  margin: 0;
+  font-family: "Source Sans 3", sans-serif;
 }
 
 #app {
-    display:flex;
-    flex-direction: column;
-    height: 100vh;
-    background: radial-gradient(189.5% 116.38% at 111.33% -32.22%, #4DA6F9 8.92%, #084EB6 77.97%);
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: radial-gradient(
+    189.5% 116.38% at 111.33% -32.22%,
+    #4da6f9 8.92%,
+    #084eb6 77.97%
+  );
+  overflow: hidden;
 }
 
 .content {
-    background-color: #F3F4FA;
-    border-radius: 24px 24px 0 0;
-    flex: 1;
-    overflow-y: auto;
+  background-color: #f3f4fa;
+  border-radius: 24px 24px 0 0;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-    @media (max-width:1024px) {
-        width: 90%;
-    }
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  @media (max-width: 1024px) {
+    width: 90%;
+  }
 }
 
 .global-error {
-    text-align: center;
-    font-size: 36px;
-    margin: 24px 0;
-    text-transform: uppercase;
+  text-align: center;
+  font-size: 36px;
+  margin: 24px 0;
+  text-transform: uppercase;
 }

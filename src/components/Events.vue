@@ -59,7 +59,7 @@ const handleToggle = (open: boolean) => {
     <Label
       v-if="compact"
       :icon="eventIcon"
-      alt="event icon"
+      :alt="$t('addresses.events')"
       :text="$t('addresses.events')"
       @toggle="handleToggle"
     />
@@ -92,7 +92,7 @@ const handleToggle = (open: boolean) => {
     </Transition>
   </template>
   <template v-else>
-    <div class="global-error">дом не найден</div>
+    <div class="global-error">{{ $t('events.not-found') }}</div>
   </template>
 </template>
 

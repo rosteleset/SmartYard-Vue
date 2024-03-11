@@ -157,7 +157,7 @@ watch(settings, (newSettings) => {
           variant="primary"
           @click="togleIsFacesOpen"
         >
-          Упрвление лицами
+          {{ $t('settings.frs') }}
         </Button>
         <Faces v-if="isFacesOpen" :flatId="flatId" />
       </div>

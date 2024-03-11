@@ -90,7 +90,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div ref="containerRef" class="cancas-container">
-    <div v-if="error" class="error">Нет изображения</div>
+    <div v-if="error" class="error">{{ $t('events.image-error') }}</div>
     <canvas v-else ref="canvasRef"></canvas>
   </div>
 </template>

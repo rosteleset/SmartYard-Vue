@@ -25,7 +25,7 @@ const labelClickHandler = () => {
     </div>
     <div class="text">{{ props.text }}</div>
     <div class="arrow" :class="{ open: isOpen }" aria-hidden="true">
-      <img :src="arrowIcon" alt="arrow icon">
+      <img :src="arrowIcon" :alt="$t('global.more')">
     </div>
   </div>
 </template>

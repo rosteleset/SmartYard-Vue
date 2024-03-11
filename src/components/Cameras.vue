@@ -34,7 +34,7 @@ const handleToggle = (open: boolean) => {
     <Label
       v-if="compact"
       :icon="cameraIcon"
-      alt="camera icon"
+      :alt="$t('addresses.cameras')"
       :text="$t('addresses.cameras')"
       @toggle="handleToggle"
     />

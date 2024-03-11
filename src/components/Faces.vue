@@ -54,13 +54,13 @@ const openEventsHandler = () => {
   <Modal
     :isOpen="removedFace !== undefined"
     @onClose="removedFace = undefined"
-    title="Удалить это лицо"
+    title="$t('faces.delete-face')"
   >
     <div class="delete-form">
       <img :src="removedFace?.image" :alt="removedFace?.faceId" />
-      <Button variant="error" @click="removeHandler">удалить</Button>
+      <Button variant="error" @click="removeHandler">{{ $t('faces.delete') }}</Button>
       <Button variant="primary" bordered @click="removedFace = undefined"
-        >отмена</Button
+        >{{ $t('faces.cancel') }}</Button
       >
     </div>
   </Modal>

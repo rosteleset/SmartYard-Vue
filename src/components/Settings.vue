@@ -23,16 +23,16 @@ const updateNames = async () => {
 
 <template>
   <div class="container">
-    <h2>контактные данные</h2>
+    <h2>{{ $t('settings.details') }}</h2>
     <div class="settings-block">
-      <input type="text" placeholder="имя" v-model="name" />
-      <input type="text" placeholder="отчество" v-model="patronymic" />
-      <input type="text" placeholder="телефон" disabled />
+      <input type="text" placeholder="$t('settings.name')" v-model="name" />
+      <input type="text" placeholder="$t('settings.patronymic')" v-model="patronymic" />
+      <input type="text" placeholder="$t('settings.phone')" disabled />
       <Button variant="primary" @click="updateNames" :disabled="isProcessed"
-        >Сохранить</Button
+        >{{ $t('settings.save') }}</Button
       >
     </div>
-    <h2>уведомления</h2>
+    <h2>{{ $t('settings.notifications') }}</h2>
     <div class="settings-block">
       <Switch
         v-model="notificationsEnable"

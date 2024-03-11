@@ -1,8 +1,14 @@
 {
+  "global": {
+    "more": "Развернуть"
+  },
   "addresses": {
-    "open": "Открыть",
     "cameras": "Видеокамеры",
-    "events": "События"
+    "events": "События",
+    "open": "Открыть",
+    "flat": "кв {0}",
+    "settings": "Настройки",
+    "not-found": "дом не найден"
   },
   "events": {
     "call_unanswered": "Пропущенный звонок в домофон",
@@ -12,7 +18,11 @@
     "open_by_face": "Открывание по лицу",
     "open_by_code": "Открывание по коду",
     "open_gates_by_call": "Открытие ворот звонком",
-    "unknown": "Неизвестное событие"
+    "unknown": "Неизвестное событие",
+    "like": "свой",
+    "dislike": "чужой",
+    "not-found": "дом не найден",
+    "image-error": "Нет изображения"
   },
   "select": {
     "all": "Все"
@@ -29,12 +39,24 @@
     "intercom": "Домофон",
     "access": "Доступ",
     "reset-code": "Код открытия",
-    "guest-access": "гостевой доступ на час"
+    "guest-access": "гостевой доступ на час",
+    "frs": "Упрвление лицами",
+    "details": "контактные данные",
+    "name": "имя",
+    "patronymic": "отчество",
+    "phone": "телефон",
+    "save": "Сохранить",
+    "notifications": "уведомления"
   },
   "routes": {
     "AddressesList": "Адреса",
     "Settings": "Настройки",
     "CityCameras": "Камеры",
     "Chat": "Уведомления"
+  },
+  "faces": {
+    "delete-face": "Удалить это лицо",
+    "delete": "удалить",
+    "cancel": "отмена"
   }
 }

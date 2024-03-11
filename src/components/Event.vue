@@ -75,10 +75,10 @@ const getEventName = (event: string) => {
     />
     <div v-if="!isUpdated" class="event__buttons">
       <Button variant="sucsses" v-if="canLike" @click="likeHandler"
-        >свой</Button
+        >{{ $t('events.like') }}</Button
       >
       <Button variant="error" v-if="canDislike" @click="disLikeHandler"
-        >чужой</Button
+        >{{ $t('events.dislike') }}</Button
       >
     </div>
   </Modal>

@@ -9,6 +9,7 @@ import Door from "./Door.vue";
 import Events from "./Events.vue";
 import Modal from "./Modal.vue";
 import Tabs from "./Tabs.vue";
+import { useI18n } from "vue-i18n";
 
 // Определение свойств компонента
 const { houseId } = defineProps<{ houseId: string }>();
@@ -18,6 +19,7 @@ provide("houseId", houseId);
 
 // Использование хранилища адресов и пользователей
 const { getAdressByHouseId, getClientsByHouseId } = useAdressesStore();
+const { t } = useI18n();
 
 // Получение данных о здании и клиентах
 const building = getAdressByHouseId(houseId);
@@ -40,7 +42,7 @@ const toggleSettingsOpen = () => {
 const clientsWithTitles = computed(() =>
   clients.value.map((client) => ({
     tabId: client.flatId,
-    tabTitle: `кв ${client.flatId}`,
+    tabTitle: t("addresses.flat", [client.flatId]),
   }))
 );
 </script>
@@ -51,12 +53,12 @@ const clientsWithTitles = computed(() =>
       <div class="address__label">{{ building.address }}</div>
       <div class="address__buttons">
         <button @click="toggleSettingsOpen">
-          <img :src="settingsIcon" alt="Settings" />
+          <img :src="settingsIcon" alt="$t('addresses.settings')" />
         </button>
         <button class="address__more" @click="toggleOpen(!isOpen)">
           <img
             :src="arrowIcon"
-            alt="More"
+            alt="$t('global.more')"
             :class="{ 'address__more--open': isOpen }"
           />
         </button>
@@ -86,7 +88,7 @@ const clientsWithTitles = computed(() =>
     </Modal>
   </div>
   <div v-else>
-    <div class="global-error">дом не найден</div>
+    <div class="global-error">{{ $t('addresses.not-found') }}</div>
   </div>
 </template>
 
