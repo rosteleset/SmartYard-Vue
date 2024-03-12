@@ -9,7 +9,7 @@ import Faces from "./Faces.vue";
 import Switch from "./Switch.vue";
 import convertSettingsBoolean from "../lib/convertSettingsBoolean";
 import { useRouter } from "vue-router";
-import { useConfig } from "../store/config";
+import { useConfigStore } from "../store/config";
 
 // определение свойств
 const { flatId } = defineProps<{
@@ -18,7 +18,7 @@ const { flatId } = defineProps<{
 
 // использование настроек
 const { settings, save } = useSettings(flatId);
-const { config } = useConfig();
+const { config } = useConfigStore();
 const router = useRouter();
 
 // установка значения doorCode

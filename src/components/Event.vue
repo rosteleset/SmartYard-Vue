@@ -58,7 +58,7 @@ const getEventName = (event: string) => {
 <template>
   <div class="event" v-on:click="openModal">
     <span>{{ label }}</span>
-    <span>{{ time }}</span>
+    <span class="event__time">{{ time }}</span>
     <img :src="informationIcon" alt="information" class="event__button" />
   </div>
   <Modal
@@ -92,6 +92,10 @@ const getEventName = (event: string) => {
   padding: 12px;
   border-bottom: solid 1px #f0f0f1;
   cursor: pointer;
+
+  &__time {
+    margin-left: auto;
+  }
 
   &__button {
     background: none;

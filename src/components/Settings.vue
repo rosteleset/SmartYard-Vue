@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import sendName from "../api/sendName";
+import { useLocale } from "../hooks/locale";
 import convertSettingsBoolean from "../lib/convertSettingsBoolean";
-import { useConfig } from "../store/config";
+import { useConfigStore } from "../store/config";
 import { useUserStore } from "../store/user";
 import Button from "./Button.vue";
 import Select from "./Select.vue";
 import Switch from "./Switch.vue";
-import { useLocale } from "../hooks/locale";
 
 const { names, notifications } = useUserStore();
-const { config, updateConfig } = useConfig();
+const { config, updateConfig } = useConfigStore();
 const { availableLocales, locale, changeLocale, t } = useLocale();
 const isProcessed = ref(false);
 const name = ref<string>(names.name);

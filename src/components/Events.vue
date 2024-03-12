@@ -131,4 +131,3 @@ const handleToggle = (open: boolean) => {
   opacity: 0;
 }
 </style>
-../hooks/locale

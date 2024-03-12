@@ -3,8 +3,6 @@ import { ref, watch } from "vue";
 
 // Интерфейс для хранилища конфигурации
 interface ConfigStore {
-  facesPage?: boolean;
-  watchmanMode?:boolean;
   [key: string]: any;
 }
 
@@ -21,7 +19,7 @@ const getConfig = (): ConfigStore => {
 };
 
 // Экспорт хука для работы с конфигурацией
-export const useConfig = defineStore(STORE_NAME, () => {
+export const useConfigStore = defineStore(STORE_NAME, () => {
   const config = ref<ConfigStore>(getConfig());
 
   // Функция для обновления конфигурации
