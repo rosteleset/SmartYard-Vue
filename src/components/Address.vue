@@ -3,13 +3,13 @@ import { computed, provide, ref } from "vue";
 import arrowIcon from "../assets/ArrowBottom.svg";
 import settingsIcon from "../assets/settings.svg";
 import { useAdressesStore } from "../store/addresses";
+import { useLocaleStore } from "../store/locale";
 import AddressSettings from "./AddressSettings.vue";
 import Cameras from "./Cameras.vue";
 import Door from "./Door.vue";
 import Events from "./Events.vue";
 import Modal from "./Modal.vue";
 import Tabs from "./Tabs.vue";
-import { useI18n } from "vue-i18n";
 
 // Определение свойств компонента
 const { houseId } = defineProps<{ houseId: string }>();
@@ -19,7 +19,7 @@ provide("houseId", houseId);
 
 // Использование хранилища адресов и пользователей
 const { getAdressByHouseId, getClientsByHouseId } = useAdressesStore();
-const { t } = useI18n();
+const { t } = useLocaleStore();
 
 // Получение данных о здании и клиентах
 const building = getAdressByHouseId(houseId);
@@ -88,7 +88,7 @@ const clientsWithTitles = computed(() =>
     </Modal>
   </div>
   <div v-else>
-    <div class="global-error">{{ $t('addresses.not-found') }}</div>
+    <div class="global-error">{{ $t("addresses.not-found") }}</div>
   </div>
 </template>
 

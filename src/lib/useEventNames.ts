@@ -1,9 +1,9 @@
 import { ref } from "vue";
-import { useI18n } from "vue-i18n";
+import { useLocaleStore } from "../store/locale";
 
 
 export default () => {
-    const { t } = useI18n()
+    const { t } = useLocaleStore()
 
     const eventNames = ref<{ [key: string]: string }>({
         '1': t('events.call_unanswered'),

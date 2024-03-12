@@ -1,27 +1,32 @@
-import { defineStore } from 'pinia';
-import dayjs, { Dayjs } from 'dayjs';
-import { computed, ref } from 'vue';
+import { defineStore } from "pinia";
+import dayjs, { Dayjs } from "dayjs";
+import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { watch } from "vue";
+import { LOCAL_STORAGE_KEY } from "../i18n";
 
-type Locale = 'ru' | 'en'
+export const useLocaleStore = defineStore("locale", () => {
+  const { locale, availableLocales, t } = useI18n();
 
-export const useLocaleStore = defineStore('locale', () => {
-    const locale = ref<Locale>('ru')
+  const localizedDayjs = computed(() => {
+    return (date?: string | number | Date | Dayjs) => {
+      return dayjs(date).locale(locale.value);
+    };
+  });
 
-    const localizedDayjs = computed(() => {
-        return (date?: string | number | Date | Dayjs) => {
-            return dayjs(date).locale(locale.value);
-        };
-    });
+  const changeLocale = (value:string) => {
+    locale.value = value
+  }
 
-    const changeLocale = (newLocale: Locale) => {
-        locale.value = newLocale;
-        dayjs.locale(newLocale);
-    }
+  watch(locale, (value) => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, value);
+  });
 
-    return {
-        locale,
-        changeLocale,
-        localizedDayjs
-    }
+  return {
+    locale,
+    changeLocale,
+    availableLocales,
+    t,
+    localizedDayjs,
+  };
 });
-

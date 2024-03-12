@@ -2,13 +2,16 @@
 import { ref, watch } from "vue";
 import sendName from "../api/sendName";
 import convertSettingsBoolean from "../lib/convertSettingsBoolean";
+import { useConfig } from "../store/config";
+import { useLocaleStore } from "../store/locale";
 import { useUserStore } from "../store/user";
 import Button from "./Button.vue";
+import Select from "./Select.vue";
 import Switch from "./Switch.vue";
-import { useConfig } from "../store/config";
 
 const { names, notifications } = useUserStore();
 const { config, updateConfig } = useConfig();
+const { availableLocales, locale, changeLocale, t } = useLocaleStore();
 const isProcessed = ref(false);
 const name = ref<string>(names.name);
 const patronymic = ref<string>(names.patronymic || "");
@@ -21,6 +24,17 @@ const notificationsMoney = ref(
 
 const facesPage = ref(config.facesPage);
 const watchmanMode = ref(config.watchmanMode);
+
+const localeToOption = (locale: string): { id: string; name: string } => {
+  return {
+    id: locale,
+    name: t(`locales.${locale}`),
+  };
+};
+
+const localeHandler = (option: { id: string; name: string }) => {
+  changeLocale(option.id);
+};
 
 const updateNames = async () => {
   isProcessed.value = true;
@@ -62,6 +76,14 @@ watch(watchmanMode, (value) => {
         v-model="notificationsMoney"
         :label="$t('settings.show-money-notifications')"
         justify="space-between"
+      />
+    </div>
+    <h2>Настройки приложения</h2>
+    <div class="settings-block">
+      <Select
+        :options="availableLocales.map((locale) => localeToOption(locale))"
+        :modelValue="localeToOption(locale)"
+        @update:modelValue="localeHandler"
       />
     </div>
     <h2>Настройки разработки</h2>

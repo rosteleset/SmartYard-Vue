@@ -2,7 +2,10 @@ import { createI18n } from "vue-i18n";
 import en from "./locales/en.json";
 import ru from "./locales/ru.json";
 
-const DEFAULT_LOCALE = import.meta.env.VITE_DEFAULT_LOCALE;
+export const LOCAL_STORAGE_KEY = "i18n-locale";
+const DEFAULT_LOCALE: string =
+  localStorage.getItem(LOCAL_STORAGE_KEY) ||
+  import.meta.env.VITE_DEFAULT_LOCALE;
 
 const messages = {
   en: en,

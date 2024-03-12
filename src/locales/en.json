@@ -1,28 +1,68 @@
 {
+  "global": {
+    "more": "Expand"
+  },
   "addresses": {
-    "cameras": "",
-    "events": "",
-    "open": ""
+    "cameras": "Cameras",
+    "events": "Events",
+    "open": "Open",
+    "flat": "apt {0}",
+    "settings": "Settings",
+    "not-found": "home not found"
   },
   "events": {
-    "call_unanswered": "",
-    "open_by_code": "",
-    "open_by_face": "",
-    "open_by_key": "",
-    "open_from_app": "",
-    "open_gates_by_call": "",
-    "unknown": "",
-    "сall_answered": ""
+    "call_unanswered": "Missed intercom call",
+    "сall_answered": "Intercom call",
+    "open_by_key": "Opening by key",
+    "open_from_app": "Opening from the app",
+    "open_by_face": "Opening by face",
+    "open_by_code": "Opening by code",
+    "open_gates_by_call": "Gate opening by call",
+    "unknown": "Unknown event",
+    "like": "own",
+    "dislike": "foreign",
+    "not-found": "home not found",
+    "image-error": "No image"
   },
   "select": {
-    "all": ""
+    "all": "All"
   },
   "settings": {
-    "CMS": "",
-    "FRSDisabled": "",
-    "VoIP": "",
-    "disablePlog": "",
-    "hiddenPlog": "",
-    "paperBill": ""
+    "CMS": "Intercom enabled",
+    "VoIP": "Accept calls",
+    "paperBill": "Print paper bills",
+    "disablePlog": "disablePlog",
+    "hiddenPlog": "Show log only to owner",
+    "FRSDisabled": "Face recognition",
+    "whiteRabbit": "White rabbit",
+    "title": "Settings",
+    "intercom": "Intercom",
+    "access": "Access",
+    "reset-code": "Reset code",
+    "guest-access": "guest access for an hour",
+    "frs": "Face control",
+    "details": "contact details",
+    "name": "name",
+    "patronymic": "patronymic",
+    "phone": "phone",
+    "save": "Save",
+    "notifications": "notifications",
+    "show-notifications": "Show notifications",
+    "show-money-notifications": "Notify of low funds"
+  },
+  "routes": {
+    "AddressesList": "Addresses",
+    "Settings": "Settings",
+    "CityCameras": "Cameras",
+    "Chat": "Notifications"
+  },
+  "faces": {
+    "delete-face": "Delete this face",
+    "delete": "delete",
+    "cancel": "cancel"
+  },
+  "locales": {
+    "ru": "Russian",
+    "en": "English"
   }
 }
