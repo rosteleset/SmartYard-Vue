@@ -10,7 +10,7 @@ export const useRanges = (cameraId: number) => {
 
   onMounted(() => {
     const url = "cctv/ranges";
-    get<Stream[]>(url, { cameraId }).then((response)=>streams.value = response);
+    get<Stream[]>(url, { cameraId }).then((response)=>streams.value = response || []);
   });
 
   return {
