@@ -28,7 +28,7 @@ const activeTab = ref(0);
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .tabs {
   display: flex;
 }

@@ -1,19 +1,29 @@
 <script setup lang="ts">
 import Hls from "hls.js";
-import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
+import {
+  StyleValue,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+  defineProps,
+  defineEmits,
+} from "vue";
 import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
 import { useRanges } from "../hooks/ranges";
 import { Camera, FormatedRange } from "../types/camera";
 import RangeSelect from "./RangeSelect.vue";
 import arrowIcon from "../assets/arrowRight.svg";
+import CustomControls from "./CustomControls.vue";
 
-// Определение пропсов и эмиттера
-const props = defineProps<{
+// Определение свойств и эмиттеров
+const { camera, isOpen, startStyles, response } = defineProps<{
   camera: Camera;
   isOpen: boolean;
   startStyles?: StyleValue;
   response?: number;
 }>();
+const { id, name } = camera;
 const emit = defineEmits(["onClose"]);
 
 // Реактивные переменные
@@ -22,27 +32,27 @@ const isOpenInfo = ref(false);
 const previewElement = ref<HTMLVideoElement | null>(null);
 const videoElement = ref<HTMLVideoElement | null>(null);
 const styles = ref<StyleValue>();
-const preview = ref<string>(getPreviewURL(props.camera));
-const response = ref<number | undefined>(props.response);
-const hls = ref<Hls>();
-const { streams } = useRanges(props.camera.id);
-const range = ref<FormatedRange>();
+const preview = ref<string>(getPreviewURL(camera));
+const currentResponse = ref<number | undefined>(response);
+const hlsInstance = ref<Hls>();
+const { streams } = useRanges(id);
+const currentRange = ref<FormatedRange>();
 
 // Слежение за открытием/закрытием окна
 watch(
-  () => props.isOpen,
+  () => isOpen,
   () => {
-    styles.value = props.startStyles;
-    if (!props.isOpen) isPlaying.value = false;
+    styles.value = startStyles;
+    if (!isOpen) isPlaying.value = false;
   }
 );
 
-// Функция изменения размеров видео
-const resize = () => {
+// Функция изменения размера видео
+const resizeVideo = () => {
   if (previewElement.value !== null) {
-    response.value =
+    currentResponse.value =
       previewElement.value.videoWidth / previewElement.value.videoHeight;
-    const aspectRatio = response.value;
+    const aspectRatio = currentResponse.value;
     const containerWidth = window.innerWidth;
     const containerHeight = window.innerHeight;
     let newVideoWidth, newVideoHeight;
@@ -63,67 +73,77 @@ const resize = () => {
 };
 
 // Функция загрузки видео и инициализации потока
-const onLoad = () => {
-  resize();
+const onVideoLoad = () => {
+  resizeVideo();
   if (videoElement.value)
-    initializeVideoStream(getLiveURL(props.camera), videoElement.value).then(
-      (response) => (hls.value = response)
+    initializeVideoStream(getLiveURL(camera), videoElement.value).then(
+      (hlsResponse) => (hlsInstance.value = hlsResponse)
     );
 };
 
-// Функция готовности видео
-const ready = () => {
+// Функция события готовности видео
+const onVideoReady = () => {
   isPlaying.value = true;
 };
 
 // Обработчики событий
 onMounted(() => {
-  window.addEventListener("resize", resize);
+  window.addEventListener("resize", resizeVideo);
 });
+
 onUnmounted(() => {
-  window.removeEventListener("resize", resize);
-  hls.value?.destroy();
+  window.removeEventListener("resize", resizeVideo);
+  hlsInstance.value?.destroy();
 });
-watch(range, () => {
+
+// Слежение за текущей записью
+watch(currentRange, () => {
   isPlaying.value = false;
   if (videoElement.value) {
-    hls.value?.destroy();
+    hlsInstance.value?.destroy();
     initializeVideoStream(
-      getLiveURL(props.camera, range.value?.from, range.value?.duration),
+      getLiveURL(
+        camera,
+        currentRange.value?.from,
+        currentRange.value?.duration
+      ),
       videoElement.value
-    ).then((response) => (hls.value = response));
+    ).then((hlsResponse) => (hlsInstance.value = hlsResponse));
   }
 });
 </script>
+
 <template>
   <div class="pop-up" v-if="isOpen" v-on:click="emit('onClose')">
     <div class="video-container" :style="styles" @click.stop>
-      <video
-        ref="videoElement"
-        v-on:canplay="ready"
-        :controls="range != undefined"
-      ></video>
+      <video ref="videoElement" v-on:canplay="onVideoReady"></video>
       <video
         ref="previewElement"
         class="previewElement"
         :class="{ active: isPlaying }"
         :src="preview"
-        v-on:canplay="onLoad"
+        v-on:canplay="onVideoLoad"
+      />
+      <CustomControls
+        v-if="videoElement && currentRange"
+        :videoElement="videoElement"
+        :range="currentRange"
       />
       <div class="info" :class="{ open: isOpenInfo }">
-        <button class="togle-info" @click="isOpenInfo = !isOpenInfo">
+        <button class="toggle-info" @click="isOpenInfo = !isOpenInfo">
           <img :src="arrowIcon" alt="arrow" />
         </button>
-        <div class="info__label">{{ camera.name }}</div>
+        <div class="info__label">{{ name }}</div>
         <RangeSelect
           v-if="streams.length > 0"
           :streams="streams"
-          v-model:modelValue="range"
+          v-model:modelValue="currentRange"
         />
       </div>
     </div>
   </div>
 </template>
+
 <style scoped lang="scss">
 .pop-up {
   position: fixed;
@@ -159,7 +179,7 @@ watch(range, () => {
     }
   }
 }
-.togle-info {
+.toggle-info {
   background-color: #ffffff;
   border: 0;
   box-shadow: none;
@@ -187,7 +207,7 @@ watch(range, () => {
   transition: 0.5s;
   &.open {
     transform: translateX(0);
-    .togle-info {
+    .toggle-info {
       img {
         transform: rotateZ(0);
       }

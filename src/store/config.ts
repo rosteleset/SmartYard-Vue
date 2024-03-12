@@ -24,7 +24,6 @@ export const useConfigStore = defineStore(STORE_NAME, () => {
 
   // Функция для обновления конфигурации
   const updateConfig = (params: ConfigStore) => {
-    console.log(`update_${params.facesPage}`);
     config.value = {
       ...config.value,
       ...params,
