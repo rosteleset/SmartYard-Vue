@@ -8,6 +8,8 @@ import Button from "./Button.vue";
 import Faces from "./Faces.vue";
 import Switch from "./Switch.vue";
 import convertSettingsBoolean from "../lib/convertSettingsBoolean";
+import { useRouter } from "vue-router";
+import { useConfig } from "../store/config";
 
 // определение свойств
 const { flatId } = defineProps<{
@@ -16,6 +18,8 @@ const { flatId } = defineProps<{
 
 // использование настроек
 const { settings, save } = useSettings(flatId);
+const { config } = useConfig();
+const router = useRouter();
 
 // установка значения doorCode
 const doorCode = ref(settings.value?.doorCode);
@@ -29,6 +33,11 @@ const isFacesOpen = ref(false);
 
 const togleIsFacesOpen = () => {
   isFacesOpen.value = !isFacesOpen.value;
+};
+
+const openFacesHandler = () => {
+  if (config.facesPage) router.push(`/faces/${flatId}`);
+  else togleIsFacesOpen();
 };
 
 // функции для проверки настроек
@@ -155,9 +164,9 @@ watch(settings, (newSettings) => {
         <Button
           v-if="settings.FRSDisabled === 'f' && !isFacesOpen"
           variant="primary"
-          @click="togleIsFacesOpen"
+          @click="openFacesHandler"
         >
-          {{ $t('settings.frs') }}
+          {{ $t("settings.frs") }}
         </Button>
         <Faces v-if="isFacesOpen" :flatId="flatId" />
       </div>
@@ -167,6 +176,7 @@ watch(settings, (newSettings) => {
 
 <style scoped lang="scss">
 .grid {
+  max-width: 600px;
   display: grid;
   grid-template-columns: 3fr 1fr;
   gap: 12px;

@@ -7,7 +7,6 @@ import { Camera, FormatedRange } from "../types/camera";
 import RangeSelect from "./RangeSelect.vue";
 import arrowIcon from "../assets/arrowRight.svg";
 
-
 // Определение пропсов и эмиттера
 const props = defineProps<{
   camera: Camera;
@@ -67,7 +66,9 @@ const resize = () => {
 const onLoad = () => {
   resize();
   if (videoElement.value)
-    initializeVideoStream(getLiveURL(props.camera), videoElement.value);
+    initializeVideoStream(getLiveURL(props.camera), videoElement.value).then(
+      (response) => (hls.value = response)
+    );
 };
 
 // Функция готовности видео
@@ -90,7 +91,7 @@ watch(range, () => {
     initializeVideoStream(
       getLiveURL(props.camera, range.value?.from, range.value?.duration),
       videoElement.value
-    );
+    ).then((response) => (hls.value = response));
   }
 });
 </script>
@@ -111,7 +112,7 @@ watch(range, () => {
       />
       <div class="info" :class="{ open: isOpenInfo }">
         <button class="togle-info" @click="isOpenInfo = !isOpenInfo">
-        <img :src="arrowIcon" alt="arrow">
+          <img :src="arrowIcon" alt="arrow" />
         </button>
         <div class="info__label">{{ camera.name }}</div>
         <RangeSelect
@@ -161,13 +162,16 @@ watch(range, () => {
 .togle-info {
   background-color: #ffffff;
   border: 0;
-  box-shadow: 0;
+  box-shadow: none;
   padding: 12px;
+  border-radius: 6px 0 0 6px;
   position: absolute;
   right: 100%;
   top: 50%;
+  cursor: pointer;
   img {
     display: block;
+    transition: 0.5s ease-out;
     transform: rotateZ(180deg);
   }
 }
@@ -183,6 +187,16 @@ watch(range, () => {
   transition: 0.5s;
   &.open {
     transform: translateX(0);
+    .togle-info {
+      img {
+        transform: rotateZ(0);
+      }
+    }
+  }
+  &:not(.open) {
+    &:hover {
+      transform: translate(calc(100% - 12px));
+    }
   }
   &__label {
     font-size: 20px;
@@ -190,4 +204,3 @@ watch(range, () => {
   }
 }
 </style>
-../hooks/ranges

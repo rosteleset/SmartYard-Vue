@@ -8,6 +8,10 @@ body {
   font-family: "Source Sans 3", sans-serif;
 }
 
+p {
+  white-space: pre-line;
+}
+
 #app {
   display: flex;
   flex-direction: column;

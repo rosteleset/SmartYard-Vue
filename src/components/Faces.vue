@@ -1,32 +1,34 @@
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 import deleteIcon from "../assets/delete.svg";
 import plusIcon from "../assets/plus.svg";
 import { useFaces } from "../hooks/faces";
+import { useAdressesStore } from "../store/addresses";
 import { Face } from "../types/faces";
 import Button from "./Button.vue";
 import Modal from "./Modal.vue";
-import { useRouter } from "vue-router";
 
-const props = defineProps<{
+const { flatId } = defineProps<{
   flatId: string;
 }>();
-const houseId = inject<string>("houseId")
-const router = useRouter()
-const { faces, remove } = useFaces(props.flatId);
+const router = useRouter();
+const { faces, remove } = useFaces(flatId);
+const { getAdressByFlatId } = useAdressesStore();
 const selectedFace = ref<Face>();
 const removedFace = ref<Face>();
+const house = getAdressByFlatId(flatId);
 
 const removeHandler = () => {
   if (removedFace.value) {
-    remove({ faceId: removedFace.value.faceId, flatId: props.flatId });
+    remove({ faceId: removedFace.value.faceId, flatId: flatId });
     removedFace.value = undefined;
   }
 };
 
 const openEventsHandler = () => {
-  router.push(`/events/${houseId}`)
-}
+  router.push(`/events/${house?.houseId}`);
+};
 </script>
 <template>
   <div class="list">
@@ -45,6 +47,12 @@ const openEventsHandler = () => {
       <img :src="plusIcon" alt="add" />
     </div>
   </div>
+  <p>
+    Фотографии ваших гостей хранятся в разделе История событий. {{ "\n" }}Для
+    выбора и регистрации лица перейдите в указанный раздел, кликнув на Плюс. В
+    Истории событий кликните на значок информации напротив нужного события и на
+    открывшемся экране выберите необходимое фото.
+  </p>
   <Modal
     :isOpen="selectedFace !== undefined"
     @onClose="selectedFace = undefined"
@@ -58,10 +66,12 @@ const openEventsHandler = () => {
   >
     <div class="delete-form">
       <img :src="removedFace?.image" :alt="removedFace?.faceId" />
-      <Button variant="error" @click="removeHandler">{{ $t('faces.delete') }}</Button>
-      <Button variant="primary" bordered @click="removedFace = undefined"
-        >{{ $t('faces.cancel') }}</Button
-      >
+      <Button variant="error" @click="removeHandler">{{
+        $t("faces.delete")
+      }}</Button>
+      <Button variant="primary" bordered @click="removedFace = undefined">{{
+        $t("faces.cancel")
+      }}</Button>
     </div>
   </Modal>
 </template>

@@ -82,7 +82,7 @@ const clientsWithTitles = computed(() =>
           v-slot:[client.tabId]
           :key="client.tabId"
         >
-          <AddressSettings :flat-id="client.tabId" />
+          <AddressSettings :flat-id="client.tabId" @test="toggleSettingsOpen" />
         </template>
       </Tabs>
     </Modal>

@@ -29,6 +29,11 @@ export const useAdressesStore = defineStore("addresses", () => {
     );
   };
 
+  const getAdressByFlatId = (flatId: string): Building | undefined => {
+    const client = userStore.clients.find((client) => client.flatId === flatId)
+    return client && getAdressByHouseId(client.houseId)
+  };
+
   onMounted(load);
 
   return {
@@ -37,5 +42,6 @@ export const useAdressesStore = defineStore("addresses", () => {
     load,
     getAdressByHouseId,
     getClientsByHouseId,
+    getAdressByFlatId
   };
 });
