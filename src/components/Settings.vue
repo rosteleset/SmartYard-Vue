@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import sendName from "../api/sendName";
 import convertSettingsBoolean from "../lib/convertSettingsBoolean";
 import { useConfig } from "../store/config";
-import { useLocaleStore } from "../store/locale";
 import { useUserStore } from "../store/user";
 import Button from "./Button.vue";
 import Select from "./Select.vue";
 import Switch from "./Switch.vue";
+import { useLocale } from "../hooks/locale";
 
 const { names, notifications } = useUserStore();
 const { config, updateConfig } = useConfig();
-const { availableLocales, locale, changeLocale, t } = useLocaleStore();
+const { availableLocales, locale, changeLocale, t } = useLocale();
 const isProcessed = ref(false);
 const name = ref<string>(names.name);
 const patronymic = ref<string>(names.patronymic || "");
@@ -78,25 +78,12 @@ watch(watchmanMode, (value) => {
         justify="space-between"
       />
     </div>
-    <h2>Настройки приложения</h2>
+    <h2>{{ $t("settings.other") }}</h2>
     <div class="settings-block">
       <Select
         :options="availableLocales.map((locale) => localeToOption(locale))"
         :modelValue="localeToOption(locale)"
         @update:modelValue="localeHandler"
-      />
-    </div>
-    <h2>Настройки разработки</h2>
-    <div class="settings-block">
-      <Switch
-        v-model="facesPage"
-        label="Блок лиц отдельной страницей"
-        justify="space-between"
-      />
-      <Switch
-        v-model="watchmanMode"
-        label="Режим вахтера"
-        justify="space-between"
       />
     </div>
   </div>
@@ -119,4 +106,4 @@ watch(watchmanMode, (value) => {
     }
   }
 }
-</style>
+</style>../hooks/locale

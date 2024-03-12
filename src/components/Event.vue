@@ -2,27 +2,27 @@
 import { computed, ref } from "vue";
 import informationIcon from "../assets/information.svg";
 import useEventNames from "../lib/useEventNames";
-import { useLocaleStore } from "../store/locale";
 import { Event } from "../types/events";
 import Button from "./Button.vue";
 import ImageWithFace from "./ImageWithFace.vue";
 import Modal from "./Modal.vue";
 import { useFaces } from "../hooks/faces";
+import { useLocale } from "../hooks/locale";
 
 // Определение пропсов
 const props = defineProps<{ event: Event }>();
 
-const localeStore = useLocaleStore();
+const {localizedDayjs} = useLocale();
 const { eventNames } = useEventNames();
 const { add, remove } = useFaces();
 
 // Вычисляемые свойства
 const label = computed(() => getEventName(props.event.event));
 const time = computed(() =>
-  localeStore.localizedDayjs(props.event.date).format("HH:mm")
+  localizedDayjs.value(props.event.date).format("HH:mm")
 );
 const dateTime = computed(() =>
-  localeStore.localizedDayjs(props.event.date).format("dddd, D, MMMM HH:mm")
+  localizedDayjs.value(props.event.date).format("dddd, D, MMMM HH:mm")
 );
 const isModalOpen = ref(false);
 const canLike = computed(() => props.event.detailX.flags?.includes("canLike"));

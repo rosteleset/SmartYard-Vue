@@ -4,10 +4,10 @@ import eventIcon from "../assets/events.svg";
 import { useEvents } from "../hooks/events";
 import useEventNames from "../lib/useEventNames";
 import { useAdressesStore } from "../store/addresses";
-import { useLocaleStore } from "../store/locale";
 import Event from "./Event.vue";
 import Label from "./Label.vue";
 import Select from "./Select.vue";
+import { useLocale } from "../hooks/locale";
 
 // Интерфейс для опций
 interface OptionType {
@@ -29,8 +29,8 @@ const options = computed(() => {
     .filter(([id]) => id !== "default")
     .map(([id, name]) => ({ id, name }));
 });
-const selectedOption = ref<OptionType | null>(null);
-const selectedClient = ref<OptionType | null>(null);
+const selectedOption = ref<OptionType>();
+const selectedClient = ref<OptionType>();
 const flatIds = computed(() => {
   if (selectedClient.value) return [selectedClient.value.id];
   else return clients.value.map((client) => client.flatId);
@@ -38,13 +38,13 @@ const flatIds = computed(() => {
 const selectedOptionId = computed(() => selectedOption.value?.id);
 const isOpen = ref(false);
 const { events } = useEvents(flatIds, selectedOptionId);
-const localeStore = useLocaleStore();
+const localeStore = useLocale();
 
 // Функции для обновления опций и клиентов
-const updateOption = (newOption: OptionType | null) => {
+const updateOption = (newOption?: OptionType) => {
   selectedOption.value = newOption;
 };
-const updateClient = (newClient: OptionType | null) => {
+const updateClient = (newClient?: OptionType) => {
   selectedClient.value = newClient;
 };
 
@@ -84,7 +84,7 @@ const handleToggle = (open: boolean) => {
         </div>
         <div class="events__day" v-for="day in events" :key="day.date">
           <div class="events__title" v-if="day.events.length > 0">
-            {{ localeStore.localizedDayjs(day.date).format("dddd, D MMMM") }}
+            {{ localeStore.localizedDayjs.value(day.date).format("dddd, D MMMM") }}
           </div>
           <Event v-for="event in day.events" :key="event.uuid" :event="event" />
         </div>
@@ -124,3 +124,4 @@ const handleToggle = (open: boolean) => {
   opacity: 0;
 }
 </style>
+../hooks/locale

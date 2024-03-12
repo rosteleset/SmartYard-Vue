@@ -48,7 +48,8 @@
     "save": "Сохранить",
     "notifications": "уведомления",
     "show-notifications": "Показывать уведомления",
-    "show-money-notifications": "Оповещать о недостатке средств"
+    "show-money-notifications": "Оповещать о недостатке средств",
+    "other": "Настройки приложения"
   },
   "routes": {
     "AddressesList": "Адреса",

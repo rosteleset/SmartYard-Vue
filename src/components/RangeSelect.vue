@@ -3,15 +3,15 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import dayjs from "dayjs";
 import { computed, ref } from "vue";
-import { useLocaleStore } from "../store/locale";
 import { FormatedRange, Range, Stream } from "../types/camera";
+import { useLocale } from "../hooks/locale";
 
 const { streams } = defineProps<{
   streams: Stream[];
 }>();
 const model = defineModel<FormatedRange>();
 
-const { locale, localizedDayjs } = useLocaleStore();
+const { locale, localizedDayjs } = useLocale();
 
 const ranges = streams.flatMap((stream) =>
   stream.ranges.flatMap((range) => splitRangeIntoParts(range, stream.stream))
@@ -97,3 +97,4 @@ const date = ref();
   }
 }
 </style>
+../hooks/locale
