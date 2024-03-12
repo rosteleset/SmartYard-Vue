@@ -70,8 +70,11 @@ const handleToggle = (open: boolean) => {
             :options="options"
             :model-value="selectedOption"
             @update:model-value="updateOption"
+            allow-undefined
+            :undefined-text="$t('select.events')"
           />
           <Select
+            v-if="clients.length > 1"
             :options="
               clients.map((client) => ({
                 id: client.flatId,
@@ -80,11 +83,15 @@ const handleToggle = (open: boolean) => {
             "
             :model-value="selectedClient"
             @update:model-value="updateClient"
+            allow-undefined
+            :undefined-text="$t('select.flat')"
           />
         </div>
         <div class="events__day" v-for="day in events" :key="day.date">
           <div class="events__title" v-if="day.events.length > 0">
-            {{ localeStore.localizedDayjs.value(day.date).format("dddd, D MMMM") }}
+            {{
+              localeStore.localizedDayjs.value(day.date).format("dddd, D MMMM")
+            }}
           </div>
           <Event v-for="event in day.events" :key="event.uuid" :event="event" />
         </div>
@@ -92,7 +99,7 @@ const handleToggle = (open: boolean) => {
     </Transition>
   </template>
   <template v-else>
-    <div class="global-error">{{ $t('events.not-found') }}</div>
+    <div class="global-error">{{ $t("events.not-found") }}</div>
   </template>
 </template>
 
