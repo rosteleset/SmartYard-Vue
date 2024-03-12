@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { useUserStore } from "../store/user";
+import { ref } from "vue";
 import sendName from "../api/sendName";
+import convertSettingsBoolean from "../lib/convertSettingsBoolean";
+import { useUserStore } from "../store/user";
 import Button from "./Button.vue";
 import Switch from "./Switch.vue";
-import convertSettingsBoolean from "../lib/convertSettingsBoolean";
 
 const { names, notifications } = useUserStore();
 const isProcessed = ref(false);
@@ -36,12 +36,12 @@ const updateNames = async () => {
     <div class="settings-block">
       <Switch
         v-model="notificationsEnable"
-        label="Показывать уведомления"
+        label="$t('settings.show-notifications')"
         justify="space-between"
       />
       <Switch
         v-model="notificationsMoney"
-        label="Оповещать о недостатке средств"
+        label="$t('settings.show-money-notifications')"
         justify="space-between"
       />
     </div>

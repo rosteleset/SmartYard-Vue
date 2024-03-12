@@ -46,7 +46,9 @@
     "patronymic": "отчество",
     "phone": "телефон",
     "save": "Сохранить",
-    "notifications": "уведомления"
+    "notifications": "уведомления",
+    "show-notifications": "Показывать уведомления",
+    "show-money-notifications": "Оповещать о недостатке средств"
   },
   "routes": {
     "AddressesList": "Адреса",
