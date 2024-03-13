@@ -117,7 +117,6 @@ header {
   max-height: v-bind(height);
   transition: 0.5s ease;
 
-  overflow: hidden;
 }
 
 .height-enter-from,

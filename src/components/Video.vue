@@ -74,7 +74,6 @@ const onVideoReady = () => {
       :class="{ active: isPlaying }"
       v-on:click="openHandler"
       v-on:canplay="onVideoReady"
-      controls
     />
     <div v-if="index" class="number">{{ index }}</div>
 
