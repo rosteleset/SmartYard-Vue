@@ -4,7 +4,7 @@ import { get } from "../api";
 import { Building } from "../types/building";
 import { useUserStore } from "./user";
 
-export const useAdressesStore = defineStore("addresses", () => {
+export const useAddressesStore = defineStore("addresses", () => {
   const isLoaded = ref(false);
   const userStore = useUserStore();
   const addresses = ref<Building[]>([]);
@@ -16,7 +16,7 @@ export const useAdressesStore = defineStore("addresses", () => {
     });
   };
 
-  const getAdressByHouseId = (houseId: string): Building | undefined => {
+  const getAddressByHouseId = (houseId: string): Building | undefined => {
     const result = addresses.value.find(
       (address) => address.houseId === houseId
     );
@@ -29,9 +29,9 @@ export const useAdressesStore = defineStore("addresses", () => {
     );
   };
 
-  const getAdressByFlatId = (flatId: string): Building | undefined => {
-    const client = userStore.clients.find((client) => client.flatId === flatId)
-    return client && getAdressByHouseId(client.houseId)
+  const getAddressByFlatId = (flatId: string): Building | undefined => {
+    const client = userStore.clients.find((client) => client.flatId === flatId);
+    return client && getAddressByHouseId(client.houseId);
   };
 
   onMounted(load);
@@ -40,8 +40,8 @@ export const useAdressesStore = defineStore("addresses", () => {
     isLoaded,
     addresses,
     load,
-    getAdressByHouseId,
+    getAddressByHouseId,
     getClientsByHouseId,
-    getAdressByFlatId
+    getAddressByFlatId,
   };
 });

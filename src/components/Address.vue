@@ -2,7 +2,7 @@
 import { computed, provide, ref } from "vue";
 import arrowIcon from "../assets/ArrowBottom.svg";
 import settingsIcon from "../assets/settings.svg";
-import { useAdressesStore } from "../store/addresses";
+import { useAddressesStore } from "../store/addresses";
 import AddressSettings from "./AddressSettings.vue";
 import Cameras from "./Cameras.vue";
 import Door from "./Door.vue";
@@ -18,11 +18,11 @@ const { houseId } = defineProps<{ houseId: string }>();
 provide("houseId", houseId);
 
 // Использование хранилища адресов и пользователей
-const { getAdressByHouseId, getClientsByHouseId } = useAdressesStore();
+const { getAddressByHouseId, getClientsByHouseId } = useAddressesStore();
 const { t } = useLocale();
 
 // Получение данных о здании и клиентах
-const building = getAdressByHouseId(houseId);
+const building = getAddressByHouseId(houseId);
 const clients = getClientsByHouseId(houseId);
 
 // Состояния открытости окон
@@ -149,4 +149,5 @@ const clientsWithTitles = computed(() =>
     grid-template-columns: repeat(1, 1fr);
   }
 }
-</style>../hooks/locale
+</style>
+../hooks/locale

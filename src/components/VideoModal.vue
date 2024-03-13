@@ -6,8 +6,6 @@ import {
   onUnmounted,
   ref,
   watch,
-  defineProps,
-  defineEmits,
 } from "vue";
 import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
 import { useRanges } from "../hooks/ranges";

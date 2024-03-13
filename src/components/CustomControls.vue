@@ -2,8 +2,6 @@
 import dayjs from "dayjs";
 import {
   computed,
-  defineEmits,
-  defineProps,
   onMounted,
   onUnmounted,
   ref,

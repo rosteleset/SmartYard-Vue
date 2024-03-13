@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 import deleteIcon from "../assets/delete.svg";
 import plusIcon from "../assets/plus.svg";
 import { useFaces } from "../hooks/faces";
-import { useAdressesStore } from "../store/addresses";
+import { useAddressesStore } from "../store/addresses";
 import { Face } from "../types/faces";
 import Button from "./Button.vue";
 import Modal from "./Modal.vue";
@@ -14,10 +14,10 @@ const { flatId } = defineProps<{
 }>();
 const router = useRouter();
 const { faces, remove } = useFaces(flatId);
-const { getAdressByFlatId } = useAdressesStore();
+const { getAddressByFlatId } = useAddressesStore();
 const selectedFace = ref<Face>();
 const removedFace = ref<Face>();
-const house = getAdressByFlatId(flatId);
+const house = getAddressByFlatId(flatId);
 
 const removeHandler = () => {
   if (removedFace.value) {

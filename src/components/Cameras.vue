@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useRoute } from "vue-router";
 import cameraIcon from "../assets/camera.svg";
 import { useCameras } from "../hooks/cameras";
-import { useAdressesStore } from "../store/addresses";
+import { useAddressesStore } from "../store/addresses";
 import Label from "./Label.vue";
 import Map from "./Map.vue";
 import Video from "./Video.vue";
@@ -15,11 +15,11 @@ const { houseId } = defineProps<{
 
 const route = useRoute();
 
-const { getAdressByHouseId } = useAdressesStore();
+const { getAddressByHouseId } = useAddressesStore();
 
 const invalidHouseId =
   typeof route.params.houseId === "string" &&
-  getAdressByHouseId(route.params.houseId) === undefined; //проверка на наличие дома если в роутрере указан houseId
+  getAddressByHouseId(route.params.houseId) === undefined; //проверка на наличие дома если в роутрере указан houseId
 const isOpen = ref(false);
 
 const { cameras } = useCameras({ houseId, overview: houseId === undefined });

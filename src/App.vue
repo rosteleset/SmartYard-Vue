@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { provide, ref } from "vue";
 import Header from "./components/Header.vue";
-import { useAdressesStore } from "./store/addresses";
+import { useAddressesStore } from "./store/addresses";
 import { useUserStore } from "./store/user";
 
-const adressesStore = useAdressesStore();
+const addressesStore = useAddressesStore();
 const userStore = useUserStore();
 
 const isMenuOpen = ref(false);
@@ -23,7 +23,7 @@ provide("isMenuOpen", isMenuOpen);
       >
         <div class="container">
           <component
-            v-if="userStore.isLoaded && adressesStore.isLoaded"
+            v-if="userStore.isLoaded && addressesStore.isLoaded"
             :is="Component"
           />
 

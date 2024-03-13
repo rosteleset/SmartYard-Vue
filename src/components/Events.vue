@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import eventIcon from "../assets/events.svg";
 import { useEvents } from "../hooks/events";
 import useEventNames from "../lib/useEventNames";
-import { useAdressesStore } from "../store/addresses";
+import { useAddressesStore } from "../store/addresses";
 import Event from "./Event.vue";
 import Label from "./Label.vue";
 import Select from "./Select.vue";
@@ -21,7 +21,7 @@ const { houseId } = defineProps<{
 }>();
 
 // Использование сторов и реактивных переменных
-const { getClientsByHouseId } = useAdressesStore();
+const { getClientsByHouseId } = useAddressesStore();
 const clients = getClientsByHouseId(houseId);
 const eventNames = ref(useEventNames().eventNames);
 const options = computed(() => {
