@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { Ref, inject, ref, watch } from "vue";
-import { RouterLink, useRouter } from "vue-router";
+import {RouteRecord, RouterLink, useRouter} from "vue-router";
+import {useLocale} from "../hooks/locale.ts";
 
 const isMenuOpen: Ref<boolean> = inject("isMenuOpen") || ref(false);
 
 const { getRoutes, currentRoute } = useRouter();
-const routes = getRoutes();
 
-watch(currentRoute, () => (isMenuOpen.value = false));
 </script>
 <template>
   <button class="nav">
@@ -29,40 +28,16 @@ watch(currentRoute, () => (isMenuOpen.value = false));
       </g>
     </svg>
   </button>
-  <div class="menu">
-    <RouterLink
-      v-for="route in routes.filter((route) => route.name)"
-      :to="route.path"
-      >{{ $t(`routes.${route.name as string}`) }}</RouterLink
-    >
-  </div>
+
 </template>
 <style scoped lang="scss">
-.menu {
-  position: absolute;
-  left: 0;
-  top: 100%;
-  width: 100%;
-  z-index: 0;
-  display: flex;
-  justify-content: center;
-  gap: 24px;
-  a {
-    color: #ffffff;
-    font-size: 24px;
-    text-decoration: none;
-    transition: 0.5s ease-out;
-    &:hover {
-      transform: translateY(-6px);
-    }
-  }
-}
+
 .nav {
   display: block;
   height: max-content;
   background: none;
   border: 0;
-  box-shadow: 0;
+  box-shadow: none;
 }
 .toggle-svg {
   width: 60px;

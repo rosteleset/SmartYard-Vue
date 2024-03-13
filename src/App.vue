@@ -18,7 +18,6 @@ provide("isMenuOpen", isMenuOpen);
     <Transition name="route" mode="out-in">
       <div
         class="content"
-        :class="{ 'menu-open': isMenuOpen }"
         :key="$route.fullPath"
       >
         <div class="container">
