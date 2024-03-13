@@ -12,7 +12,7 @@ import { useLocale } from "../hooks/locale";
 // Определение пропсов
 const props = defineProps<{ event: Event }>();
 
-const {localizedDayjs} = useLocale();
+const { localizedDayjs } = useLocale();
 const { eventNames } = useEventNames();
 const { add, remove } = useFaces();
 
@@ -62,10 +62,11 @@ const getEventName = (event: string) => {
     <img :src="informationIcon" alt="information" class="event__button" />
   </div>
   <Modal
-    :title="props.event.mechanizmaDescription"
+    :title="label"
     :is-open="isModalOpen"
     @on-close="closeModal"
   >
+    <p>{{ props.event.mechanizmaDescription }}</p>
     <p>{{ dateTime }}</p>
     <ImageWithFace
       v-if="props.event.preview"
@@ -73,13 +74,14 @@ const getEventName = (event: string) => {
       :face="props.event.detailX.face"
       :color="color"
     />
+    <p v-else class="error">{{ $t("events.image-error") }}</p>
     <div v-if="!isUpdated" class="event__buttons">
-      <Button variant="sucsses" v-if="canLike" @click="likeHandler"
-        >{{ $t('events.like') }}</Button
-      >
-      <Button variant="error" v-if="canDislike" @click="disLikeHandler"
-        >{{ $t('events.dislike') }}</Button
-      >
+      <Button variant="sucsses" v-if="canLike" @click="likeHandler">{{
+        $t("events.like")
+      }}</Button>
+      <Button variant="error" v-if="canDislike" @click="disLikeHandler">{{
+        $t("events.dislike")
+      }}</Button>
     </div>
   </Modal>
 </template>
@@ -108,5 +110,9 @@ const getEventName = (event: string) => {
     justify-content: center;
     gap: 12px;
   }
+}
+.error {
+  text-align: center;
+  padding: 24px;
 }
 </style>
