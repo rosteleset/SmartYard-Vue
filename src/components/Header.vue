@@ -8,10 +8,13 @@ import {
 import { useLocale } from "../hooks/locale.ts";
 import Arrow from "./Arrow.vue";
 import Nav from "./Nav.vue";
+import { useConfigStore } from "../store/config.ts";
 
 const { t } = useLocale();
 const { currentRoute, getRoutes, back } = useRouter();
 const routes = getRoutes();
+const { config } = useConfigStore();
+const alwaysMenu = computed(() => config["alwaysMenu"]);
 const isMenuOpen: Ref<boolean> = inject("isMenuOpen") || ref(false);
 const menuList = ref<HTMLElement | null>(null);
 const height = ref("0px");
@@ -44,13 +47,13 @@ watch(currentRoute, () => {
         <div class="header__label">
           SmartYard-WEB {{ currentRoute && getRouteName(currentRoute) }}
         </div>
-        <div class="nav">
+        <div v-if="!alwaysMenu" class="nav">
           <Nav />
         </div>
       </div>
 
       <Transition name="height" to>
-        <div class="menu" v-if="isMenuOpen">
+        <div class="menu" v-if="alwaysMenu || isMenuOpen">
           <div class="menu__list" ref="menuList">
             <RouterLink
               v-for="route in routes.filter((route) => route.name)"

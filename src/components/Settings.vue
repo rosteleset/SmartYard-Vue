@@ -91,6 +91,12 @@ watch(watchmanMode, (value) => {
         label="Режим вахтера"
         justify="space-between"
       />
+      <Switch
+        v-model:modelValue="config['alwaysMenu']"
+        @update:modelValue="(value) => updateConfig({ alwaysMenu: value })"
+        label="Постоянное меню"
+        justify="space-between"
+      />
     </div>
   </div>
 </template>
