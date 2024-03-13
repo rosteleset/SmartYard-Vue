@@ -4,14 +4,17 @@ import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
 import { Camera } from "../types/camera";
 import VideoModal from "./VideoModal.vue";
 import Hls from "hls.js";
+import { useConfigStore } from "../store/config";
 
-const {camera} = defineProps<{ camera: Camera; index?: number }>();
+const { camera } = defineProps<{ camera: Camera; index?: number }>();
+const {config} = useConfigStore()
+
 const previewContainer = ref<HTMLVideoElement | null>(null);
 const previewElement = ref<HTMLVideoElement | null>(null);
 const videoElement = ref<HTMLVideoElement | null>(null);
 const preview = ref<string>(getPreviewURL(camera));
-  const hlsInstance = ref<Hls>();
-    const isPlaying = ref(false);
+const hlsInstance = ref<Hls>();
+const isPlaying = ref(false);
 
 const isOpen = ref(false);
 const styles = ref<StyleValue>();
@@ -37,7 +40,7 @@ const closeHandler = () => {
 
 // Функция загрузки видео и инициализации потока
 const onVideoLoad = () => {
-  if (videoElement.value)
+  if (config['watchmanMode'] && videoElement.value)
     initializeVideoStream(getLiveURL(camera), videoElement.value).then(
       (hlsResponse) => (hlsInstance.value = hlsResponse)
     );
@@ -60,22 +63,28 @@ const onVideoReady = () => {
       autoplay
       ref="previewElement"
       class="video__preview"
-      :class="{active:isPlaying}"
       :src="preview"
       v-on:click="openHandler"
       v-on:canplay="onVideoLoad"
     />
-    <video ref="videoElement" class="video__player" v-on:canplay="onVideoReady" />
+    <video
+      muted
+      ref="videoElement"
+      class="video__player"
+      :class="{ active: isPlaying }"
+      v-on:click="openHandler"
+      v-on:canplay="onVideoReady"
+      controls
+    />
     <div v-if="index" class="number">{{ index }}</div>
-    
-      <VideoModal
+
+    <VideoModal
       v-if="isOpen"
-        :camera="camera"
-        :start-styles="styles"
-        :response="response"
-        @on-close="closeHandler"
-      />
-    
+      :camera="camera"
+      :start-styles="styles"
+      :response="response"
+      @on-close="closeHandler"
+    />
   </div>
 </template>
 
@@ -92,10 +101,6 @@ const onVideoReady = () => {
     height: 100%;
     object-fit: cover;
     position: relative;
-    &.active {
-      z-index: 2;
-      // opacity: 0;
-    }
   }
 
   &__player {
@@ -105,8 +110,10 @@ const onVideoReady = () => {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 1;
-    
+    z-index: 0;
+    &.active {
+      z-index: 2;
+    }
   }
 }
 
@@ -122,5 +129,6 @@ const onVideoReady = () => {
   width: 36px;
   height: 36px;
   border-radius: 50%;
+  z-index: 3;
 }
 </style>

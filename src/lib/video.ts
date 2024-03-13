@@ -44,13 +44,14 @@ const initializeVideoStream = (
 ): Promise<Hls | undefined> => {
   return new Promise((resolve, reject) => {
     if (Hls.isSupported()) {
-      const hls = new Hls();
+      const hls = new Hls({maxBufferLength:1});
       hls.loadSource(streamUrl);
       hls.attachMedia(videoElement);
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         videoElement.play();
       });
       resolve(hls);
+
     } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
       videoElement.src = streamUrl;
       resolve(undefined);
