@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { StyleValue, ref } from "vue";
-import { getPreviewURL } from "../lib/video";
+import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
 import { Camera } from "../types/camera";
 import VideoModal from "./VideoModal.vue";
+import Hls from "hls.js";
 
-const props = defineProps<{ camera: Camera; index?: number }>();
+const {camera} = defineProps<{ camera: Camera; index?: number }>();
 const previewContainer = ref<HTMLVideoElement | null>(null);
 const previewElement = ref<HTMLVideoElement | null>(null);
-const preview = ref<string>(getPreviewURL(props.camera));
+const videoElement = ref<HTMLVideoElement | null>(null);
+const preview = ref<string>(getPreviewURL(camera));
+  const hlsInstance = ref<Hls>();
+    const isPlaying = ref(false);
 
 const isOpen = ref(false);
 const styles = ref<StyleValue>();
@@ -30,6 +34,19 @@ const openHandler = () => {
 const closeHandler = () => {
   isOpen.value = false;
 };
+
+// Функция загрузки видео и инициализации потока
+const onVideoLoad = () => {
+  if (videoElement.value)
+    initializeVideoStream(getLiveURL(camera), videoElement.value).then(
+      (hlsResponse) => (hlsInstance.value = hlsResponse)
+    );
+};
+
+// Функция события готовности видео
+const onVideoReady = () => {
+  isPlaying.value = true;
+};
 </script>
 
 <template>
@@ -37,15 +54,18 @@ const closeHandler = () => {
     v-if="camera.url"
     ref="previewContainer"
     class="video"
-    :id="`camera-${props.camera.id}`"
+    :id="`camera-${camera.id}`"
   >
     <video
       autoplay
       ref="previewElement"
       class="video__preview"
+      :class="{active:isPlaying}"
       :src="preview"
       v-on:click="openHandler"
-    ></video>
+      v-on:canplay="onVideoLoad"
+    />
+    <video ref="videoElement" class="video__player" v-on:canplay="onVideoReady" />
     <div v-if="index" class="number">{{ index }}</div>
     <VideoModal
       :camera="camera"
@@ -62,13 +82,29 @@ const closeHandler = () => {
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.5s;
-  background-color: #6D7A8A;
+  background-color: #6d7a8a;
   position: relative;
 
   &__preview {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    position: relative;
+    &.active {
+      z-index: 2;
+      // opacity: 0;
+    }
+  }
+
+  &__player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;
+    
   }
 }
 
