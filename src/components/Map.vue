@@ -15,7 +15,7 @@ const props = defineProps<{
 // Реактивные переменные
 const zoom = ref(10);
 const map = ref<Map | null>(null);
-const openCamera = ref<number | null>(null);
+const openCamera = ref<Camera | null>(null);
 const styles = ref<StyleValue>();
 const TILE_SERVER = import.meta.env.VITE_TILE_SERVER;
 const CRS = import.meta.env.VITE_CRS;
@@ -60,7 +60,7 @@ const handler = (event: any, camera: Camera) => {
       height: `${rect?.height}px`,
     };
   }
-  openCamera.value = camera.id;
+  openCamera.value = camera;
 };
 </script>
 
@@ -96,11 +96,9 @@ const handler = (event: any, camera: Camera) => {
     </LMap>
     <!-- Модальное окно с видеопотоком -->
     <VideoModal
-      v-for="camera in cameras"
-      :key="camera.id"
-      :camera="camera"
+      v-if="openCamera"
+      :camera="openCamera"
       :startStyles="styles"
-      :isOpen="openCamera === camera.id"
       @on-close="openCamera = null"
     />
   </div>

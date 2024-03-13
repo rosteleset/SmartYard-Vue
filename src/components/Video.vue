@@ -47,13 +47,15 @@ const closeHandler = () => {
       v-on:click="openHandler"
     ></video>
     <div v-if="index" class="number">{{ index }}</div>
-    <VideoModal
-      :camera="camera"
-      :is-open="isOpen"
-      :start-styles="styles"
-      :response="response"
-      @on-close="closeHandler"
-    />
+    
+      <VideoModal
+      v-if="isOpen"
+        :camera="camera"
+        :start-styles="styles"
+        :response="response"
+        @on-close="closeHandler"
+      />
+    
   </div>
 </template>
 
@@ -62,7 +64,7 @@ const closeHandler = () => {
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.5s;
-  background-color: #6D7A8A;
+  background-color: #6d7a8a;
   position: relative;
 
   &__preview {

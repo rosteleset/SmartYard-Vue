@@ -15,9 +15,8 @@ import arrowIcon from "../assets/arrowRight.svg";
 import CustomControls from "./CustomControls.vue";
 
 // Определение свойств и эмиттеров
-const { camera, isOpen, startStyles, response } = defineProps<{
+const { camera, startStyles, response } = defineProps<{
   camera: Camera;
-  isOpen: boolean;
   startStyles?: StyleValue;
   response?: number;
 }>();
@@ -36,14 +35,6 @@ const hlsInstance = ref<Hls>();
 const { streams } = useRanges(id);
 const currentRange = ref<FormatedRange>();
 
-// Слежение за открытием/закрытием окна
-watch(
-  () => isOpen,
-  () => {
-    styles.value = startStyles;
-    if (!isOpen) isPlaying.value = false;
-  }
-);
 
 // Функция изменения размера видео
 const resizeVideo = () => {
@@ -86,10 +77,12 @@ const onVideoReady = () => {
 
 // Обработчики событий
 onMounted(() => {
+  styles.value = startStyles;
   window.addEventListener("resize", resizeVideo);
 });
 
 onUnmounted(() => {
+  isPlaying.value = false;
   window.removeEventListener("resize", resizeVideo);
   hlsInstance.value?.destroy();
 });
@@ -112,7 +105,7 @@ watch(currentRange, () => {
 </script>
 
 <template>
-  <div class="pop-up" v-if="isOpen" v-on:click="emit('onClose')">
+  <div class="pop-up" v-on:click="emit('onClose')">
     <div class="video-container" :style="styles" @click.stop>
       <video ref="videoElement" v-on:canplay="onVideoReady"></video>
       <video

@@ -85,6 +85,12 @@ watch(watchmanMode, (value) => {
         :modelValue="localeToOption(locale)"
         @update:modelValue="localeHandler"
       />
+      <Switch
+        v-model:modelValue="config['watchmanMode']"
+        @update:modelValue="(value) => updateConfig({ watchmanMode: value })"
+        label="Режим вахтера"
+        justify="space-between"
+      />
     </div>
   </div>
 </template>
@@ -106,4 +112,5 @@ watch(watchmanMode, (value) => {
     }
   }
 }
-</style>../hooks/locale
+</style>
+../hooks/locale
