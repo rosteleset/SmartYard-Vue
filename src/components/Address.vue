@@ -51,7 +51,7 @@ const clientsWithTitles = computed(() =>
   <div v-if="building" class="address" :class="{ 'address--open': isOpen }">
     <div class="address__header" @click="toggleOpen(true)">
       <div class="address__label">{{ building.address }}</div>
-      <div class="address__buttons">
+      <div class="address__buttons" @click.stop>
         <button @click="toggleSettingsOpen">
           <img :src="settingsIcon" alt="$t('addresses.settings')" />
         </button>

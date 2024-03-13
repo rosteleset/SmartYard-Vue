@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import Nav from "./Nav.vue";
 import { computed, inject, ref, Ref, watch } from "vue";
-import { useLocale } from "../hooks/locale.ts";
 import {
   RouteLocationNormalizedLoaded,
   RouteRecord,
   useRouter,
 } from "vue-router";
+import { useLocale } from "../hooks/locale.ts";
+import Arrow from "./Arrow.vue";
+import Nav from "./Nav.vue";
 
 const { t } = useLocale();
-const { currentRoute, getRoutes } = useRouter();
+const { currentRoute, getRoutes, back } = useRouter();
 const routes = getRoutes();
 const isMenuOpen: Ref<boolean> = inject("isMenuOpen") || ref(false);
 const menuList = ref<HTMLElement | null>(null);
 const height = ref("0px");
+
+const isFirst = ref(!!history.state.back);
 
 const getRouteName = (route: RouteLocationNormalizedLoaded | RouteRecord) =>
   typeof route.name === "string" && t(`routes.${route.name}`);
@@ -25,13 +28,19 @@ watch(
       ? menuList.value.getBoundingClientRect().height + "px"
       : height.value)
 );
-watch(currentRoute, () => (isMenuOpen.value = false));
+watch(currentRoute, () => {
+  isFirst.value = !!history.state.back;
+  isMenuOpen.value = false;
+});
 </script>
 
 <template>
   <header>
     <div class="container">
       <div class="header__grid">
+        <Transition name="fade">
+          <Arrow v-if="isFirst" @click="back" />
+        </Transition>
         <div class="header__label">
           SmartYard-WEB {{ currentRoute && getRouteName(currentRoute) }}
         </div>
@@ -60,7 +69,8 @@ header {
   position: relative;
 }
 .container {
-  padding: 0;
+  padding-bottom: 0;
+  padding-top: 0;
 }
 .header__grid {
   display: grid;
@@ -116,7 +126,6 @@ header {
 .height-leave-active {
   max-height: v-bind(height);
   transition: 0.5s ease;
-
 }
 
 .height-enter-from,

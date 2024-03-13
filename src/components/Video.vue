@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { StyleValue, ref } from "vue";
+import { StyleValue, onUnmounted, ref } from "vue";
 import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
 import { Camera } from "../types/camera";
 import VideoModal from "./VideoModal.vue";
@@ -50,6 +50,10 @@ const onVideoLoad = () => {
 const onVideoReady = () => {
   isPlaying.value = true;
 };
+
+onUnmounted(()=>{
+  hlsInstance.value?.destroy()
+})
 </script>
 
 <template>

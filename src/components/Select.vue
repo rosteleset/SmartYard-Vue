@@ -99,6 +99,7 @@ const handleOutsideClick = (event: MouseEvent) => {
   transition: 0.5s;
   position: absolute;
   top: 100%;
+  z-index: 10;
   background-color: #ffffff;
   border: 1px solid #298bff;
   border-radius: 0 0 12px 12px;

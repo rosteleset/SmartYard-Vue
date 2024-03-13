@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { Ref, inject, ref, watch } from "vue";
-import {RouteRecord, RouterLink, useRouter} from "vue-router";
-import {useLocale} from "../hooks/locale.ts";
+import { Ref, inject, ref } from "vue";
 
 const isMenuOpen: Ref<boolean> = inject("isMenuOpen") || ref(false);
 
-const { getRoutes, currentRoute } = useRouter();
 
 </script>
 <template>
