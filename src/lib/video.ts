@@ -1,4 +1,5 @@
 import Hls from "hls.js";
+import { Player } from "shaka-player/dist/shaka-player.compiled";
 import { Camera } from "../types/camera";
 
 // Функция для получения URL прямого эфира
@@ -31,14 +32,14 @@ const initializeVideoStream = (
 ): Promise<Hls | undefined> => {
   return new Promise((resolve, reject) => {
     if (Hls.isSupported()) {
-      const hls = new Hls({maxBufferLength:1});
+      const hls = new Hls({ maxBufferLength: 1 });
       hls.loadSource(streamUrl);
       hls.attachMedia(videoElement);
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         videoElement.play();
       });
+      hls.on(Hls.Events.ERROR, () => console.log("oops"));
       resolve(hls);
-
     } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
       videoElement.src = streamUrl;
       resolve(undefined);
@@ -51,4 +52,32 @@ const initializeVideoStream = (
   });
 };
 
-export { getLiveURL, getPreviewURL, initializeVideoStream };
+const initializeVideoStreamShaka = (
+  streamUrl: string,
+  videoElement: HTMLVideoElement
+): Player | undefined => {
+  if (Player.isBrowserSupported()) {
+    const player = new Player(videoElement);
+
+    player
+      .load(streamUrl)
+      .then(() => {
+        console.log("Video loaded");
+        videoElement.play();
+      })
+      .catch((err) => {
+        console.error("Error loading video", err);
+      });
+
+    return player;
+  } else {
+    console.error("Browser does not support Shaka Player");
+  }
+};
+
+export {
+  getLiveURL,
+  getPreviewURL,
+  initializeVideoStream,
+  initializeVideoStreamShaka,
+};
