@@ -48,13 +48,9 @@ const closeHandler = () => {
 // Функция загрузки видео и инициализации потока
 const onVideoLoad = () => {
   if (config["watchmanMode"] && videoElement.value)
-    shakaInstance.value = initializeVideoStreamShaka(
-      getLiveURL(camera),
-      videoElement.value
+    initializeVideoStreamShaka(getLiveURL(camera), videoElement.value).then(
+      (response) => (shakaInstance.value = response)
     );
-  // .then(
-  //     (hlsResponse) => (hlsInstance.value = hlsResponse)
-  //   );
 };
 
 // Функция события готовности видео

@@ -54,25 +54,32 @@ const initializeVideoStream = (
 
 const initializeVideoStreamShaka = (
   streamUrl: string,
-  videoElement: HTMLVideoElement
-): Player | undefined => {
-  if (Player.isBrowserSupported()) {
-    const player = new Player(videoElement);
+  videoElement: HTMLVideoElement,
+  _player?: Player
+): Promise<Player | undefined> => {
+  return new Promise((resolve, reject) => {
+    if (Player.isBrowserSupported()) {
+      console.log(streamUrl);
+      const player = _player || new Player();
+      player.attach(videoElement);
+      player
+        .load(streamUrl)
+        .then(() => {
+          console.log("Video loaded");
+          videoElement.play();
+          resolve(player);
+        })
+        .catch((err) => {
+          console.error("Error loading video", err);
+          resolve(player);
+        });
 
-    player
-      .load(streamUrl)
-      .then(() => {
-        console.log("Video loaded");
-        videoElement.play();
-      })
-      .catch((err) => {
-        console.error("Error loading video", err);
-      });
-
-    return player;
-  } else {
-    console.error("Browser does not support Shaka Player");
-  }
+      return player;
+    } else {
+      console.error("Browser does not support Shaka Player");
+      reject();
+    }
+  });
 };
 
 export {
