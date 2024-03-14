@@ -7,7 +7,7 @@ import Hls from "hls.js";
 import { useConfigStore } from "../store/config";
 
 const { camera } = defineProps<{ camera: Camera; index?: number }>();
-const {config} = useConfigStore()
+const { config } = useConfigStore();
 
 const previewContainer = ref<HTMLVideoElement | null>(null);
 const previewElement = ref<HTMLVideoElement | null>(null);
@@ -40,7 +40,7 @@ const closeHandler = () => {
 
 // Функция загрузки видео и инициализации потока
 const onVideoLoad = () => {
-  if (config['watchmanMode'] && videoElement.value)
+  if (config["watchmanMode"] && videoElement.value)
     initializeVideoStream(getLiveURL(camera), videoElement.value).then(
       (hlsResponse) => (hlsInstance.value = hlsResponse)
     );
@@ -51,9 +51,9 @@ const onVideoReady = () => {
   isPlaying.value = true;
 };
 
-onUnmounted(()=>{
-  hlsInstance.value?.destroy()
-})
+onUnmounted(() => {
+  hlsInstance.value?.destroy();
+});
 </script>
 
 <template>

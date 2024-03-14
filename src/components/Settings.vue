@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import sendName from "../api/sendName";
 import { useLocale } from "../hooks/locale";
 import convertSettingsBoolean from "../lib/convertSettingsBoolean";
@@ -9,6 +9,8 @@ import Button from "./Button.vue";
 import Select from "./Select.vue";
 import Switch from "./Switch.vue";
 
+const columnsOptions = [1, 2, 3, 4];
+// Стейты
 const { names, notifications } = useUserStore();
 const { config, updateConfig } = useConfigStore();
 const { availableLocales, locale, changeLocale, t } = useLocale();
@@ -21,27 +23,39 @@ const notificationsEnable = ref(
 const notificationsMoney = ref(
   notifications.money && convertSettingsBoolean(notifications.money)
 );
-
 const facesPage = ref(config.facesPage);
 const watchmanMode = ref(config.watchmanMode);
 
+const columnsCount = computed(() =>
+  config["columnsCount"]
+    ? { id: config["columnsCount"], name: config["columnsCount"].toString() }
+    : undefined
+);
+
+//  Получение опции для Select из локали
 const localeToOption = (locale: string): { id: string; name: string } => {
   return {
     id: locale,
     name: t(`locales.${locale}`),
   };
 };
-
+// изменени локали
 const localeHandler = (option: { id: string; name: string }) => {
   changeLocale(option.id);
 };
-
+// изменение обращения
 const updateNames = async () => {
   isProcessed.value = true;
   await sendName({ name: name.value, patronymic: patronymic.value });
   isProcessed.value = false;
 };
 
+// изменение количества колонок
+const updateColumnCount = (option: { id: number; name: string }) => {
+  updateConfig({ columnsCount: option.id });
+};
+
+// Watchers
 watch(facesPage, (value) => {
   updateConfig({ facesPage: value });
 });
@@ -80,11 +94,14 @@ watch(watchmanMode, (value) => {
     </div>
     <h2>{{ $t("settings.other") }}</h2>
     <div class="settings-block">
-      <Select
-        :options="availableLocales.map((locale) => localeToOption(locale))"
-        :modelValue="localeToOption(locale)"
-        @update:modelValue="localeHandler"
-      />
+      <div class="flex">
+        <div>Язык</div>
+        <Select
+          :options="availableLocales.map((locale) => localeToOption(locale))"
+          :modelValue="localeToOption(locale)"
+          @update:modelValue="localeHandler"
+        />
+      </div>
       <Switch
         v-model:modelValue="config['watchmanMode']"
         @update:modelValue="(value) => updateConfig({ watchmanMode: value })"
@@ -97,11 +114,35 @@ watch(watchmanMode, (value) => {
         label="Постоянное меню"
         justify="space-between"
       />
+      <div class="flex">
+        <div>Количество колонок</div>
+        <Select
+          :options="
+            columnsOptions.map((count) => ({
+              id: count,
+              name: count.toString(),
+            }))
+          "
+          v-model:modelValue="columnsCount"
+          @update:modelValue="updateColumnCount"
+          label="Постоянное меню"
+          justify="space-between"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  > div {
+    flex: 1;
+  }
+}
 .container {
   max-width: 600px;
 }
@@ -109,7 +150,6 @@ watch(watchmanMode, (value) => {
   display: flex;
   flex-direction: column;
   gap: 24px;
-
   input {
     padding: 12px;
     border: solid 1px #f0f0f1;
@@ -119,4 +159,3 @@ watch(watchmanMode, (value) => {
   }
 }
 </style>
-../hooks/locale

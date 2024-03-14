@@ -12,14 +12,14 @@ export const useUserStore = defineStore("user", () => {
 
   const load = () => {
     Promise.all([
-      
       get<Client[]>("address/getSettingsList"),
-      // get<Names>("user/getName"),
+      get<Names>("user/getName"),
       get<Notifications>("user/notification"),
     ])
-      .then(([clientsResponse, _namesResponse]) => {
+      .then(([clientsResponse, namesResponse, notificationsResponse]) => {
         clients.value = clientsResponse;
-        // names.value = namesResponse;
+        names.value = namesResponse;
+        notifications.value = notificationsResponse;
         isLoaded.value = true;
       })
       .catch((error) => {

@@ -10,7 +10,7 @@ const { videoElement, range } = defineProps<{
   range: FormatedRange;
 }>();
 
-const emits = defineEmits(['pause'])
+const emits = defineEmits(["pause"]);
 
 // Константы
 const minValue = 0;
@@ -43,7 +43,7 @@ const timeDisplayLeft = computed(() => {
 });
 
 const progress = computed(() => {
-  return (currentTime.value / maxValue.value) * 100;
+  return ((currentTime.value / maxValue.value) * 100).toFixed(2);
 });
 
 const handleSliderInput = () => {
@@ -146,6 +146,7 @@ onUnmounted(() => {
       background-color: #fff;
       border-radius: 50%;
       border: 2px solid #298bff;
+      box-shadow: 0 0 2px 4px #298bff;
       transition: 0.5s;
     }
     &::-moz-range-thumb {
@@ -153,7 +154,7 @@ onUnmounted(() => {
       width: 12px;
       background-color: #fff;
       border-radius: 50%;
-      border: 2px solid #298bff;
+      border: 4px solid #298bff;
       transition: 0.5s;
     }
     &:active {
