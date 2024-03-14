@@ -1,0 +1,52 @@
+# Deploy to Pages
+name: Deploy to Pages
+
+on:
+  # Запускается при пушах в основную ветку
+  push:
+    branches: ['main']
+  # Позволяет запускать этот рабочий процесс вручную из вкладки Actions
+  workflow_dispatch:
+
+# Устанавливает разрешения GITHUB_TOKEN для развертывания на GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Разрешить одновременное развертывание
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  # Один рабочий процесс для развертывания, так как мы просто разворачиваем
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        env:
+          DEPLOY_ENV: 'gh-pages'
+        run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Загрузить папку dist
+          path: './dist'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
