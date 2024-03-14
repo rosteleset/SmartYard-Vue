@@ -18,8 +18,8 @@ const { flatId } = defineProps<{
 
 // использование настроек
 const { settings, save } = useSettings(flatId);
-const { config } = useConfigStore();
 const router = useRouter();
+const { config } = useConfigStore();
 
 // установка значения doorCode
 const doorCode = ref(settings.value?.doorCode);

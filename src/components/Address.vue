@@ -150,4 +150,3 @@ const clientsWithTitles = computed(() =>
   }
 }
 </style>
-../hooks/locale

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRoute } from "vue-router";
 import cameraIcon from "../assets/camera.svg";
 import { useCameras } from "../hooks/cameras";
 import { useAddressesStore } from "../store/addresses";
@@ -13,13 +12,10 @@ const { houseId } = defineProps<{
   compact?: boolean;
 }>();
 
-const route = useRoute();
-
 const { getAddressByHouseId } = useAddressesStore();
 
-const invalidHouseId =
-  typeof route.params.houseId === "string" &&
-  getAddressByHouseId(route.params.houseId) === undefined; //проверка на наличие дома если в роутрере указан houseId
+const invalidHouseId = houseId && getAddressByHouseId(houseId) === undefined; //проверка на наличие дома если в роутрере указан houseId
+// Состояния открытости в компактном режиме
 const isOpen = ref(false);
 
 const { cameras } = useCameras({ houseId, overview: houseId === undefined });

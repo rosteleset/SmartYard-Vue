@@ -1,19 +1,16 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
-import {
-  computed,
-  onMounted,
-  onUnmounted,
-  ref,
-  watch,
-} from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { FormatedRange } from "../types/camera";
+import playIcon from "../assets/play.svg";
 
 // Определение свойств
 const { videoElement, range } = defineProps<{
   videoElement: HTMLVideoElement;
   range: FormatedRange;
 }>();
+
+const emits = defineEmits(['pause'])
 
 // Константы
 const minValue = 0;
@@ -81,6 +78,9 @@ onUnmounted(() => {
 </script>
 <template>
   <div class="custom-controls">
+    <button class="play" @click="emits('pause')">
+      <img :src="playIcon" alt="play" />
+    </button>
     <div class="wrap">
       <input
         type="range"
@@ -173,6 +173,22 @@ onUnmounted(() => {
     background-color: #fff;
     padding: 6px;
     border-radius: 12px;
+  }
+
+  .play {
+    background: none;
+    border: solid 1px #fff;
+    box-shadow: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    img {
+      display: block;
+    }
   }
 }
 </style>

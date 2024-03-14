@@ -13,16 +13,10 @@ const routes: RouteRecordRaw[] = [
     path: "/addresses",
     name: "AddressesList",
     component: AddressesList,
-    beforeEnter: () => {
-      useAddressesStore();
-    },
   },
   {
     path: "/addresses/:houseId",
     component: Address,
-    beforeEnter: () => {
-      useAddressesStore();
-    },
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {

@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import Hls from "hls.js";
-import {
-  StyleValue,
-  onMounted,
-  onUnmounted,
-  ref,
-  watch,
-} from "vue";
+import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
 import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
 import { useRanges } from "../hooks/ranges";
 import { Camera, FormatedRange } from "../types/camera";
@@ -24,7 +18,7 @@ const { id, name } = camera;
 const emit = defineEmits(["onClose"]);
 
 // Реактивные переменные
-const isPlaying = ref(false);
+const isLoaded = ref(false);
 const isOpenInfo = ref(false);
 const previewElement = ref<HTMLVideoElement | null>(null);
 const videoElement = ref<HTMLVideoElement | null>(null);
@@ -34,7 +28,6 @@ const currentResponse = ref<number | undefined>(response);
 const hlsInstance = ref<Hls>();
 const { streams } = useRanges(id);
 const currentRange = ref<FormatedRange>();
-
 
 // Функция изменения размера видео
 const resizeVideo = () => {
@@ -61,6 +54,12 @@ const resizeVideo = () => {
   }
 };
 
+const pause = () => {
+  videoElement.value?.paused
+    ? videoElement.value?.play()
+    : videoElement.value?.pause();
+};
+
 // Функция загрузки видео и инициализации потока
 const onVideoLoad = () => {
   resizeVideo();
@@ -72,7 +71,7 @@ const onVideoLoad = () => {
 
 // Функция события готовности видео
 const onVideoReady = () => {
-  isPlaying.value = true;
+  isLoaded.value = true;
 };
 
 // Обработчики событий
@@ -82,14 +81,14 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  isPlaying.value = false;
+  isLoaded.value = false;
   window.removeEventListener("resize", resizeVideo);
   hlsInstance.value?.destroy();
 });
 
 // Слежение за текущей записью
 watch(currentRange, () => {
-  isPlaying.value = false;
+  isLoaded.value = false;
   if (videoElement.value) {
     hlsInstance.value?.destroy();
     initializeVideoStream(
@@ -111,7 +110,7 @@ watch(currentRange, () => {
       <video
         ref="previewElement"
         class="previewElement"
-        :class="{ active: isPlaying }"
+        :class="{ active: isLoaded }"
         :src="preview"
         v-on:canplay="onVideoLoad"
       />
@@ -119,6 +118,7 @@ watch(currentRange, () => {
         v-if="videoElement && currentRange"
         :videoElement="videoElement"
         :range="currentRange"
+        @pause="pause"
       />
       <div class="info" :class="{ open: isOpenInfo }">
         <button class="toggle-info" @click="isOpenInfo = !isOpenInfo">
