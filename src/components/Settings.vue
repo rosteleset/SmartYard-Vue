@@ -140,7 +140,15 @@ watch(watchmanMode, (value) => {
   justify-content: space-between;
   gap: 24px;
   > div {
-    flex: 1;
+    &:first-child {
+      flex: 1;
+    }
+
+    &:last-child {
+      flex: unset;
+      flex-basis: 150px;
+      text-align: right;
+    }
   }
 }
 .container {

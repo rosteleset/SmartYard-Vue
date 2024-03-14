@@ -1,52 +1,45 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from "vue-router";
-import Address from "./components/Address.vue";
-import AddressesList from "./components/AddressesList.vue";
-import Cameras from "./components/Cameras.vue";
-import Chat from "./components/Chat.vue";
-import Events from "./components/Events.vue";
-import Faces from "./components/Faces.vue";
-import Settings from "./components/Settings.vue";
 
 const routes: RouteRecordRaw[] = [
   {
     path: "/addresses",
     name: "AddressesList",
-    component: AddressesList,
+    component: () => import("./components/AddressesList.vue"),
   },
   {
     path: "/addresses/:houseId",
-    component: Address,
+    component: () => import("./components/Address.vue"),
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {
     path: "/cameras",
     name: "CityCameras",
-    component: Cameras,
+    component: () => import("./components/Cameras.vue"),
   },
 
   {
     path: "/cameras/:houseId",
-    component: Cameras,
+    component: () => import("./components/Cameras.vue"),
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {
     path: "/chat",
     name: "Chat",
-    component: Chat,
+    component: () => import("./components/Chat.vue"),
   },
   {
     path: "/settings",
     name: "Settings",
-    component: Settings,
+    component: () => import('./components/Settings.vue'),
   },
   {
     path: "/events/:houseId",
-    component: Events,
+    component: () => import("./components/Events.vue"),
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {
     path: "/faces/:flatId",
-    component: Faces,
+    component: () => import("./components/Faces.vue"),
     props: (route) => ({ flatId: route.params.flatId }),
   },
 ];
