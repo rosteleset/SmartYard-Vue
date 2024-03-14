@@ -24,19 +24,6 @@ const getPreviewURL = (camera: Camera) => {
   return `${url}/preview.mp4?token=${token}`;
 };
 
-// Функция для получения iframe
-const getIframe = (camera: Camera, from?: string, to?: string) => {
-  const { serverType, url, token } = camera;
-  switch (serverType) {
-    case "flussonic":
-      let timeMark: string | undefined;
-      if (from && to) timeMark = `&from=${from}&to=${to}`;
-      return `${url}/embed.html?dvr=true&token=${token}`;
-    default:
-      return "empty";
-  }
-};
-
 // Функция для инициализации видеопотока
 const initializeVideoStream = (
   streamUrl: string,
@@ -64,4 +51,4 @@ const initializeVideoStream = (
   });
 };
 
-export { getIframe, getLiveURL, getPreviewURL, initializeVideoStream };
+export { getLiveURL, getPreviewURL, initializeVideoStream };

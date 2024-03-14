@@ -17,7 +17,7 @@ export const useUserStore = defineStore("user", () => {
       // get<Names>("user/getName"),
       get<Notifications>("user/notification"),
     ])
-      .then(([clientsResponse, namesResponse]) => {
+      .then(([clientsResponse, _namesResponse]) => {
         clients.value = clientsResponse;
         // names.value = namesResponse;
         isLoaded.value = true;

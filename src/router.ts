@@ -3,10 +3,9 @@ import Address from "./components/Address.vue";
 import AddressesList from "./components/AddressesList.vue";
 import Cameras from "./components/Cameras.vue";
 import Chat from "./components/Chat.vue";
-import Settings from "./components/Settings.vue";
 import Events from "./components/Events.vue";
-import { useAddressesStore } from "./store/addresses";
 import Faces from "./components/Faces.vue";
+import Settings from "./components/Settings.vue";
 
 const routes: RouteRecordRaw[] = [
   {
