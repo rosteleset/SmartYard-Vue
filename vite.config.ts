@@ -4,8 +4,7 @@ import vue from "@vitejs/plugin-vue";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  base: process.env.DEPLOY_ENV === "gh-pages" ? "/SmartYard-Web/" : "/",
-  server: process.env.DEPLOY_ENV === "gh-pages" ? {} : {
+  server: {
     proxy: {
       "/api": {
         target: "https://rbt-demo.lanta.me",
