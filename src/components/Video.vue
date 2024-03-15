@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { StyleValue, onUnmounted, ref } from "vue";
-import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
+import { Player } from "shaka-player/dist/shaka-player.compiled";
+import {
+  getLiveURL,
+  getPreviewURL,
+  initializeVideoStream
+} from "../lib/video";
 import { Camera } from "../types/camera";
 import VideoModal from "./VideoModal.vue";
 import Hls from "hls.js";
@@ -14,6 +19,7 @@ const previewElement = ref<HTMLVideoElement | null>(null);
 const videoElement = ref<HTMLVideoElement | null>(null);
 const preview = ref<string>(getPreviewURL(camera));
 const hlsInstance = ref<Hls>();
+const shakaInstance = ref<Player>();
 const isPlaying = ref(false);
 
 const isOpen = ref(false);
@@ -42,7 +48,10 @@ const closeHandler = () => {
 const onVideoLoad = () => {
   if (config["watchmanMode"] && videoElement.value)
     initializeVideoStream(getLiveURL(camera), videoElement.value).then(
-      (hlsResponse) => (hlsInstance.value = hlsResponse)
+      (response) => {
+        shakaInstance.value = response
+        videoElement.value?.play()
+      }
     );
 };
 
@@ -53,6 +62,7 @@ const onVideoReady = () => {
 
 onUnmounted(() => {
   hlsInstance.value?.destroy();
+  shakaInstance.value?.unload();
 });
 </script>
 

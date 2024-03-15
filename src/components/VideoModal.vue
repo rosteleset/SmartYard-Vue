@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import Hls from "hls.js";
+import { Player } from "shaka-player/dist/shaka-player.compiled";
 import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
-import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
-import { useRanges } from "../hooks/ranges";
-import { Camera, FormatedRange } from "../types/camera";
-import RangeSelect from "./RangeSelect.vue";
 import arrowIcon from "../assets/arrowRight.svg";
+import { useRanges } from "../hooks/ranges";
+import {
+  getLiveURL,
+  getPreviewURL,
+  initializeVideoStream,
+} from "../lib/video";
+import { Camera, FormatedRange } from "../types/camera";
 import CustomControls from "./CustomControls.vue";
+import RangeSelect from "./RangeSelect.vue";
 
 // Определение свойств и эмиттеров
 const { camera, startStyles, response } = defineProps<{
@@ -26,6 +31,8 @@ const styles = ref<StyleValue>();
 const preview = ref<string>(getPreviewURL(camera));
 const currentResponse = ref<number | undefined>(response);
 const hlsInstance = ref<Hls>();
+const shakaInstance = ref<Player>();
+
 const { streams } = useRanges(id);
 const currentRange = ref<FormatedRange>();
 
@@ -65,13 +72,14 @@ const onVideoLoad = () => {
   resizeVideo();
   if (videoElement.value)
     initializeVideoStream(getLiveURL(camera), videoElement.value).then(
-      (hlsResponse) => (hlsInstance.value = hlsResponse)
+      (response) => (shakaInstance.value = response)
     );
 };
 
 // Функция события готовности видео
 const onVideoReady = () => {
   isLoaded.value = true;
+  isOpenInfo.value = false
 };
 
 // Обработчики событий
@@ -84,6 +92,7 @@ onUnmounted(() => {
   isLoaded.value = false;
   window.removeEventListener("resize", resizeVideo);
   hlsInstance.value?.destroy();
+  shakaInstance.value?.unload();
 });
 
 // Слежение за текущей записью
@@ -91,14 +100,20 @@ watch(currentRange, () => {
   isLoaded.value = false;
   if (videoElement.value) {
     hlsInstance.value?.destroy();
+    shakaInstance.value?.unload();
+
     initializeVideoStream(
       getLiveURL(
         camera,
         currentRange.value?.from,
         currentRange.value?.duration
       ),
-      videoElement.value
-    ).then((hlsResponse) => (hlsInstance.value = hlsResponse));
+      videoElement.value,
+      shakaInstance.value
+    ).then((response) => {
+      shakaInstance.value = response
+      videoElement.value?.play();
+    });
   }
 });
 </script>

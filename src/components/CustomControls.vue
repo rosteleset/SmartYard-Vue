@@ -187,6 +187,7 @@ onUnmounted(() => {
     align-items: center;
     justify-content: center;
     margin-right: 12px;
+    cursor: pointer;
     img {
       display: block;
     }
