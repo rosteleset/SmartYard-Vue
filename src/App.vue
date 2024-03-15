@@ -9,26 +9,22 @@ const userStore = useUserStore();
 
 const isMenuOpen = ref(false);
 provide("isMenuOpen", isMenuOpen);
-
 </script>
 
 <template>
   <Header />
-  <router-view v-slot="{ Component }" >
+  <router-view v-slot="{ Component }">
     <Transition name="route" mode="out-in">
-      <div
-        class="content"
-        :key="$route.fullPath"
-      >
+      <div class="content" :key="$route.fullPath">
         <div class="container">
           <component
-            v-if="userStore.isLoaded && addressesStore.isLoaded"
+            v-if="userStore.isLoaded && addressesStore.isLoaded && Component"
             :is="Component"
           />
-
           <template v-else-if="userStore.error">
             <div class="global-error">{{ userStore.error }}</div>
           </template>
+          <div v-else class="welcome">Welcome</div>
         </div>
       </div>
     </Transition>
@@ -36,6 +32,11 @@ provide("isMenuOpen", isMenuOpen);
 </template>
 
 <style scoped>
+.welcome {
+  margin: 24px 0;
+  text-align: center;
+  font-size: 200%;
+}
 .content {
   transition: 0.3s ease-out;
   z-index: 1;
