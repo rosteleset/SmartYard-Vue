@@ -3,12 +3,17 @@ import { get } from "../api";
 import { Client, Names, Notifications } from "../types/user";
 import { defineStore } from "pinia";
 
+const LOCAL_STORAGE_TOKEN_KEY = "jwt-token";
+
 export const useUserStore = defineStore("user", () => {
   const isLoaded = ref(false);
   const clients = ref<Client[]>([]);
   const names = ref<Names>({} as Names);
   const notifications = ref<Notifications>({});
   const error = ref<string>();
+  const token = ref<string | null>(
+    localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
+  );
 
   const load = () => {
     Promise.all([
@@ -35,5 +40,6 @@ export const useUserStore = defineStore("user", () => {
     notifications,
     isLoaded,
     error,
+    token
   };
 });
