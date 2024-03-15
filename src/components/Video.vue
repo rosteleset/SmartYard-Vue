@@ -18,7 +18,6 @@ const previewContainer = ref<HTMLVideoElement | null>(null);
 const previewElement = ref<HTMLVideoElement | null>(null);
 const videoElement = ref<HTMLVideoElement | null>(null);
 const preview = ref<string>(getPreviewURL(camera));
-const hlsInstance = ref<Hls>();
 const shakaInstance = ref<Player>();
 const isPlaying = ref(false);
 
@@ -61,7 +60,6 @@ const onVideoReady = () => {
 };
 
 onUnmounted(() => {
-  hlsInstance.value?.destroy();
   shakaInstance.value?.unload();
 });
 </script>

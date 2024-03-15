@@ -30,7 +30,6 @@ const videoElement = ref<HTMLVideoElement | null>(null);
 const styles = ref<StyleValue>();
 const preview = ref<string>(getPreviewURL(camera));
 const currentResponse = ref<number | undefined>(response);
-const hlsInstance = ref<Hls>();
 const shakaInstance = ref<Player>();
 
 const { streams } = useRanges(id);
@@ -91,7 +90,6 @@ onMounted(() => {
 onUnmounted(() => {
   isLoaded.value = false;
   window.removeEventListener("resize", resizeVideo);
-  hlsInstance.value?.destroy();
   shakaInstance.value?.unload();
 });
 
@@ -99,7 +97,6 @@ onUnmounted(() => {
 watch(currentRange, () => {
   isLoaded.value = false;
   if (videoElement.value) {
-    hlsInstance.value?.destroy();
     shakaInstance.value?.unload();
 
     initializeVideoStream(
