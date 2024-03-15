@@ -31,7 +31,7 @@ const openEventsHandler = () => {
 };
 </script>
 <template>
-  <div class="label">Управление лицами</div>
+  <div class="label">{{ $t('settings.frs') }}</div>
   <div class="list">
     <div class="face" v-for="face in faces" :key="face.faceId">
       <img
