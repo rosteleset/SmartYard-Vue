@@ -13,7 +13,6 @@
     "@vuepic/vue-datepicker": "^8.2.0",
     "axios": "^1.6.7",
     "dayjs": "^1.11.10",
-    "hls.js": "^1.5.6",
     "leaflet": "^1.9.4",
     "pinia": "^2.1.7",
     "sass": "^1.71.1",
