@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Hls from "hls.js";
 import { Player } from "shaka-player/dist/shaka-player.compiled";
 import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
 import arrowIcon from "../assets/arrowRight.svg";

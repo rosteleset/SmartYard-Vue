@@ -22,7 +22,7 @@ const height = ref("0px");
 const isFirst = ref(!!history.state.back);
 
 const getRouteName = (route: RouteLocationNormalizedLoaded | RouteRecord) =>
-  typeof route.name === "string" && t(`routes.${route.name}`);
+  typeof route.name === "string" ?  t(`routes.${route.name}`) : undefined;
 
 watch(
   menuList,
@@ -45,7 +45,8 @@ watch(currentRoute, () => {
           <Arrow v-if="isFirst" @click="back" />
         </Transition>
         <div class="header__label">
-          SmartYard-WEB : {{ currentRoute ? getRouteName(currentRoute) : "" }}
+          SmartYard-WEB 
+          {{ currentRoute && getRouteName(currentRoute) }}
         </div>
         <div v-if="!alwaysMenu" class="nav">
           <Nav />

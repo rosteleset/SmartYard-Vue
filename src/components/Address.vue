@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { computed, provide, ref } from "vue";
+import { provide, ref } from "vue";
 import arrowIcon from "../assets/ArrowBottom.svg";
 import settingsIcon from "../assets/settings.svg";
 import { useAddressesStore } from "../store/addresses";
-import AddressSettings from "./AddressSettings.vue";
 import Cameras from "./Cameras.vue";
 import Door from "./Door.vue";
 import Events from "./Events.vue";
 import Modal from "./Modal.vue";
-import Tabs from "./Tabs.vue";
-import { useLocale } from "../hooks/locale";
+import { useRouter } from "vue-router";
 
 // Определение свойств компонента
 const { houseId } = defineProps<{ houseId: string }>();
@@ -18,12 +16,13 @@ const { houseId } = defineProps<{ houseId: string }>();
 provide("houseId", houseId);
 
 // Использование хранилища адресов и пользователей
-const { getAddressByHouseId, getClientsByHouseId } = useAddressesStore();
-const { t } = useLocale();
+const { getAddressByHouseId } = useAddressesStore();
+const router = useRouter();
 
-// Получение данных о здании и клиентах
+
+// Получение данных о зданиях
 const building = getAddressByHouseId(houseId);
-const clients = getClientsByHouseId(houseId);
+
 
 // Состояния открытости окон
 const isOpen = ref(true);
@@ -34,17 +33,11 @@ const toggleOpen = (status: boolean) => {
   isOpen.value = status;
 };
 
-const toggleSettingsOpen = () => {
-  isSettingsOpen.value = !isSettingsOpen.value;
+const settingsOpen = () => {
+  router.push(`/settings/${houseId}`)
 };
 
-// Вычисляемое свойство для добавления заголовков клиентов
-const clientsWithTitles = computed(() =>
-  clients.value.map((client) => ({
-    tabId: client.flatId,
-    tabTitle: t("addresses.flat", [client.flatId]),
-  }))
-);
+
 </script>
 
 <template>
@@ -52,7 +45,7 @@ const clientsWithTitles = computed(() =>
     <div class="address__header" @click="toggleOpen(true)">
       <div class="address__label">{{ building.address }}</div>
       <div class="address__buttons" @click.stop>
-        <button @click="toggleSettingsOpen">
+        <button @click="settingsOpen">
           <img :src="settingsIcon" alt="$t('addresses.settings')" />
         </button>
         <button class="address__more" @click="toggleOpen(!isOpen)">
@@ -71,21 +64,6 @@ const clientsWithTitles = computed(() =>
       <Cameras :houseId="houseId" compact />
       <Events :houseId="houseId" compact />
     </div>
-    <Modal
-      :title="$t('settings.title')"
-      :is-open="isSettingsOpen"
-      @on-close="toggleSettingsOpen"
-    >
-      <Tabs :tabs="clientsWithTitles">
-        <template
-          v-for="client in clientsWithTitles"
-          v-slot:[client.tabId]
-          :key="client.tabId"
-        >
-          <AddressSettings :flat-id="client.tabId" @test="toggleSettingsOpen" />
-        </template>
-      </Tabs>
-    </Modal>
   </div>
   <div v-else>
     <div class="global-error">{{ $t("addresses.not-found") }}</div>

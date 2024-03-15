@@ -31,6 +31,7 @@ const openEventsHandler = () => {
 };
 </script>
 <template>
+  <div class="label">Управление лицами</div>
   <div class="list">
     <div class="face" v-for="face in faces" :key="face.faceId">
       <img
@@ -76,6 +77,10 @@ const openEventsHandler = () => {
   </Modal>
 </template>
 <style scoped lang="scss">
+.label {
+  font-size: 24px;
+  margin: 24px 0;
+}
 .list {
   display: grid;
   grid-template-columns: repeat(6, 1fr);

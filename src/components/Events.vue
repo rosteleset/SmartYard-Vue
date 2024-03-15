@@ -21,7 +21,8 @@ const { houseId } = defineProps<{
 }>();
 
 // Использование сторов и реактивных переменных
-const { getClientsByHouseId } = useAddressesStore();
+const { getAddressByHouseId, getClientsByHouseId } = useAddressesStore();
+const building = getAddressByHouseId(houseId);
 const clients = getClientsByHouseId(houseId);
 const eventNames = ref(useEventNames().eventNames);
 const options = computed(() => {
@@ -63,6 +64,7 @@ const handleToggle = (open: boolean) => {
       :text="$t('addresses.events')"
       @toggle="handleToggle"
     />
+    <div v-else class="title">{{$t('addresses.events')}} : {{ building?.address }}</div>
     <Transition>
       <div class="events__list" v-if="isOpen || !compact">
         <div class="filters">
@@ -104,6 +106,10 @@ const handleToggle = (open: boolean) => {
 </template>
 
 <style scoped lang="scss">
+.title {
+  font-size: 24px;
+  margin: 24px 0;
+}
 .events {
   &__list {
     padding: 24px;

@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { StyleValue, onUnmounted, ref } from "vue";
 import { Player } from "shaka-player/dist/shaka-player.compiled";
+import { StyleValue, onUnmounted, ref } from "vue";
 import {
   getLiveURL,
   getPreviewURL,
   initializeVideoStream
 } from "../lib/video";
+import { useConfigStore } from "../store/config";
 import { Camera } from "../types/camera";
 import VideoModal from "./VideoModal.vue";
-import Hls from "hls.js";
-import { useConfigStore } from "../store/config";
 
 const { camera } = defineProps<{ camera: Camera; index?: number }>();
 const { config } = useConfigStore();

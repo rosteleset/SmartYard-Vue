@@ -33,6 +33,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('./components/Settings.vue'),
   },
   {
+    path: "/settings/:houseId",
+    component: () => import('./components/AddressSettings.vue'),
+    props: (route) => ({ houseId: route.params.houseId }),
+  },
+  {
     path: "/events/:houseId",
     component: () => import("./components/Events.vue"),
     props: (route) => ({ houseId: route.params.houseId }),
