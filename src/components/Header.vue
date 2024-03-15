@@ -45,7 +45,7 @@ watch(currentRoute, () => {
           <Arrow v-if="isFirst" @click="back" />
         </Transition>
         <div class="header__label">
-          SmartYard-WEB : {{ currentRoute && getRouteName(currentRoute) }}
+          SmartYard-WEB : {{ currentRoute ? getRouteName(currentRoute) : "" }}
         </div>
         <div v-if="!alwaysMenu" class="nav">
           <Nav />
