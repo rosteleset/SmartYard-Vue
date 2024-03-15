@@ -1,4 +1,3 @@
-import Hls from "hls.js";
 import { Player } from "shaka-player/dist/shaka-player.compiled";
 import { Camera } from "../types/camera";
 
@@ -33,7 +32,7 @@ const initializeVideoStream = (
 ): Promise<Player | undefined> => {
   // Вспомогательная функция для загрузки видео
   const loader = (player: Player): Promise<void> => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       player
         .load(streamUrl) // Загрузка видео по указанному URL
         .then(() => {
@@ -42,7 +41,7 @@ const initializeVideoStream = (
         })
         .catch((err) => {
           console.error("Error loading video", err); // Вывод сообщения об ошибке загрузки видео
-          resolve();
+          reject();
         });
     });
   };

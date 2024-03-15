@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { StyleValue, onUnmounted, ref } from "vue";
 import { Player } from "shaka-player/dist/shaka-player.compiled";
-import {
-  getLiveURL,
-  getPreviewURL,
-  initializeVideoStream
-} from "../lib/video";
+import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
 import { Camera } from "../types/camera";
 import VideoModal from "./VideoModal.vue";
 import Hls from "hls.js";
@@ -47,12 +43,14 @@ const closeHandler = () => {
 // Функция загрузки видео и инициализации потока
 const onVideoLoad = () => {
   if (config["watchmanMode"] && videoElement.value)
-    initializeVideoStream(getLiveURL(camera), videoElement.value).then(
-      (response) => {
-        shakaInstance.value = response
-        videoElement.value?.play()
-      }
-    );
+    initializeVideoStream(getLiveURL(camera), videoElement.value)
+      .then((response) => {
+        shakaInstance.value = response;
+        videoElement.value?.play();
+      })
+      .catch((e) => {
+        console.log(":(");
+      });
 };
 
 // Функция события готовности видео
