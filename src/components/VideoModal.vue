@@ -7,7 +7,7 @@ import { useRanges } from "../hooks/ranges";
 import {
   getLiveURL,
   getPreviewURL,
-  initializeVideoStreamShaka,
+  initializeVideoStream,
 } from "../lib/video";
 import { Camera, FormatedRange } from "../types/camera";
 import CustomControls from "./CustomControls.vue";
@@ -71,7 +71,7 @@ const pause = () => {
 const onVideoLoad = () => {
   resizeVideo();
   if (videoElement.value)
-    initializeVideoStreamShaka(getLiveURL(camera), videoElement.value).then(
+    initializeVideoStream(getLiveURL(camera), videoElement.value).then(
       (response) => (shakaInstance.value = response)
     );
 };
@@ -102,7 +102,7 @@ watch(currentRange, () => {
     hlsInstance.value?.destroy();
     shakaInstance.value?.unload();
 
-    initializeVideoStreamShaka(
+    initializeVideoStream(
       getLiveURL(
         camera,
         currentRange.value?.from,
@@ -110,7 +110,10 @@ watch(currentRange, () => {
       ),
       videoElement.value,
       shakaInstance.value
-    ).then((response) => (shakaInstance.value = response));
+    ).then((response) => {
+      shakaInstance.value = response
+      videoElement.value?.play();
+    });
   }
 });
 </script>

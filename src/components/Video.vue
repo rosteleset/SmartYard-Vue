@@ -4,8 +4,7 @@ import { Player } from "shaka-player/dist/shaka-player.compiled";
 import {
   getLiveURL,
   getPreviewURL,
-  initializeVideoStream,
-  initializeVideoStreamShaka,
+  initializeVideoStream
 } from "../lib/video";
 import { Camera } from "../types/camera";
 import VideoModal from "./VideoModal.vue";
@@ -48,8 +47,11 @@ const closeHandler = () => {
 // Функция загрузки видео и инициализации потока
 const onVideoLoad = () => {
   if (config["watchmanMode"] && videoElement.value)
-    initializeVideoStreamShaka(getLiveURL(camera), videoElement.value).then(
-      (response) => (shakaInstance.value = response)
+    initializeVideoStream(getLiveURL(camera), videoElement.value).then(
+      (response) => {
+        shakaInstance.value = response
+        videoElement.value?.play()
+      }
     );
 };
 
