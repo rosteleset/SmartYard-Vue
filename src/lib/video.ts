@@ -1,4 +1,3 @@
-import Hls from "hls.js";
 import { Player } from "shaka-player/dist/shaka-player.compiled";
 import { Camera } from "../types/camera";
 

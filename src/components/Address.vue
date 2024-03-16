@@ -6,7 +6,6 @@ import { useAddressesStore } from "../store/addresses";
 import Cameras from "./Cameras.vue";
 import Door from "./Door.vue";
 import Events from "./Events.vue";
-import Modal from "./Modal.vue";
 import { useRouter } from "vue-router";
 
 // Определение свойств компонента
@@ -26,7 +25,6 @@ const building = getAddressByHouseId(houseId);
 
 // Состояния открытости окон
 const isOpen = ref(true);
-const isSettingsOpen = ref(false);
 
 // Функции для управления открытостью окон
 const toggleOpen = (status: boolean) => {
