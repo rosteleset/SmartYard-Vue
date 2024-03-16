@@ -13,19 +13,25 @@ export const useUserStore = defineStore("user", () => {
   const load = () => {
     Promise.all([
       get<Client[]>("address/getSettingsList"),
-      get<Names>("user/getName"),
       get<Notifications>("user/notification"),
     ])
-      .then(([clientsResponse, namesResponse, notificationsResponse]) => {
+      .then(([clientsResponse, notificationsResponse]) => {
         clients.value = clientsResponse;
-        names.value = namesResponse;
         notifications.value = notificationsResponse;
         isLoaded.value = true;
+
       })
-      .catch((error) => {
-        error.value = error.message;
+      .catch((_error) => {
+        error.value = _error.message;
       });
   };
+  
+  // вынес отдельно для обратной совместимости
+  get<Names>("user/getNames").then((namesResponse) => {
+    names.value = namesResponse;
+  }).catch((_error) => {
+    error.value = _error.message;
+  });
 
   onMounted(load);
 

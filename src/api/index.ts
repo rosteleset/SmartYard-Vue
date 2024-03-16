@@ -26,8 +26,8 @@ export const get = async <T>(path: string, params?: object): Promise<T> => {
         const body = JSON.stringify(params);
         const response = await axiosInstance.post(path, body);
         return response.data.data;
-    } catch (error) {
-        console.error("Ошибка во время запроса", error);
+    } catch (error:any) {
+        console.error("Ошибка во время запроса", error.message);
         throw error;
     }
 }
