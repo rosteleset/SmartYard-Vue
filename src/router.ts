@@ -1,15 +1,7 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from "vue-router";
+import { getBasePath } from "./lib/basePath";
 
-const basePathValidator = (path: string) => {
-  if (typeof path !== 'string')
-    return ""
-  if (path.charAt(path.length - 1) === '/')
-    return path.slice(0, -1);
-  else
-    return path
-}
-
-const BASE_PATH = basePathValidator(import.meta.env.VITE_BASE_PATH);
+const BASE_PATH = getBasePath();
 
 const routes: RouteRecordRaw[] = [
   {
