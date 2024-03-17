@@ -1,49 +1,60 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from "vue-router";
 
+const basePathValidator = (path: string) => {
+  if (typeof path !== 'string')
+    return ""
+  if (path.charAt(path.length - 1) === '/')
+    return path.slice(0, -1);
+  else
+    return path
+}
+
+const BASE_PATH = basePathValidator(import.meta.env.VITE_BASE_PATH);
+
 const routes: RouteRecordRaw[] = [
   {
-    path: "/addresses",
+    path: `${BASE_PATH}/addresses`,
     name: "AddressesList",
     component: () => import("./components/AddressesList.vue"),
   },
   {
-    path: "/addresses/:houseId",
+    path: `${BASE_PATH}/addresses/:houseId`,
     component: () => import("./components/Address.vue"),
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {
-    path: "/cameras",
+    path: `${BASE_PATH}/cameras`,
     name: "CityCameras",
     component: () => import("./components/Cameras.vue"),
   },
 
   {
-    path: "/cameras/:houseId",
+    path: `${BASE_PATH}/cameras/:houseId`,
     component: () => import("./components/Cameras.vue"),
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {
-    path: "/chat",
+    path: `${BASE_PATH}/chat`,
     name: "Chat",
     component: () => import("./components/Chat.vue"),
   },
   {
-    path: "/settings",
+    path: `${BASE_PATH}/settings`,
     name: "Settings",
     component: () => import('./components/Settings.vue'),
   },
   {
-    path: "/settings/:houseId",
+    path: `${BASE_PATH}/settings/:houseId`,
     component: () => import('./components/AddressSettings.vue'),
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {
-    path: "/events/:houseId",
+    path: `${BASE_PATH}/events/:houseId`,
     component: () => import("./components/Events.vue"),
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {
-    path: "/faces/:flatId",
+    path: `${BASE_PATH}/faces/:flatId`,
     component: () => import("./components/Faces.vue"),
     props: (route) => ({ flatId: route.params.flatId }),
   },
