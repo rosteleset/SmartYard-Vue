@@ -27,7 +27,7 @@ export const useUserStore = defineStore("user", () => {
   };
   
   // вынес отдельно для обратной совместимости
-  get<Names>("user/getNames").then((namesResponse) => {
+  get<Names>("user/getName").then((namesResponse) => {
     names.value = namesResponse;
   }).catch((_error) => {
     error.value = _error.message;
