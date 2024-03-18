@@ -8,6 +8,6 @@ $yellow: #ffe38e;
 
 $size: 12px;
 
-@mixin rounded($size: 1) {
-  border-radius: $radius * $size;
+@mixin rounded($rate: 1) {
+  border-radius: $size * $rate;
 }

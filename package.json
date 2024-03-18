@@ -29,6 +29,7 @@
     "typescript": "^5.2.2",
     "vite": "^5.1.4",
     "vite-plugin-env-compatible": "^2.0.1",
+    "vite-svg-loader": "^5.1.0",
     "vue-tsc": "^1.8.27"
   }
 }

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import arrowIcon from '../assets/arrowRight.svg'
+import { VueElement, ref } from 'vue';
+import ArrowIcon from '../assets/arrowRight.svg?component'
 
 const props = defineProps({
-  icon: String,
+  icon: VueElement,
   alt: String,
   text: String
 });
@@ -21,11 +21,11 @@ const labelClickHandler = () => {
 <template>
   <div class="label" v-on:click="labelClickHandler">
     <div class="icon">
-      <img :src="props.icon" :alt="props.alt">
+      <icon/>
     </div>
     <div class="text">{{ props.text }}</div>
     <div class="arrow" :class="{ open: isOpen }" aria-hidden="true">
-      <img :src="arrowIcon" :alt="$t('global.more')">
+      <ArrowIcon />
     </div>
   </div>
 </template>
@@ -41,6 +41,9 @@ const labelClickHandler = () => {
 
   .icon {
     width: 30px;
+    svg {
+      fill: var(--color-text);
+    }
   }
 
   .arrow {

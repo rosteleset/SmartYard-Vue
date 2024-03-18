@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import cameraIcon from "../assets/camera.svg";
+import CameraIcon from "../assets/camera.svg?component";
 import { useCameras } from "../hooks/cameras";
 import { useAddressesStore } from "../store/addresses";
 import Label from "./Label.vue";
@@ -32,7 +32,7 @@ const handleToggle = (open: boolean) => {
   <template v-if="!invalidHouseId">
     <Label
       v-if="compact"
-      :icon="cameraIcon"
+      :icon="CameraIcon"
       :alt="$t('addresses.cameras')"
       :text="$t('addresses.cameras')"
       @toggle="handleToggle"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import informationIcon from "../assets/information.svg";
+import InformationIcon from "../assets/information.svg?component";
 import useEventNames from "../lib/useEventNames";
 import { Event } from "../types/events";
 import Button from "./Button.vue";
@@ -59,7 +59,7 @@ const getEventName = (event: string) => {
   <div class="event" v-on:click="openModal">
     <span>{{ label }}</span>
     <span class="event__time">{{ time }}</span>
-    <img :src="informationIcon" alt="information" class="event__button" />
+    <InformationIcon class="event__button" />
   </div>
   <Modal
     :title="label"

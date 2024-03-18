@@ -2,7 +2,7 @@
 import dayjs from "dayjs";
 import { computed, ref, watch } from "vue";
 import resetCode from "../api/resetCode";
-import reloadIcon from "../assets/reload.svg";
+import reloadIcon from "../assets/reload.svg?component";
 import { useSettings } from "../hooks/settings";
 import Button from "./Button.vue";
 import Faces from "./Faces.vue";

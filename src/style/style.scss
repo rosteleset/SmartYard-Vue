@@ -2,14 +2,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
 
 html[data-theme="light"] {
+  $second-background :#FFFFFF;
   --color-text: #{$darkBlue};
   --color-background: #{$offWhite};
-  --color-accent: #{$lightGray};
+  --color-second-background: #{$second-background};
+  --color-accent: #FFFFFF;
 }
 
 html[data-theme="dark"] {
+  $second-background :transparentize($offWhite, 0.9);
+  --theme:"dark";
   --color-text: #{$offWhite};
   --color-background: #{$darkBlue};
+  --color-second-background: #{$second-background};
   --color-accent: #{$lightGray};
 }
 

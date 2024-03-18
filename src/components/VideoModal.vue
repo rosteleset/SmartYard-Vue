@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Player } from "shaka-player/dist/shaka-player.compiled";
 import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
-import arrowIcon from "../assets/arrowRight.svg";
+import arrowIcon from "../assets/arrowRight.svg?component";
 import { useRanges } from "../hooks/ranges";
 import {
   getLiveURL,

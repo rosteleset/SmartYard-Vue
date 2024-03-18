@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import deleteIcon from "../assets/delete.svg";
+import deleteIcon from "../assets/delete.svg?component";
 import plusIcon from "../assets/plus.svg";
 import { useFaces } from "../hooks/faces";
 import { useAddressesStore } from "../store/addresses";

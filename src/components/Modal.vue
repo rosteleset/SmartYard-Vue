@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import closeIcon from "../assets/close.svg";
+import closeIcon from "../assets/close.svg?component";
 const props = defineProps<{
   title?: string;
   isOpen: boolean;
