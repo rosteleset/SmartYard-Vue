@@ -50,6 +50,31 @@ npm run dev
 
 Это запустит сервер разработки, предоставленный Vite.
 
+#### NGINX
+
+Конфигурация Nginx 
+
+```
+server {
+    listen 80;
+    server_name your_domain.com;
+
+    root /path/to/your/parent/directory;
+    index index.html;
+    
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+```
+Конфигурация Nginx для вложенной директории 
+
+```
+location /nested_directory {
+    try_files $uri $uri/ /nested_directory/index.html;
+}
+```
+
 ## Скрипты
 
 Smartyard Web поставляется с несколькими полезными скриптами:
