@@ -1,0 +1,13 @@
+$darkBlue: #28323e;
+$lightGray: #6d7a8a;
+$blue: #298bff;
+$offWhite: #f3f4fa;
+$red: #ff3b30;
+$green: #1fbc62;
+$yellow: #ffe38e;
+
+$size: 12px;
+
+@mixin rounded($size: 1) {
+  border-radius: $radius * $size;
+}

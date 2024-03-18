@@ -1,4 +1,5 @@
 <script setup lang="ts" generic="T extends OptionProps">
+import { onClickOutside } from "@vueuse/core";
 import { ref } from "vue";
 
 export type OptionProps = {
@@ -13,8 +14,9 @@ const props = defineProps<{
 }>();
 
 const model = defineModel<T>();
-
+const dropdown = ref<HTMLElement | null>(null);
 const dropdownOpen = ref(false);
+onClickOutside(dropdown, () => (dropdownOpen.value = false));
 
 const toggleDropdown = () => {
   dropdownOpen.value = !dropdownOpen.value;
@@ -23,12 +25,6 @@ const toggleDropdown = () => {
 const selectOption = (option?: T) => {
   model.value = option;
   dropdownOpen.value = false;
-};
-
-const handleOutsideClick = (event: MouseEvent) => {
-  if (!event.target) {
-    dropdownOpen.value = false;
-  }
 };
 </script>
 
@@ -44,7 +40,7 @@ const handleOutsideClick = (event: MouseEvent) => {
       }}</span>
     </div>
     <Transition name="dropdown">
-      <div v-if="dropdownOpen" @click="handleOutsideClick" class="dropdown">
+      <div v-if="dropdownOpen" class="dropdown" ref="dropdown">
         <div v-if="allowUndefined" @click="selectOption()">
           <input type="radio" :id="'dropdown-option'" :value="null" />
           <label :for="'dropdown-option'"
@@ -73,7 +69,8 @@ const handleOutsideClick = (event: MouseEvent) => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "../style/variables" as *;
 .warp {
   position: relative;
   min-width: min-content;
@@ -100,10 +97,10 @@ const handleOutsideClick = (event: MouseEvent) => {
   position: absolute;
   top: 100%;
   z-index: 10;
-  background-color: #ffffff;
+  background-color: var(--color-background);
   border: 1px solid #298bff;
   border-radius: 0 0 12px 12px;
-  border-top-color: #f0f0f1;
+  border-top-color: $lightGray;
   margin: 0;
   width: 100%;
   overflow: hidden;
@@ -113,8 +110,10 @@ const handleOutsideClick = (event: MouseEvent) => {
   label {
     display: block;
     padding: 12px;
+    transition: 0.5s;
     &.active {
-      background-color: #f3f4fa;
+      background-color: var(--color-accent);
+      color: var(--color-text);
     }
     &:hover {
       background-color: #298bff;

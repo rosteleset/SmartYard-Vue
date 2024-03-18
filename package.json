@@ -11,6 +11,7 @@
   "dependencies": {
     "@vue-leaflet/vue-leaflet": "^0.10.1",
     "@vuepic/vue-datepicker": "^8.2.0",
+    "@vueuse/core": "^10.9.0",
     "axios": "^1.6.7",
     "dayjs": "^1.11.10",
     "leaflet": "^1.9.4",
