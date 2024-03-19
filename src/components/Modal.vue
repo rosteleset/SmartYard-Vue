@@ -31,7 +31,7 @@ const initClose = () => {
                 :class="{ absolute: !title }"
                 @click="initClose"
               >
-                <img :src="closeIcon" alt="close" />
+                <closeIcon/>
               </button>
             </div>
             <div class="modal__body">

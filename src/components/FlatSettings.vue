@@ -138,7 +138,7 @@ watch(settings, (newSettings) => {
           {{ $t("settings.reset-code") }} <strong>{{ doorCode }}</strong>
         </div>
         <button class="reset" @click="regenerateCode">
-          <img :src="reloadIcon" alt="" />
+          <reloadIcon/>
         </button>
       </template>
       <template v-if="settings.autoOpen !== undefined">

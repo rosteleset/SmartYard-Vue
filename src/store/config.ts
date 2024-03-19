@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Ref, onMounted, reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 
 // Интерфейс для хранилища конфигурации
 interface ConfigStore {
@@ -26,9 +26,8 @@ const getPreferredScheme = () =>
 // Экспорт хука для работы с конфигурацией
 export const useConfigStore = defineStore(STORE_NAME, () => {
   const config = ref<ConfigStore>(getConfig());
-  const reactiveConfig = reactive(config);
-
-  // Функция для обновления конфигурации
+  reactive(config);
+// Функция для обновления конфигурации
   const updateConfig = (params: ConfigStore) => {
     config.value = {
       ...config.value,

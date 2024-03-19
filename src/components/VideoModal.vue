@@ -133,7 +133,7 @@ watch(currentRange, () => {
       />
       <div class="info" :class="{ open: isOpenInfo }">
         <button class="toggle-info" @click="isOpenInfo = !isOpenInfo">
-          <img :src="arrowIcon" alt="arrow" />
+          <arrowIcon />
         </button>
         <div class="info__label">{{ name }}</div>
         <RangeSelect

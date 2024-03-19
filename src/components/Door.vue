@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VueElement, computed } from "vue";
+import { FunctionalComponent, computed } from "vue";
 import openDoor from "../api/openDoor";
 import barrierIcon from "../assets/barrier.svg?component";
 import entranceIcon from "../assets/entrance.svg?component";
@@ -8,7 +8,7 @@ import { Domophone } from "../types/domophone";
 
 const props = defineProps<{ data: Domophone }>();
 
-const iconMap: Record<Domophone["icon"], VueElement> = {
+const iconMap: Record<Domophone["icon"], FunctionalComponent> = {
   entrance: entranceIcon,
   wicket: gateIcon,
   gate: gateIcon,
