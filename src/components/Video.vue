@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { Player } from "shaka-player/dist/shaka-player.compiled";
-import { StyleValue, onUnmounted, ref } from "vue";
-import {
-  getLiveURL,
-  getPreviewURL,
-  initializeVideoStream
-} from "../lib/video";
+import { StyleValue, onMounted, onUnmounted, ref } from "vue";
+import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
 import { useConfigStore } from "../store/config";
 import { Camera } from "../types/camera";
 import VideoModal from "./VideoModal.vue";
@@ -44,19 +40,24 @@ const closeHandler = () => {
 
 // Функция загрузки видео и инициализации потока
 const onVideoLoad = () => {
+
   if (config["watchmanMode"] && videoElement.value)
-    initializeVideoStream(getLiveURL(camera), videoElement.value).then(
-      (response) => {
-        shakaInstance.value = response
-        videoElement.value?.play()
-      }
-    );
+    initializeVideoStream(getLiveURL(camera), videoElement.value)
+      .then((response) => {
+        shakaInstance.value = response;
+        videoElement.value?.play();
+      })
+      .catch(e=>console.log(e.message))
 };
 
 // Функция события готовности видео
 const onVideoReady = () => {
   isPlaying.value = true;
 };
+
+onMounted(() => {
+  onVideoLoad();
+});
 
 onUnmounted(() => {
   shakaInstance.value?.unload();
@@ -74,7 +75,8 @@ onUnmounted(() => {
       autoplay
       ref="previewElement"
       class="video__preview"
-      :src="preview"
+      :src="camera.serverType !== 'forpost' ? preview : undefined"
+      :poster="camera.serverType === 'forpost' ? preview : undefined"
       v-on:click="openHandler"
       v-on:canplay="onVideoLoad"
     />

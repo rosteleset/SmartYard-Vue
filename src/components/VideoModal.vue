@@ -3,11 +3,7 @@ import { Player } from "shaka-player/dist/shaka-player.compiled";
 import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
 import arrowIcon from "../assets/arrowRight.svg";
 import { useRanges } from "../hooks/ranges";
-import {
-  getLiveURL,
-  getPreviewURL,
-  initializeVideoStream,
-} from "../lib/video";
+import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
 import { Camera, FormatedRange } from "../types/camera";
 import CustomControls from "./CustomControls.vue";
 import RangeSelect from "./RangeSelect.vue";
@@ -68,8 +64,9 @@ const pause = () => {
 // Функция загрузки видео и инициализации потока
 const onVideoLoad = () => {
   resizeVideo();
-  if (videoElement.value)
-    initializeVideoStream(getLiveURL(camera), videoElement.value).then(
+  const liveURL = getLiveURL(camera);
+  if (liveURL && videoElement.value)
+    initializeVideoStream(liveURL, videoElement.value).then(
       (response) => (shakaInstance.value = response)
     );
 };
@@ -77,7 +74,7 @@ const onVideoLoad = () => {
 // Функция события готовности видео
 const onVideoReady = () => {
   isLoaded.value = true;
-  isOpenInfo.value = false
+  isOpenInfo.value = false;
 };
 
 // Обработчики событий
@@ -97,19 +94,20 @@ watch(currentRange, () => {
   isLoaded.value = false;
   if (videoElement.value) {
     shakaInstance.value?.unload();
-
-    initializeVideoStream(
-      getLiveURL(
-        camera,
-        currentRange.value?.from,
-        currentRange.value?.duration
-      ),
-      videoElement.value,
-      shakaInstance.value
-    ).then((response) => {
-      shakaInstance.value = response
-      videoElement.value?.play();
-    });
+    const liveURL = getLiveURL(
+      camera,
+      currentRange.value?.from,
+      currentRange.value?.duration
+    );
+    if (liveURL)
+      initializeVideoStream(
+        liveURL,
+        videoElement.value,
+        shakaInstance.value
+      ).then((response) => {
+        shakaInstance.value = response;
+        videoElement.value?.play();
+      });
   }
 });
 </script>
@@ -122,7 +120,8 @@ watch(currentRange, () => {
         ref="previewElement"
         class="previewElement"
         :class="{ active: isLoaded }"
-        :src="preview"
+        :src="camera.serverType !== 'forpost' ? preview : undefined"
+        :poster="camera.serverType === 'forpost' ? preview : undefined"
         v-on:canplay="onVideoLoad"
       />
       <CustomControls
