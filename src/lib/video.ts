@@ -4,7 +4,7 @@ import { Camera } from "../types/camera";
 // Функция для получения URL прямого эфира
 const getLiveURL = (camera: Camera, from?: number, length?: number) => {
   const { serverType, url, hlsMode, token } = camera;
-  if (!token) return "";
+  if (!token) return "empty";
   const speed = 1;
   let time = "";
   if (from && length) time = `-${from}-${length}`;
@@ -18,15 +18,14 @@ const getLiveURL = (camera: Camera, from?: number, length?: number) => {
     case "forpost":
       const speedStr = speed < 1 ? speed.toFixed(2) : speed.toFixed(0);
       const tz = new Date().getTimezoneOffset() * 60;
-      const parameters = `&TS=${from}&TZ=${tz}&Speed=${speedStr}`;
+      const parameters = from ? `&TS=${from}&TZ=${tz}&Speed=${speedStr}` : `${camera.token}`;
       let urlBase = new URL(camera.url + parameters);
       if (!urlBase || !urlBase.searchParams) {
-        console.log(camera.url);
-        return "";
+        return "empty";
       }
       return urlBase.toString();
     default:
-      return "";
+      return "empty";
   }
 };
 
@@ -55,8 +54,6 @@ const initializeVideoStream = (
   videoElement: HTMLVideoElement, // HTML элемент видео
   _player?: Player // Параметр для передачи объекта Player, необязательный
 ): Promise<Player> => {
-  const maxRetries = 3;
-  let retryCount = 0;
   // Вспомогательная функция для загрузки видео
   const loader = (player: Player): Promise<void> => {
     return new Promise((resolve, reject) => {
@@ -73,7 +70,8 @@ const initializeVideoStream = (
   };
 
   return new Promise((resolve, reject) => {
-    if (!streamUrl) reject();
+    if (!streamUrl) reject(); // Проверка наличия URL потока
+
     // Проверка поддержки браузером Shaka Player
     if (Player.isBrowserSupported()) {
       const player = _player || new Player(); // Создание нового объекта Player или использование переданного
@@ -92,15 +90,18 @@ const initializeVideoStream = (
           // Обработчик ошибок потока
           failureCallback: (e: any) => {
             console.log(`${streamUrl} stream fall ${e.code}`); // Вывод сообщения о сбое потока
-
-            // if (e.severity === 2) loader(player); // Повторная загрузка видео
+            if (e.severity === 2) {
+              // Повторная загрузка видео с задержкой 10 секунд
+              setTimeout(() => loader(player), 1000 * 10);
+            }
           },
         },
       });
+
       player.attach(videoElement); // Привязка видео к HTML элементу
       loader(player)
-        .then(() => resolve(player)) // Загрузка видео и возврат объекта Player
-        .catch((err) => reject(err));
+        .then(() => resolve(player)) // Загрузка видео и возврат объекта Player при успешном завершении
+        .catch((err) => reject(err)); // Обработка ошибки загрузки видео
     } else {
       console.error("Browser does not support Shaka Player"); // Вывод сообщения о неподдержке браузером Shaka Player
       reject("Browser does not support Shaka Player");

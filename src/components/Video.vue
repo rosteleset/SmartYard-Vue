@@ -40,14 +40,13 @@ const closeHandler = () => {
 
 // Функция загрузки видео и инициализации потока
 const onVideoLoad = () => {
-
   if (config["watchmanMode"] && videoElement.value)
     initializeVideoStream(getLiveURL(camera), videoElement.value)
       .then((response) => {
         shakaInstance.value = response;
         videoElement.value?.play();
       })
-      .catch(e=>console.log(e.message))
+      .catch((e) => console.log(e.message));
 };
 
 // Функция события готовности видео
@@ -56,7 +55,20 @@ const onVideoReady = () => {
 };
 
 onMounted(() => {
-  onVideoLoad();
+  if (camera.serverType === "forpost") onVideoLoad();
+  console.log(
+    getLiveURL({
+      houseId: 0,
+      id: 0,
+      name: "test",
+      lat: 0,
+      lon: 0,
+      serverType: "forpost",
+      hlsMode: "",
+      url: "http://test.ok",
+      token: "testtoken",
+    })
+  );
 });
 
 onUnmounted(() => {
