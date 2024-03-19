@@ -66,9 +66,10 @@ const onVideoLoad = () => {
   resizeVideo();
   const liveURL = getLiveURL(camera);
   if (liveURL && videoElement.value)
-    initializeVideoStream(liveURL, videoElement.value).then(
-      (response) => (shakaInstance.value = response)
-    );
+    initializeVideoStream(liveURL, videoElement.value).then((response) => {
+      shakaInstance.value = response;
+      videoElement.value?.play();
+    });
 };
 
 // Функция события готовности видео
