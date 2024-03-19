@@ -1,11 +1,25 @@
 import { Player } from "shaka-player/dist/shaka-player.compiled";
 import { Camera } from "../types/camera";
+import axios from "axios";
+
+const getForpostFormat = (camera: Camera, from?: number) => {
+  const url = camera.url;
+  const speed = 1;
+  const speedStr = speed < 1 ? speed.toFixed(2) : speed.toFixed(0);
+  const tz = new Date().getTimezoneOffset() * 60;
+  const parameters = from ? `&TS=${from}&TZ=${tz}&Speed=${speedStr}` : "";
+  let urlBase = new URL(url + parameters + `&${camera.token}`);
+  if (!urlBase || !urlBase.searchParams) {
+    return "empty";
+  }
+  return urlBase.toString();
+};
 
 // Функция для получения URL прямого эфира
 const getLiveURL = (camera: Camera, from?: number, length?: number) => {
   const { serverType, url, hlsMode, token } = camera;
   if (!token) return "empty";
-  const speed = 1;
+
   let time = "";
   if (from && length) time = `-${from}-${length}`;
   switch (serverType) {
@@ -16,30 +30,46 @@ const getLiveURL = (camera: Camera, from?: number, length?: number) => {
         ? `${url}/index${time}.fmp4.m3u8?token=${token}`
         : `${url}/index${time}.m3u8?token=${token}`;
     case "forpost":
-      const speedStr = speed < 1 ? speed.toFixed(2) : speed.toFixed(0);
-      const tz = new Date().getTimezoneOffset() * 60;
-      const parameters = from ? `&TS=${from}&TZ=${tz}&Speed=${speedStr}` : `${camera.token}`;
-      let urlBase = new URL(camera.url + parameters);
-      if (!urlBase || !urlBase.searchParams) {
-        return "empty";
-      }
-      return urlBase.toString();
+      return getForpostFormat(camera, from);
     default:
       return "empty";
   }
 };
 
 // Функция для получения URL превью
-const getPreviewURL = (camera: Camera) => {
+const getPreviewURL = async (camera: Camera) => {
   const { serverType, url, token } = camera;
   switch (serverType) {
     case "flussonic":
       return `${url}/preview.mp4?token=${token}`;
     case "forpost":
-      const urlBase = new URL(camera.url);
+      const urlBase = new URL(getForpostFormat(camera));
 
       urlBase.searchParams.delete("Format");
       urlBase.searchParams.append("Format", "JPG");
+
+      const postParams: { [key: string]: any } = {};
+      urlBase.searchParams.forEach((value, key) => (postParams[key] = value));
+      urlBase.search = "";
+      const _url = urlBase.href.replace("https://fpst.garant.tv", "/fpst")
+
+
+      try {
+        const response = await axios.post(
+          _url,
+          JSON.stringify(postParams)
+        );
+        console.log(response);
+        
+        const jsonData = response.data;
+
+        const streamURL: string = jsonData["URL"] || "empty";
+        return streamURL;
+      } catch (error) {
+        console.log(error);
+
+        return "empty";
+      }
 
       return urlBase.toString();
 

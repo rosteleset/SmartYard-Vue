@@ -17,9 +17,14 @@ export default defineConfig(({ mode }) => {
       target: PROXY_TARGET,
       changeOrigin: true,
       secure: false,
-      rewrite: (path) =>
-        path.replace(new RegExp(`^\\${PROXY_PREFIX}`), ""),
+      rewrite: (path) => path.replace(new RegExp(`^\\${PROXY_PREFIX}`), ""),
     };
+  proxy["/fpst"] = {
+    target: "https://fpst.garant.tv/",
+    changeOrigin: true,
+    secure: false,
+    rewrite: (path) => path.replace(new RegExp(`^\/frpst`), ""),
+  };
 
   return {
     plugins: [vue()],

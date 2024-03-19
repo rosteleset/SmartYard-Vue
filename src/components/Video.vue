@@ -12,7 +12,7 @@ const { config } = useConfigStore();
 const previewContainer = ref<HTMLVideoElement | null>(null);
 const previewElement = ref<HTMLVideoElement | null>(null);
 const videoElement = ref<HTMLVideoElement | null>(null);
-const preview = ref<string>(getPreviewURL(camera));
+const preview = ref<string>("");
 const shakaInstance = ref<Player>();
 const isPlaying = ref(false);
 
@@ -55,6 +55,7 @@ const onVideoReady = () => {
 };
 
 onMounted(() => {
+  getPreviewURL(camera).then((r) => (preview.value = r));
   if (camera.serverType === "forpost") onVideoLoad();
   console.log(
     getLiveURL({

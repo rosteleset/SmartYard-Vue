@@ -3,12 +3,17 @@ import { provide, ref } from "vue";
 import Header from "./components/Header.vue";
 import { useAddressesStore } from "./store/addresses";
 import { useUserStore } from "./store/user";
+import axios from "axios";
 
 const addressesStore = useAddressesStore();
 const userStore = useUserStore();
 
 const isMenuOpen = ref(false);
 provide("isMenuOpen", isMenuOpen);
+
+// axios
+//   .post("/fpst/system-api/GetTranslationURL")
+//   .then((r) => console.log(r));
 </script>
 
 <template>
