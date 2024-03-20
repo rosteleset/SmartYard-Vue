@@ -15,16 +15,19 @@ export default defineConfig(({ mode }) => {
   if (PROXY_TARGET && PROXY_PREFIX)
     proxy[PROXY_PREFIX] = {
       target: PROXY_TARGET,
-      changeOrigin: true,
+      changeOrigin: false,
       secure: false,
       rewrite: (path) => path.replace(new RegExp(`^\\${PROXY_PREFIX}`), ""),
     };
-  proxy["/fpst"] = {
-    target: "https://fpst.garant.tv/",
-    changeOrigin: true,
-    secure: false,
-    rewrite: (path) => path.replace(new RegExp(`^\/frpst`), ""),
-  };
+
+    console.log(`${PROXY_TARGET} ${PROXY_PREFIX}`);
+    
+  // proxy["/fpst"] = {
+  //   target: "https://fpst.garant.tv/",
+  //   changeOrigin: true,
+  //   secure: false,
+  //   rewrite: (path) => path.replace(new RegExp(`^\/frpst`), ""),
+  // };
 
   return {
     plugins: [vue()],

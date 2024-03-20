@@ -3,49 +3,59 @@ import { StyleValue } from "vue";
 import { Camera } from "../types/camera";
 import axios from "axios";
 
+// Абстрактный класс Player, представляющий базовую модель плеера
 abstract class Player {
-  readonly camera: Camera;
-  protected videoElement: HTMLVideoElement;
-  protected stream: string = "";
-  protected preview: string = "";
-  readonly previewType: "video" | "image" = "video";
-  protected aspectRatio: number = 1.6;
-  protected isLoaded: boolean = false;
-  protected player: ShakaPlayer | undefined;
+  readonly camera: Camera; // Камера, с которой работает плеер
+  protected videoElement: HTMLVideoElement; // HTML элемент видео
+  protected stream: string | undefined; // URL потока видео
+  protected preview: string | undefined; // URL превью видео
+  readonly previewType: "video" | "image" = "video"; // Тип превью
+  protected aspectRatio: number = 1.6; // Соотношение сторон видео
+  protected isLoaded: boolean = false; // Флаг загрузки видео
+  protected player: ShakaPlayer | undefined; // Инстанс ShakaPlayer для воспроизведения видео
 
+  // Конструктор класса Player
   constructor(camera: Camera, videoElement: HTMLVideoElement) {
-    if (!camera.token) throw new Error("no token");
+    if (!camera.token) throw new Error("no token"); // Проверка наличия токена у камеры
     this.camera = camera;
     this.videoElement = videoElement;
   }
 
-  readonly play = () => {
+  // Метод для воспроизведения видео
+  play() {
     this.videoElement.play();
-  };
-  readonly pause = () => {
+  }
+
+  // Метод для паузы видео
+  pause() {
     this.videoElement.pause();
-  };
+  }
+
+  // Абстрактные методы для генерации превью и потока видео
   abstract generatePreview(): void;
   abstract generateStream(from?: number, length?: number): void;
-  readonly calculateAspectRatio = (): number => {
+
+  // Метод для расчета соотношения сторон видео
+  calculateAspectRatio(): number {
     this.aspectRatio =
       this.videoElement.videoWidth / this.videoElement.videoHeight ||
       this.aspectRatio;
     console.log(`ar - ${this.aspectRatio}`);
-
     return this.aspectRatio;
-  };
-  readonly getSize = (): StyleValue => {
-    this.calculateAspectRatio();
+  }
+
+  // Метод для вычисления размеров видео
+  getSize(): StyleValue {
+    const aspectRatio = this.aspectRatio;
     const containerWidth = window.innerWidth;
     const containerHeight = window.innerHeight;
     let newVideoWidth, newVideoHeight;
-    if (containerWidth / this.aspectRatio > containerHeight) {
-      newVideoWidth = containerHeight * 0.9 * this.aspectRatio;
+    if (containerWidth / aspectRatio > containerHeight) {
+      newVideoWidth = containerHeight * 0.9 * aspectRatio;
       newVideoHeight = containerHeight * 0.9;
     } else {
       newVideoWidth = containerWidth * 0.9;
-      newVideoHeight = (containerWidth * 0.9) / this.aspectRatio;
+      newVideoHeight = (containerWidth * 0.9) / aspectRatio;
     }
     return {
       top: `${(containerHeight - newVideoHeight) / 2}px`,
@@ -53,47 +63,38 @@ abstract class Player {
       width: `${newVideoWidth}px`,
       height: `${newVideoHeight}px`,
     };
-  };
-  readonly initializeVideoStream = (): void => {
-    const loader = (player: ShakaPlayer): Promise<void> => {
-      return new Promise((resolve, reject) => {
-        player
-          .load(this.stream)
-          .then(() => {
-            resolve();
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      });
-    };
+  }
 
-    if (ShakaPlayer.isBrowserSupported()) {
-      const player = this.player || new ShakaPlayer();
-      player.configure({});
-      player.attach(this.videoElement);
-      loader(player);
-      this.videoElement.addEventListener(
-        "canplay",
-        () => this.videoElement.play(),
-        { once: true }
-      );
-    } else {
-      console.error("Browser does not support Shaka Player");
-    }
-  };
+  // Метод для инициализации видеопотока
+  initializeVideoStream(): void {
+    if (!this.stream) return console.error("Doesn't have stream url"); // Проверка наличия URL потока
+    if (!ShakaPlayer.isBrowserSupported())
+      return console.error("Browser does not support Shaka Player"); // Проверка поддержки Shaka Player
+    const player = this.player || new ShakaPlayer(); // Создание нового инстанса ShakaPlayer
+    player.configure({});
+    player.attach(this.videoElement);
+    player
+      .load(this.stream)
+      .then(() => this.videoElement.play())
+      .catch((err) => console.error(err));
+  }
 }
-// Flusonic
+
+// Класс FlussonicPlayer, наследующийся от Player для работы с Flussonic сервером
 class FlussonicPlayer extends Player {
   constructor(camera: Camera, videoElement: HTMLVideoElement) {
     super(camera, videoElement);
     this.generatePreview();
     this.generateStream();
   }
+
+  // Метод для генерации превью видео
   generatePreview = (): void => {
     const { url, token } = this.camera;
     this.preview = `${url}/preview.mp4?token=${token}`;
   };
+
+  // Метод для генерации потока видео
   generateStream = (from?: number, length?: number): void => {
     const { url, hlsMode, token } = this.camera;
     const time = from && length ? `-${from}-${length}` : "";
@@ -105,7 +106,7 @@ class FlussonicPlayer extends Player {
   };
 }
 
-// Forpost
+// Класс ForpostPlayer, наследующийся от Player для работы с Forpost сервером
 class ForpostPlayer extends Player {
   readonly previewType = "image";
 
@@ -114,6 +115,8 @@ class ForpostPlayer extends Player {
     this.generatePreview();
     this.generateStream();
   }
+
+  // Метод для форматирования запроса к Forpost серверу
   getForpostFormat = (from?: number) => {
     const url = this.camera.url;
     const speed = 1;
@@ -127,22 +130,21 @@ class ForpostPlayer extends Player {
     return urlBase.toString();
   };
 
+  // Метод для генерации превью видео
   generatePreview = (): void => {
     const urlBase = new URL(this.getForpostFormat());
-
     urlBase.searchParams.delete("Format");
     urlBase.searchParams.append("Format", "JPG");
-
     const postParams = new URLSearchParams(urlBase.searchParams);
     urlBase.search = "";
     const _url = urlBase.href;
-
     axios.post(_url, postParams.toString()).then((response) => {
       const jsonData = response.data;
       this.preview = jsonData["URL"] || "empty";
     });
   };
 
+  // Метод для генерации потока видео
   generateStream = (from?: number): void => {
     const urlBase = new URL(this.getForpostFormat(from));
     const postParams = new URLSearchParams(urlBase.searchParams);
@@ -150,12 +152,13 @@ class ForpostPlayer extends Player {
     const _url = urlBase.href;
     axios.post(_url, postParams.toString()).then((response) => {
       const jsonData = response.data;
-
       this.stream = jsonData["URL"] || "empty";
+      this.initializeVideoStream();
     });
   };
 }
 
+// Фабрика PlayerFactory для создания плееров в зависимости от типа сервера
 class PlayerFactory {
   static createPlayer(camera: Camera, videoElement: HTMLVideoElement) {
     switch (camera.serverType) {
@@ -169,4 +172,5 @@ class PlayerFactory {
   }
 }
 
+// Экспорт классов FlussonicPlayer, ForpostPlayer, Player и PlayerFactory
 export { FlussonicPlayer, ForpostPlayer, Player, PlayerFactory };

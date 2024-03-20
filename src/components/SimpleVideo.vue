@@ -7,10 +7,7 @@ import { Camera, FormatedRange } from "../types/camera";
 import CustomControls from "./CustomControls.vue";
 import RangeSelect from "./RangeSelect.vue";
 
-const {
-  camera,
-  preview: _preview,
-} = defineProps<{
+const { camera, preview: _preview } = defineProps<{
   camera: Camera;
   startStyles?: StyleValue;
   response?: number;
@@ -30,6 +27,11 @@ const styles = ref<StyleValue>();
 
 const resize = () => {
   styles.value = player.value?.getSize();
+};
+
+const onCanPlay = () => {
+  player.value?.calculateAspectRatio();
+  resize();
 };
 
 watch(currentRange, () => {
@@ -56,7 +58,7 @@ onUnmounted(() => {
       <video
         ref="videoElement"
         class="video-element"
-        v-on:canplay="styles = player?.getSize()"
+        v-on:canplay="onCanPlay"
       />
       <!-- <video ref="previewElement" class="video-preview" /> -->
       <CustomControls

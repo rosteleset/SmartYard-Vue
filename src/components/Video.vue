@@ -69,6 +69,7 @@ onMounted(() => {
 onUnmounted(() => {
   shakaInstance.value?.unload();
 });
+
 </script>
 
 <template>
