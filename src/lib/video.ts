@@ -16,7 +16,7 @@ const getForpostFormat = (camera: Camera, from?: number) => {
 };
 
 // Функция для получения URL прямого эфира
-const getLiveURL = (camera: Camera, from?: number, length?: number) => {
+const getLiveURL = async (camera: Camera, from?: number, length?: number) => {
   const { serverType, url, hlsMode, token } = camera;
   if (!token) return "empty";
 
@@ -30,7 +30,20 @@ const getLiveURL = (camera: Camera, from?: number, length?: number) => {
         ? `${url}/index${time}.fmp4.m3u8?token=${token}`
         : `${url}/index${time}.m3u8?token=${token}`;
     case "forpost":
-      return getForpostFormat(camera, from);
+      const urlBase = new URL(getForpostFormat(camera, from));
+      const postParams = new URLSearchParams(urlBase.searchParams);
+      urlBase.search = "";
+      const _url = urlBase.href;
+      try {
+        const response = await axios.post(_url, postParams.toString());
+
+        const jsonData = response.data;
+
+        const streamURL: string = jsonData["URL"] || "empty";
+        return streamURL;
+      } catch (error) {
+        return "empty";
+      }
     default:
       return "empty";
   }
@@ -48,19 +61,16 @@ const getPreviewURL = async (camera: Camera) => {
       urlBase.searchParams.delete("Format");
       urlBase.searchParams.append("Format", "JPG");
 
-      const postParams: { [key: string]: any } = {};
-      urlBase.searchParams.forEach((value, key) => (postParams[key] = value));
+      const postParams = new URLSearchParams(urlBase.searchParams);
       urlBase.search = "";
-      const _url = urlBase.href.replace("https://fpst.garant.tv", "/fpst")
+      const _url = urlBase.href;
 
+      console.log(postParams);
 
       try {
-        const response = await axios.post(
-          _url,
-          JSON.stringify(postParams)
-        );
+        const response = await axios.post(_url, postParams.toString());
         console.log(response);
-        
+
         const jsonData = response.data;
 
         const streamURL: string = jsonData["URL"] || "empty";

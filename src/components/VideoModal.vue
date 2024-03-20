@@ -9,10 +9,16 @@ import CustomControls from "./CustomControls.vue";
 import RangeSelect from "./RangeSelect.vue";
 
 // Определение свойств и эмиттеров
-const { camera, startStyles, response } = defineProps<{
+const {
+  camera,
+  startStyles,
+  response,
+  preview: _preview,
+} = defineProps<{
   camera: Camera;
   startStyles?: StyleValue;
   response?: number;
+  preview?: string;
 }>();
 const { id, name } = camera;
 const emit = defineEmits(["onClose"]);
@@ -23,7 +29,7 @@ const isOpenInfo = ref(false);
 const previewElement = ref<HTMLVideoElement | null>(null);
 const videoElement = ref<HTMLVideoElement | null>(null);
 const styles = ref<StyleValue>();
-const preview = ref<string>(getPreviewURL(camera));
+const preview = ref<string>(_preview || "");
 const currentResponse = ref<number | undefined>(response);
 const shakaInstance = ref<Player>();
 
@@ -32,27 +38,30 @@ const currentRange = ref<FormatedRange>();
 
 // Функция изменения размера видео
 const resizeVideo = () => {
-  if (previewElement.value !== null) {
-    currentResponse.value =
-      previewElement.value.videoWidth / previewElement.value.videoHeight;
-    const aspectRatio = currentResponse.value;
-    const containerWidth = window.innerWidth;
-    const containerHeight = window.innerHeight;
-    let newVideoWidth, newVideoHeight;
-    if (containerWidth / aspectRatio > containerHeight) {
-      newVideoWidth = containerHeight * 0.9 * aspectRatio;
-      newVideoHeight = containerHeight * 0.9;
-    } else {
-      newVideoWidth = containerWidth * 0.9;
-      newVideoHeight = (containerWidth * 0.9) / aspectRatio;
-    }
-    styles.value = {
-      top: `${(containerHeight - newVideoHeight) / 2}px`,
-      left: `${(containerWidth - newVideoWidth) / 2}px`,
-      width: `${newVideoWidth}px`,
-      height: `${newVideoHeight}px`,
-    };
+  const element: HTMLVideoElement | null = isLoaded.value
+    ? videoElement.value
+    : previewElement.value;
+  if (!element) return;
+  // if (previewElement.value !== null) {
+  currentResponse.value = element.videoWidth / element.videoHeight;
+  const aspectRatio = currentResponse.value;
+  const containerWidth = window.innerWidth;
+  const containerHeight = window.innerHeight;
+  let newVideoWidth, newVideoHeight;
+  if (containerWidth / aspectRatio > containerHeight) {
+    newVideoWidth = containerHeight * 0.9 * aspectRatio;
+    newVideoHeight = containerHeight * 0.9;
+  } else {
+    newVideoWidth = containerWidth * 0.9;
+    newVideoHeight = (containerWidth * 0.9) / aspectRatio;
   }
+  styles.value = {
+    top: `${(containerHeight - newVideoHeight) / 2}px`,
+    left: `${(containerWidth - newVideoWidth) / 2}px`,
+    width: `${newVideoWidth}px`,
+    height: `${newVideoHeight}px`,
+  };
+  // }
 };
 
 const pause = () => {
@@ -64,11 +73,12 @@ const pause = () => {
 // Функция загрузки видео и инициализации потока
 const onVideoLoad = () => {
   resizeVideo();
-  const liveURL = getLiveURL(camera);
-  if (liveURL && videoElement.value)
-    initializeVideoStream(liveURL, videoElement.value).then(
-      (response) => (shakaInstance.value = response)
-    );
+  getLiveURL(camera).then((liveURL) => {
+    if (liveURL && videoElement.value)
+      initializeVideoStream(liveURL, videoElement.value).then(
+        (response) => (shakaInstance.value = response)
+      );
+  });
 };
 
 // Функция события готовности видео
@@ -79,6 +89,12 @@ const onVideoReady = () => {
 
 // Обработчики событий
 onMounted(() => {
+  if (preview.value === "")
+    getPreviewURL(camera).then((r) => {
+      preview.value = r;
+      if (camera.serverType === "forpost") onVideoLoad();
+    });
+  else if (camera.serverType === "forpost") onVideoLoad();
   styles.value = startStyles;
   window.addEventListener("resize", resizeVideo);
 });
@@ -92,14 +108,14 @@ onUnmounted(() => {
 // Слежение за текущей записью
 watch(currentRange, () => {
   isLoaded.value = false;
-  if (videoElement.value) {
-    shakaInstance.value?.unload();
-    const liveURL = getLiveURL(
-      camera,
-      currentRange.value?.from,
-      currentRange.value?.duration
-    );
-    if (liveURL)
+
+  shakaInstance.value?.unload();
+  getLiveURL(
+    camera,
+    currentRange.value?.from,
+    currentRange.value?.duration
+  ).then((liveURL) => {
+    if (liveURL && videoElement.value)
       initializeVideoStream(
         liveURL,
         videoElement.value,
@@ -108,7 +124,7 @@ watch(currentRange, () => {
         shakaInstance.value = response;
         videoElement.value?.play();
       });
-  }
+  });
 });
 </script>
 
@@ -173,6 +189,9 @@ watch(currentRange, () => {
       top: 0;
       left: 0;
       opacity: 1;
+      min-height: 100px;
+      min-width: 200px;
+      background-color: #298bff;
       &.active {
         z-index: -1;
         opacity: 0;

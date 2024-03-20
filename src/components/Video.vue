@@ -4,9 +4,10 @@ import { StyleValue, onMounted, onUnmounted, ref } from "vue";
 import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
 import { useConfigStore } from "../store/config";
 import { Camera } from "../types/camera";
-import VideoModal from "./VideoModal.vue";
+// import VideoModal from "./VideoModal.vue";
+import SimpleVideo from "./SimpleVideo.vue";
 
-const { camera } = defineProps<{ camera: Camera; index?: number }>();
+const { camera, index } = defineProps<{ camera: Camera; index?: number }>();
 const { config } = useConfigStore();
 
 const previewContainer = ref<HTMLVideoElement | null>(null);
@@ -40,13 +41,16 @@ const closeHandler = () => {
 
 // Функция загрузки видео и инициализации потока
 const onVideoLoad = () => {
-  if (config["watchmanMode"] && videoElement.value)
-    initializeVideoStream(getLiveURL(camera), videoElement.value)
-      .then((response) => {
-        shakaInstance.value = response;
-        videoElement.value?.play();
-      })
-      .catch((e) => console.log(e.message));
+  if (config["watchmanMode"])
+    getLiveURL(camera).then((url) => {
+      if (videoElement.value)
+        initializeVideoStream(url, videoElement.value)
+          .then((response) => {
+            shakaInstance.value = response;
+            videoElement.value?.play();
+          })
+          .catch((e) => console.log(e.message));
+    });
 };
 
 // Функция события готовности видео
@@ -55,21 +59,11 @@ const onVideoReady = () => {
 };
 
 onMounted(() => {
-  getPreviewURL(camera).then((r) => (preview.value = r));
-  if (camera.serverType === "forpost") onVideoLoad();
-  console.log(
-    getLiveURL({
-      houseId: 0,
-      id: 0,
-      name: "test",
-      lat: 0,
-      lon: 0,
-      serverType: "forpost",
-      hlsMode: "",
-      url: "http://test.ok",
-      token: "testtoken",
-    })
-  );
+  getPreviewURL(camera).then((r) => {
+    preview.value = r;
+    if (camera.serverType === "forpost")
+      setTimeout(onVideoLoad, index || 1 * 1000);
+  });
 });
 
 onUnmounted(() => {
@@ -103,12 +97,13 @@ onUnmounted(() => {
     />
     <div v-if="index" class="number">{{ index }}</div>
 
-    <VideoModal
+    <SimpleVideo
       v-if="isOpen"
       :camera="camera"
       :start-styles="styles"
       :response="response"
       @on-close="closeHandler"
+      :preview="preview"
     />
   </div>
 </template>
@@ -124,6 +119,7 @@ onUnmounted(() => {
   &__preview {
     width: 100%;
     height: 100%;
+
     object-fit: cover;
     position: relative;
   }
