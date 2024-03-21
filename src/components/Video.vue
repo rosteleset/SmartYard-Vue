@@ -8,7 +8,6 @@ import SimpleVideo from "./SimpleVideo.vue";
 
 const { camera, index } = defineProps<{ camera: Camera; index?: number }>();
 const { config } = useConfigStore();
-
 const player = ref<Player>();
 const previewContainer = ref<HTMLVideoElement>();
 const previewElement = ref<HTMLVideoElement>();

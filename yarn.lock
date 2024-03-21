@@ -700,10 +700,10 @@ proxy-from-env@^1.1.0:
   resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
   integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
 
-rbt-player@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/rbt-player/-/rbt-player-1.0.6.tgz#76027d6c35a331d4589e265bb9cc704ad9c23749"
-  integrity sha512-WlLoVrnYxPK+1ZMDu7DvcfcKUtfZOr+bMY72Aj0jVauZHIINQrFBjPkZucSD4syDGkk5WGE2IW1scpmW/nO2UQ==
+rbt-player@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/rbt-player/-/rbt-player-1.0.8.tgz#9ef4435967b7e729b6af07834280f64248a13a94"
+  integrity sha512-FBl8DDgO+yXVKWOIJUvxD9178YapMFcQ3vIvvAMB3kiMpuritM1dissNeiAwi9ilZpb++XgjmwstTX8RvFgF6g==
   dependencies:
     axios "^1.6.8"
     shaka-player "^4.7.11"
