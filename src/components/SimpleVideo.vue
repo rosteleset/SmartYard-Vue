@@ -2,16 +2,13 @@
 import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
 import arrowIcon from "../assets/arrowRight.svg";
 import { useRanges } from "../hooks/ranges";
-import { Player, PlayerFactory } from "../lib/player";
 import { Camera, FormatedRange } from "../types/camera";
 import CustomControls from "./CustomControls.vue";
 import RangeSelect from "./RangeSelect.vue";
+import { Player, PlayerFactory } from "rbt-player/dist/player";
 
-const { camera, preview: _preview } = defineProps<{
+const { camera } = defineProps<{
   camera: Camera;
-  startStyles?: StyleValue;
-  response?: number;
-  preview?: string;
 }>();
 const emit = defineEmits(["onClose"]);
 const { streams } = useRanges(camera.id);
@@ -43,7 +40,11 @@ watch(currentRange, () => {
 
 onMounted(() => {
   if (videoElement.value) {
-    player.value = PlayerFactory.createPlayer(camera, videoElement.value);
+    player.value = PlayerFactory.createPlayer({
+      camera,
+      videoElement: videoElement.value,
+      autoplay: true,
+    });
     resize();
     window.addEventListener("resize", resize);
   }
