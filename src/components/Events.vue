@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import eventIcon from "../assets/events.svg";
+import eventIcon from "../assets/events.svg?component";
 import { useEvents } from "../hooks/events";
 import useEventNames from "../lib/useEventNames";
 import { useAddressesStore } from "../store/addresses";

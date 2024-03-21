@@ -2,7 +2,7 @@
 import dayjs from "dayjs";
 import { computed, ref, watch } from "vue";
 import resetCode from "../api/resetCode";
-import reloadIcon from "../assets/reload.svg";
+import reloadIcon from "../assets/reload.svg?component";
 import { useSettings } from "../hooks/settings";
 import Button from "./Button.vue";
 import Faces from "./Faces.vue";
@@ -138,7 +138,7 @@ watch(settings, (newSettings) => {
           {{ $t("settings.reset-code") }} <strong>{{ doorCode }}</strong>
         </div>
         <button class="reset" @click="regenerateCode">
-          <img :src="reloadIcon" alt="" />
+          <reloadIcon/>
         </button>
       </template>
       <template v-if="settings.autoOpen !== undefined">

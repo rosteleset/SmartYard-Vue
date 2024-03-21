@@ -3,7 +3,7 @@ import { LIcon, LMap, LMarker, LTileLayer } from "@vue-leaflet/vue-leaflet";
 import { LatLngBoundsExpression, Map, Point, PointExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { StyleValue, ref } from "vue";
-import cameraIcon from "../assets/camera.svg";
+import cameraIcon from "../assets/camera.svg?component";
 import { Camera } from "../types/camera";
 import SimpleVideo from "./SimpleVideo.vue";
 
@@ -89,7 +89,7 @@ const handler = (event: any, camera: Camera) => {
           className="map-icon__container"
           :iconSize="[45, 45]"
         >
-          <img class="map-icon__icon" :src="cameraIcon" alt="" />
+          <cameraIcon/>
           <div class="map-icon__label">{{ getCameraIndex(camera) }}</div>
         </LIcon>
       </LMarker>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
-import arrowIcon from "../assets/arrowRight.svg";
+import ArrowIcon from "../assets/arrowRight.svg?component";
 import { useRanges } from "../hooks/ranges";
 import { Camera, FormatedRange } from "../types/camera";
 import CustomControls from "./CustomControls.vue";
@@ -70,7 +70,7 @@ onUnmounted(() => {
       />
       <div class="info" :class="{ open: isOpenInfo }">
         <button class="toggle-info" @click="isOpenInfo = !isOpenInfo">
-          <img :src="arrowIcon" alt="arrow" />
+          <ArrowIcon />
         </button>
         <div class="info__label">{{ camera.name }}</div>
         <RangeSelect
@@ -127,10 +127,9 @@ onUnmounted(() => {
   right: 100%;
   top: 50%;
   cursor: pointer;
-  img {
-    display: block;
+  svg {
     transition: 0.5s ease-out;
-    transform: rotateZ(180deg);
+    transform: rotateY(180deg);
   }
 }
 .info {
@@ -146,8 +145,8 @@ onUnmounted(() => {
   &.open {
     transform: translateX(0);
     .toggle-info {
-      img {
-        transform: rotateZ(0);
+      svg {
+        transform: rotateY(0);
       }
     }
   }

@@ -2,7 +2,7 @@
 import dayjs from "dayjs";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { FormatedRange } from "../types/camera";
-import playIcon from "../assets/play.svg";
+import PlayIcon from "../assets/play.svg?component";
 
 // Определение свойств
 const { videoElement, range } = defineProps<{
@@ -78,8 +78,8 @@ onUnmounted(() => {
 </script>
 <template>
   <div class="custom-controls">
-    <button class="play" @click="videoElement.paused ? videoElement.play() :videoElement.pause()">
-      <img :src="playIcon" alt="play" />
+    <button class="play" @click="emits('pause')">
+      <PlayIcon />
     </button>
     <div class="wrap">
       <input

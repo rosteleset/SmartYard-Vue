@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { provide, ref } from "vue";
-import arrowIcon from "../assets/ArrowBottom.svg";
-import settingsIcon from "../assets/settings.svg";
+import ArrowIcon from "../assets/ArrowBottom.svg?component";
+import SettingsIcon from "../assets/settings.svg?component";
 import { useAddressesStore } from "../store/addresses";
 import Cameras from "./Cameras.vue";
 import Door from "./Door.vue";
@@ -44,14 +44,10 @@ const settingsOpen = () => {
       <div class="address__label">{{ building.address }}</div>
       <div class="address__buttons" @click.stop>
         <button @click="settingsOpen">
-          <img :src="settingsIcon" alt="$t('addresses.settings')" />
+          <SettingsIcon class="icon"/>
         </button>
         <button class="address__more" @click="toggleOpen(!isOpen)">
-          <img
-            :src="arrowIcon"
-            alt="$t('global.more')"
-            :class="{ 'address__more--open': isOpen }"
-          />
+          <ArrowIcon class="icon" :class="{ 'address__more&#45;&#45;open': isOpen }"/>
         </button>
       </div>
     </div>
@@ -69,17 +65,18 @@ const settingsOpen = () => {
 </template>
 
 <style scoped lang="scss">
+@use "../style/variables" as *;
 .address {
-  background-color: #fff;
-  border-radius: 12px;
-  margin-bottom: 24px;
+    background-color: var(--color-second-background);
+  @include rounded();
+  margin-bottom: $size*2;
 }
 
 .address__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px;
+  padding: $size*2;
   cursor: pointer;
 }
 
@@ -88,12 +85,12 @@ const settingsOpen = () => {
 }
 
 .address__label {
-  font-size: 20px;
+  font-size: $size*2;
 }
 
 .address__buttons {
   display: flex;
-  gap: 12px;
+  gap: $size;
 
   button {
     cursor: pointer;
@@ -102,20 +99,12 @@ const settingsOpen = () => {
   }
 }
 
-.address__more img {
-  display: block;
-  transition: 0.3s;
-
-  &.address__more--open {
-    transform: rotateX(180deg);
-  }
-}
 
 .address__doors {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  padding: 24px;
+  gap: $size;
+  padding: $size*2;
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
@@ -123,6 +112,16 @@ const settingsOpen = () => {
 
   @media (max-width: 480px) {
     grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.icon {
+  display: block;
+  fill: var(--color-text);
+  transition: 0.3s;
+
+  &.address__more--open {
+    transform: rotateX(180deg);
   }
 }
 </style>
