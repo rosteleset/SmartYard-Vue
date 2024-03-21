@@ -1,78 +1,35 @@
 <script setup lang="ts">
-import { Player } from "shaka-player/dist/shaka-player.compiled";
-import { StyleValue, onMounted, onUnmounted, ref } from "vue";
-import { getLiveURL, getPreviewURL, initializeVideoStream } from "../lib/video";
+import { onMounted, ref } from "vue";
 import { useConfigStore } from "../store/config";
 import { Camera } from "../types/camera";
-import VideoModal from "./VideoModal.vue";
+// import VideoModal from "./VideoModal.vue";
+import { Player, PlayerFactory } from "rbt-player/dist/player";
+import SimpleVideo from "./SimpleVideo.vue";
 
-const { camera } = defineProps<{ camera: Camera; index?: number }>();
+const { camera, index } = defineProps<{ camera: Camera; index?: number }>();
 const { config } = useConfigStore();
-
-const previewContainer = ref<HTMLVideoElement | null>(null);
-const previewElement = ref<HTMLVideoElement | null>(null);
-const videoElement = ref<HTMLVideoElement | null>(null);
-const preview = ref<string>(getPreviewURL(camera));
-const shakaInstance = ref<Player>();
-const isPlaying = ref(false);
-
+const player = ref<Player>();
+const previewContainer = ref<HTMLVideoElement>();
+const previewElement = ref<HTMLVideoElement>();
+const videoElement = ref<HTMLVideoElement>();
 const isOpen = ref(false);
-const styles = ref<StyleValue>();
-const response = ref<number>(0);
 
-const openHandler = () => {
-  if (previewContainer.value && previewElement.value) {
-    const rect = previewContainer.value.getBoundingClientRect();
-    styles.value = {
-      top: `${rect?.top}px`,
-      left: `${rect?.left}px`,
-      width: `${rect?.width}px`,
-      height: `${rect?.height}px`,
-      opacity: 0,
-    };
-    isOpen.value = true;
-  }
-};
-
-const closeHandler = () => {
-  isOpen.value = false;
-};
-
-// Функция загрузки видео и инициализации потока
-const onVideoLoad = () => {
-  if (config["watchmanMode"] && videoElement.value)
-    initializeVideoStream(getLiveURL(camera), videoElement.value)
-      .then((response) => {
-        shakaInstance.value = response;
-        videoElement.value?.play();
-      })
-      .catch((e) => console.log(e.message));
-};
-
-// Функция события готовности видео
-const onVideoReady = () => {
-  isPlaying.value = true;
-};
+const openHandler = () => (isOpen.value = true);
+const closeHandler = () => (isOpen.value = false);
 
 onMounted(() => {
-  if (camera.serverType === "forpost") onVideoLoad();
-  console.log(
-    getLiveURL({
-      houseId: 0,
-      id: 0,
-      name: "test",
-      lat: 0,
-      lon: 0,
-      serverType: "forpost",
-      hlsMode: "",
-      url: "http://test.ok",
-      token: "testtoken",
-    })
-  );
-});
-
-onUnmounted(() => {
-  shakaInstance.value?.unload();
+  if (videoElement.value) {
+    try {
+      player.value = PlayerFactory.createPlayer({
+        camera,
+        videoElement: videoElement.value,
+        previewElement: previewElement.value,
+        autoplay: config.watchmanMode,
+      });
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
 });
 </script>
 
@@ -87,28 +44,17 @@ onUnmounted(() => {
       autoplay
       ref="previewElement"
       class="video__preview"
-      :src="camera.serverType !== 'forpost' ? preview : undefined"
-      :poster="camera.serverType === 'forpost' ? preview : undefined"
       v-on:click="openHandler"
-      v-on:canplay="onVideoLoad"
     />
     <video
       muted
       ref="videoElement"
       class="video__player"
-      :class="{ active: isPlaying }"
       v-on:click="openHandler"
-      v-on:canplay="onVideoReady"
     />
     <div v-if="index" class="number">{{ index }}</div>
 
-    <VideoModal
-      v-if="isOpen"
-      :camera="camera"
-      :start-styles="styles"
-      :response="response"
-      @on-close="closeHandler"
-    />
+    <SimpleVideo v-if="isOpen" :camera="camera" @on-close="closeHandler" />
   </div>
 </template>
 
@@ -123,6 +69,7 @@ onUnmounted(() => {
   &__preview {
     width: 100%;
     height: 100%;
+
     object-fit: cover;
     position: relative;
   }

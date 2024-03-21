@@ -15,10 +15,9 @@ export default defineConfig(({ mode }) => {
   if (PROXY_TARGET && PROXY_PREFIX)
     proxy[PROXY_PREFIX] = {
       target: PROXY_TARGET,
-      changeOrigin: true,
+      changeOrigin: false,
       secure: false,
-      rewrite: (path) =>
-        path.replace(new RegExp(`^\\${PROXY_PREFIX}`), ""),
+      rewrite: (path) => path.replace(new RegExp(`^\\${PROXY_PREFIX}`), ""),
     };
 
   return {

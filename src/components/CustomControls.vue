@@ -78,7 +78,7 @@ onUnmounted(() => {
 </script>
 <template>
   <div class="custom-controls">
-    <button class="play" @click="emits('pause')">
+    <button class="play" @click="videoElement.paused ? videoElement.play() :videoElement.pause()">
       <img :src="playIcon" alt="play" />
     </button>
     <div class="wrap">
