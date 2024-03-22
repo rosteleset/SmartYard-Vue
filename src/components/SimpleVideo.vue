@@ -6,6 +6,7 @@ import { Camera, FormatedRange } from "../types/camera";
 import CustomControls from "./CustomControls.vue";
 import RangeSelect from "./RangeSelect.vue";
 import { Player, PlayerFactory } from "rbt-player/dist/player";
+import { computed } from "vue";
 
 const { camera } = defineProps<{
   camera: Camera;
@@ -18,8 +19,18 @@ const player = ref<Player>();
 const isOpenInfo = ref(false);
 // const previewElement = ref<HTMLVideoElement | null>(null);
 const videoElement = ref<HTMLVideoElement | null>(null);
+const videoContainer = ref<HTMLDivElement | null>(null);
+
 const currentRange = ref<FormatedRange>();
 const styles = ref<StyleValue>();
+const scale = ref(1);
+const offsetX = ref(0);
+const offsetY = ref(0);
+const videoStyles = computed<StyleValue>(() => ({
+  transformOrigin: `${offsetX.value}% ${offsetY.value}%`,
+  transform: `scale(${scale.value})`,
+}));
+
 // переменные
 
 const resize = () => {
@@ -31,6 +42,22 @@ const onCanPlay = () => {
   resize();
 };
 
+function handleScroll(event: WheelEvent) {
+  if (!videoElement.value || !videoContainer.value) return;
+  const STEP = 0.2;
+  // Определяем направление скролла
+  const delta = Math.max(-1, Math.min(1, event.deltaY));
+
+  // Получаем позицию курсора относительно элемента видео
+  const rect = videoElement.value.getBoundingClientRect();
+  offsetX.value = ((event.clientX - rect.left) / rect.width) * 100;
+  offsetY.value = ((event.clientY - rect.top) / rect.height) * 100;
+  // Изменяем масштаб в зависимости от направления скролла
+  if (delta < 0) {
+    scale.value += STEP; // Увеличиваем масштаб
+  } else if (scale.value > 1) scale.value -= STEP; // Уменьшаем масштаб
+}
+
 watch(currentRange, () => {
   player.value?.generateStream(
     currentRange.value?.from,
@@ -39,7 +66,7 @@ watch(currentRange, () => {
 });
 
 onMounted(() => {
-  document.body.classList.add("scroll-block")
+  document.body.classList.add("scroll-block");
   if (videoElement.value) {
     player.value = PlayerFactory.createPlayer({
       camera,
@@ -48,6 +75,7 @@ onMounted(() => {
     });
     resize();
     window.addEventListener("resize", resize);
+    videoElement.value?.addEventListener("wheel", handleScroll);
   }
 });
 onUnmounted(() => {
@@ -57,11 +85,17 @@ onUnmounted(() => {
 </script>
 <template>
   <div class="video-wrap" v-on:click="emit('onClose')">
-    <div class="video-container" :style="styles" @click.stop>
+    <div
+      ref="videoContainer"
+      class="video-container"
+      :style="styles"
+      @click.stop
+    >
       <video
         ref="videoElement"
         class="video-element"
         v-on:canplay="onCanPlay"
+        :style="videoStyles"
       />
       <!-- <video ref="previewElement" class="video-preview" /> -->
       <CustomControls
@@ -113,6 +147,7 @@ onUnmounted(() => {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+    transition: 0.3s;
   }
   &-preview {
     position: absolute;
