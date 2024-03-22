@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
+import { Player, PlayerFactory } from "rbt-player/dist/player";
+import { StyleValue, computed, onMounted, onUnmounted, ref, watch } from "vue";
 import ArrowIcon from "../assets/arrowRight.svg?component";
-import { useRanges } from "../hooks/ranges";
 import { Camera, FormatedRange } from "../types/camera";
 import CustomControls from "./CustomControls.vue";
 import RangeSelect from "./RangeSelect.vue";
-import { Player, PlayerFactory } from "rbt-player/dist/player";
-import { computed } from "vue";
+import SpeedControl from "./SpeedControl.vue"
 
 const { camera } = defineProps<{
   camera: Camera;
 }>();
 const emit = defineEmits(["onClose"]);
-const { streams } = useRanges(camera.id);
 
 // реактивные переменные
 const player = ref<Player>();
@@ -104,16 +102,13 @@ onUnmounted(() => {
         :range="currentRange"
         @pause="player?.pause()"
       />
+      <SpeedControl v-if="videoElement" :videoElement="videoElement" />
       <div class="info" :class="{ open: isOpenInfo }">
         <button class="toggle-info" @click="isOpenInfo = !isOpenInfo">
           <ArrowIcon />
         </button>
         <div class="info__label">{{ camera.name }}</div>
-        <RangeSelect
-          v-if="streams.length > 0"
-          :streams="streams"
-          v-model:modelValue="currentRange"
-        />
+        <RangeSelect :camera="camera" v-model:modelValue="currentRange" />
       </div>
     </div>
   </div>

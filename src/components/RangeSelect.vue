@@ -3,21 +3,22 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import dayjs from "dayjs";
 import { computed, ref } from "vue";
-import { FormatedRange, Range, Stream } from "../types/camera";
 import { useLocale } from "../hooks/locale";
+import { useRanges } from "../hooks/ranges";
 import { useConfigStore } from "../store/config.ts";
-const { streams } = defineProps<{
-  streams: Stream[];
+import { Camera, FormatedRange, Range } from "../types/camera";
+const { camera } = defineProps<{
+  camera: Camera;
 }>();
 const model = defineModel<FormatedRange>();
 
 const { locale, localizedDayjs } = useLocale();
 const { getTheme } = useConfigStore();
 const theme = getTheme();
-
-const ranges = streams.flatMap((stream) =>
+const { streams } = useRanges(camera.id);
+const ranges = computed(()=>streams.value.flatMap((stream) =>
   stream.ranges.flatMap((range) => splitRangeIntoParts(range, stream.stream))
-);
+));
 
 function splitRangeIntoParts(range: Range, stream: string): FormatedRange[] {
   const parts: FormatedRange[] = [];
@@ -49,7 +50,7 @@ function timestampToDate(timestamp: number) {
 
 // Получение массива дат из массива данных
 const datesArray = computed(() =>
-  streams.flatMap((item) =>
+  streams.value.flatMap((item) =>
     item.ranges.map((range) => timestampToDate(range.from))
   )
 );
@@ -100,4 +101,3 @@ const date = ref();
   }
 }
 </style>
-../hooks/locale

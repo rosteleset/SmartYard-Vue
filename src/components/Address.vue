@@ -18,10 +18,8 @@ provide("houseId", houseId);
 const { getAddressByHouseId } = useAddressesStore();
 const router = useRouter();
 
-
 // Получение данных о зданиях
 const building = getAddressByHouseId(houseId);
-
 
 // Состояния открытости окон
 const isOpen = ref(true);
@@ -32,10 +30,8 @@ const toggleOpen = (status: boolean) => {
 };
 
 const settingsOpen = () => {
-  router.push(`/settings/${houseId}`)
+  router.push(`/settings/${houseId}`);
 };
-
-
 </script>
 
 <template>
@@ -44,10 +40,10 @@ const settingsOpen = () => {
       <div class="address__label">{{ building.address }}</div>
       <div class="address__buttons" @click.stop>
         <button @click="settingsOpen">
-          <SettingsIcon class="icon"/>
+          <SettingsIcon class="icon" />
         </button>
         <button class="address__more" @click="toggleOpen(!isOpen)">
-          <ArrowIcon class="icon" :class="{ 'address__more&#45;&#45;open': isOpen }"/>
+          <ArrowIcon class="icon" :class="{ 'address__more--open': isOpen }" />
         </button>
       </div>
     </div>
@@ -67,16 +63,16 @@ const settingsOpen = () => {
 <style scoped lang="scss">
 @use "../style/variables" as *;
 .address {
-    background-color: var(--color-second-background);
+  background-color: var(--color-second-background);
   @include rounded();
-  margin-bottom: $size*2;
+  margin-bottom: $size * 2;
 }
 
 .address__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: $size*2;
+  padding: $size * 2;
   cursor: pointer;
 }
 
@@ -85,7 +81,7 @@ const settingsOpen = () => {
 }
 
 .address__label {
-  font-size: $size*2;
+  font-size: $size * 2;
 }
 
 .address__buttons {
@@ -99,12 +95,11 @@ const settingsOpen = () => {
   }
 }
 
-
 .address__doors {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: $size;
-  padding: $size*2;
+  padding: $size * 2;
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
@@ -117,6 +112,7 @@ const settingsOpen = () => {
 
 .icon {
   display: block;
+  min-width: 20px;
   fill: var(--color-text);
   transition: 0.3s;
 
