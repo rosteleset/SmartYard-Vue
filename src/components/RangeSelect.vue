@@ -5,13 +5,15 @@ import dayjs from "dayjs";
 import { computed, ref } from "vue";
 import { FormatedRange, Range, Stream } from "../types/camera";
 import { useLocale } from "../hooks/locale";
-
+import { useConfigStore } from "../store/config.ts";
 const { streams } = defineProps<{
   streams: Stream[];
 }>();
 const model = defineModel<FormatedRange>();
 
 const { locale, localizedDayjs } = useLocale();
+const { getTheme } = useConfigStore();
+const theme = getTheme();
 
 const ranges = streams.flatMap((stream) =>
   stream.ranges.flatMap((range) => splitRangeIntoParts(range, stream.stream))
@@ -61,6 +63,7 @@ const date = ref();
     :allowedDates="datesArray"
     :enableTimePicker="false"
     autoApply
+    :dark="theme === 'dark'"
   />
   <ul class="list">
     <li

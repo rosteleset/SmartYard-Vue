@@ -27,7 +27,7 @@ const getPreferredScheme = () =>
 export const useConfigStore = defineStore(STORE_NAME, () => {
   const config = ref<ConfigStore>(getConfig());
   reactive(config);
-// Функция для обновления конфигурации
+  // Функция для обновления конфигурации
   const updateConfig = (params: ConfigStore) => {
     config.value = {
       ...config.value,
@@ -35,10 +35,14 @@ export const useConfigStore = defineStore(STORE_NAME, () => {
     };
   };
 
-  const updateTheme = () => {
+  const getTheme = () => {
     if (config.value.theme && config.value.theme !== "auto")
-      document.documentElement.dataset["theme"] = config.value.theme;
-    else document.documentElement.dataset["theme"] = getPreferredScheme();
+      return config.value.theme;
+    else return getPreferredScheme();
+  };
+
+  const updateTheme = () => {
+    document.documentElement.dataset["theme"] = getTheme();
   };
 
   watch(config, (value) => {
@@ -51,5 +55,6 @@ export const useConfigStore = defineStore(STORE_NAME, () => {
   return {
     config,
     updateConfig,
+    getTheme
   };
 });

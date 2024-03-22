@@ -39,6 +39,7 @@ watch(currentRange, () => {
 });
 
 onMounted(() => {
+  document.body.classList.add("scroll-block")
   if (videoElement.value) {
     player.value = PlayerFactory.createPlayer({
       camera,
@@ -50,6 +51,7 @@ onMounted(() => {
   }
 });
 onUnmounted(() => {
+  document.body.classList.remove("scroll-block");
   window.removeEventListener("resize", resize);
 });
 </script>
@@ -99,7 +101,7 @@ onUnmounted(() => {
   &-container {
     transition: 0.3s;
     position: absolute;
-    background-color: #fff;
+    background-color: var(--color-background);
     overflow: hidden;
     border-radius: 24px;
     // display: flex;
@@ -118,7 +120,7 @@ onUnmounted(() => {
 }
 
 .toggle-info {
-  background-color: #ffffff;
+  background-color: var(--color-background);
   border: 0;
   box-shadow: none;
   padding: 12px;
@@ -139,7 +141,7 @@ onUnmounted(() => {
   bottom: 0;
   width: min-content;
   padding: 12px;
-  background-color: #ffffff;
+  background-color: var(--color-background);
   transform: translateX(100%);
   transition: 0.5s;
   &.open {
