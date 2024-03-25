@@ -1,4 +1,22 @@
+@use "variables" as *;
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
+
+html[data-theme="light"] {
+  $second-background :#FFFFFF;
+  --color-text: #{$darkBlue};
+  --color-background: #{$offWhite};
+  --color-second-background: #{$second-background};
+  --color-accent: #FFFFFF;
+}
+
+html[data-theme="dark"] {
+  $second-background :transparentize($offWhite, 0.9);
+  --theme:"dark";
+  --color-text: #{$offWhite};
+  --color-background: #{$darkBlue};
+  --color-second-background: #{$second-background};
+  --color-accent: #{$lightGray};
+}
 
 * {
   box-sizing: border-box;
@@ -7,6 +25,9 @@ body {
   margin: 0;
   font-family: "Source Sans 3", sans-serif;
   min-height: 101vh;
+  &.scroll-block {
+    overflow: hidden;
+  }
 }
 
 p {
@@ -26,15 +47,11 @@ p {
 }
 
 .content {
-  
-  background-color: #f3f4fa;
-  border-radius: 24px 24px 0 0;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-radius: $size * 2 $size * 2 0 0;
   flex: 1;
   overflow-y: auto;
-
-  @media (prefers-color-scheme: dark) {
-    background-color: #000;
-  }
 }
 
 .container {
@@ -61,4 +78,8 @@ p {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+svg path {
+  opacity: .8;
 }

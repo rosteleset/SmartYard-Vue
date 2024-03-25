@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 
 // Интерфейс для хранилища конфигурации
 interface ConfigStore {
@@ -18,10 +18,15 @@ const getConfig = (): ConfigStore => {
   return config ? JSON.parse(config) : DEFAULT_CONFIG;
 };
 
+const getPreferredScheme = () =>
+  window?.matchMedia?.("(prefers-color-scheme:dark)")?.matches
+    ? "dark"
+    : "light";
+
 // Экспорт хука для работы с конфигурацией
 export const useConfigStore = defineStore(STORE_NAME, () => {
   const config = ref<ConfigStore>(getConfig());
-
+  reactive(config);
   // Функция для обновления конфигурации
   const updateConfig = (params: ConfigStore) => {
     config.value = {
@@ -30,12 +35,26 @@ export const useConfigStore = defineStore(STORE_NAME, () => {
     };
   };
 
-  watch(config, (value) =>
-    localStorage.setItem(STORE_NAME, JSON.stringify(value))
-  );
+  const getTheme = () => {
+    if (config.value.theme && config.value.theme !== "auto")
+      return config.value.theme;
+    else return getPreferredScheme();
+  };
+
+  const updateTheme = () => {
+    document.documentElement.dataset["theme"] = getTheme();
+  };
+
+  watch(config, (value) => {
+    updateTheme();
+    localStorage.setItem(STORE_NAME, JSON.stringify(value));
+  });
+
+  onMounted(() => updateTheme());
 
   return {
     config,
     updateConfig,
+    getTheme
   };
 });

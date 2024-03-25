@@ -1,71 +1,75 @@
 <script setup lang="ts">
+import { FunctionalComponent, computed } from "vue";
+import openDoor from "../api/openDoor";
+import barrierIcon from "../assets/barrier.svg?component";
+import entranceIcon from "../assets/entrance.svg?component";
+import gateIcon from "../assets/gate.svg?component";
+import { Domophone } from "../types/domophone";
 
-import openDoor from '../api/openDoor';
-import barrierIcon from '../assets/barrier.svg';
-import entranceIcon from '../assets/entrance.svg';
-import gateIcon from '../assets/gate.svg';
-import { Domophone } from '../types/domophone';
+const props = defineProps<{ data: Domophone }>();
 
-const props = defineProps<{ data: Domophone }>()
+const iconMap: Record<Domophone["icon"], FunctionalComponent> = {
+  entrance: entranceIcon,
+  wicket: gateIcon,
+  gate: gateIcon,
+  barrier: barrierIcon,
+};
 
-const iconMap: Record<Domophone['icon'], string> = {
-    'entrance': entranceIcon,
-    'wicket': gateIcon,
-    'gate': gateIcon,
-    'barrier': barrierIcon
-}
+const Icon = computed(() => iconMap[props.data.icon]);
 
 const handlerOpen = () => {
-    openDoor(props.data.domophoneId)
-}
+  openDoor(props.data.domophoneId);
+};
 </script>
 
 <template>
-    <div class="door">
-        <div class="door__icon">
-            <img :src="iconMap[props.data.icon]" :alt="props.data.icon">
-        </div>
-        <div class="door__label">{{ props.data.name }}</div>
-        <button @click="handlerOpen">{{ $t('addresses.open') }}</button>
+  <div class="door">
+    <div class="door__icon">
+      <Icon class="icon"/>
     </div>
+    <div class="door__label">{{ props.data.name }}</div>
+    <button @click="handlerOpen">{{ $t("addresses.open") }}</button>
+  </div>
 </template>
 
 <style scoped lang="scss">
 .door {
-    display: grid;
-    grid-template-areas: "icon label" "button button";
-    gap: 24px;
-    border: solid 1px #F0F0F1;
-    border-radius: 12px;
-    padding: 24px;
+  display: grid;
+  grid-template-areas: "icon label" "button button";
+  gap: 24px;
+  border: solid 1px #f0f0f1;
+  border-radius: 12px;
+  padding: 24px;
 
-    &__icon {
-        grid-area: icon;
+  &__icon {
+    grid-area: icon;
+  }
+
+  &__label {
+    grid-area: label;
+    font-size: 18px;
+  }
+
+  button {
+    grid-area: button;
+    width: 100%;
+    font-size: 14px;
+    color: #298bff;
+    background-color: transparent;
+    border: 1px solid #298bff;
+    border-radius: 8px;
+    padding: 6px;
+    margin-left: auto;
+    transition: 0.3s;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #298bff;
+      color: #ffffff;
     }
-
-    &__label {
-        grid-area: label;
-        font-size: 18px;
-    }
-
-    button {
-        grid-area: button;
-        width: 100%;
-        font-size: 14px;
-        letter-spacing: 0em;
-        color: #298BFF;
-        background-color: transparent;
-        border: 1px solid #298BFF;
-        border-radius: 8px;
-        padding: 6px;
-        margin-left: auto;
-        transition: .3s;
-        cursor: pointer;
-
-        &:hover {
-            background-color: #298BFF;
-            color: #ffffff;
-        }
-    }
+  }
+}
+.icon {
+    fill: var(--color-text);
 }
 </style>

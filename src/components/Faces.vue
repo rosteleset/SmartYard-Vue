@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import deleteIcon from "../assets/delete.svg";
-import plusIcon from "../assets/plus.svg";
+import deleteIcon from "../assets/delete.svg?component";
+import plusIcon from "../assets/plus.svg?component";
 import { useFaces } from "../hooks/faces";
 import { useAddressesStore } from "../store/addresses";
 import { Face } from "../types/faces";
@@ -31,6 +31,7 @@ const openEventsHandler = () => {
 };
 </script>
 <template>
+  <div class="label">{{ $t('settings.frs') }}</div>
   <div class="list">
     <div class="face" v-for="face in faces" :key="face.faceId">
       <img
@@ -40,11 +41,11 @@ const openEventsHandler = () => {
         @click="selectedFace = face"
       />
       <button @click="removedFace = face">
-        <img :src="deleteIcon" alt="delete" />
+        <deleteIcon/>
       </button>
     </div>
     <div class="face__plus" @click="openEventsHandler">
-      <img :src="plusIcon" alt="add" />
+      <plusIcon/>
     </div>
   </div>
   <p>
@@ -76,6 +77,10 @@ const openEventsHandler = () => {
   </Modal>
 </template>
 <style scoped lang="scss">
+.label {
+  font-size: 24px;
+  margin: 24px 0;
+}
 .list {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -93,7 +98,6 @@ const openEventsHandler = () => {
     height: 80px;
   }
   &__plus {
-    display: block;
     border: solid 1px #f3f4fa;
     border-radius: 50%;
     width: 80px;

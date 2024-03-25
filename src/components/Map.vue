@@ -3,9 +3,9 @@ import { LIcon, LMap, LMarker, LTileLayer } from "@vue-leaflet/vue-leaflet";
 import { LatLngBoundsExpression, Map, Point, PointExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { StyleValue, ref } from "vue";
-import cameraIcon from "../assets/camera.svg";
+import cameraIcon from "../assets/camera.svg?component";
 import { Camera } from "../types/camera";
-import VideoModal from "./VideoModal.vue";
+import SimpleVideo from "./SimpleVideo.vue";
 
 // Определение свойств компонента
 const props = defineProps<{
@@ -89,22 +89,22 @@ const handler = (event: any, camera: Camera) => {
           className="map-icon__container"
           :iconSize="[45, 45]"
         >
-          <img class="map-icon__icon" :src="cameraIcon" alt="" />
+          <cameraIcon class="map-icon__icon"/>
           <div class="map-icon__label">{{ getCameraIndex(camera) }}</div>
         </LIcon>
       </LMarker>
     </LMap>
     <!-- Модальное окно с видеопотоком -->
-    <VideoModal
+    <SimpleVideo
       v-if="openCamera"
       :camera="openCamera"
-      :startStyles="styles"
       @on-close="openCamera = null"
     />
   </div>
 </template>
 
 <style lang="scss">
+@use "../style/variables" as *;
 .map {
   height: 500px;
   padding: 24px;
@@ -113,25 +113,27 @@ const handler = (event: any, camera: Camera) => {
     &__container {
       box-sizing: border-box;
       background-color: #ffffff;
-      display: grid;
-      grid-template-areas: "icon ." ". label";
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 1fr);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       border-radius: 50%;
       padding: 5px;
     }
     &__icon {
+      flex: 1;
       grid-area: icon;
-      display: block;
-      width: 20px !important;
-      align-self: flex-start;
+      // width: 20px !important;
+      path {
+        fill: $darkBlue;
+      }
     }
     &__label {
       grid-area: label;
       color: #298bff;
-      align-self: flex-end;
       line-height: 1;
-      font-size: 18px;
+      font-size: 12px;
+      text-align: center;
     }
   }
 }

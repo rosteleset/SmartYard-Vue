@@ -1,51 +1,63 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from "vue-router";
+import { getBasePath } from "./lib/basePath";
+
+const BASE_PATH = getBasePath();
 
 const routes: RouteRecordRaw[] = [
   {
-    path: "/addresses",
+    path: `/addresses`,
     name: "AddressesList",
     component: () => import("./components/AddressesList.vue"),
   },
   {
-    path: "/addresses/:houseId",
+    path: `/addresses/:houseId`,
     component: () => import("./components/Address.vue"),
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {
-    path: "/cameras",
+    path: `/cameras`,
     name: "CityCameras",
     component: () => import("./components/Cameras.vue"),
+    props: () => ({ overview: true }),
   },
-
   {
-    path: "/cameras/:houseId",
+    path: `/cameras/all`,
+    component: () => import("./components/Cameras.vue"),
+  },
+  {
+    path: `/cameras/:houseId`,
     component: () => import("./components/Cameras.vue"),
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {
-    path: "/chat",
+    path: `/chat`,
     name: "Chat",
     component: () => import("./components/Chat.vue"),
   },
   {
-    path: "/settings",
+    path: `/settings`,
     name: "Settings",
-    component: () => import('./components/Settings.vue'),
+    component: () => import("./components/Settings.vue"),
   },
   {
-    path: "/events/:houseId",
+    path: `/settings/:houseId`,
+    component: () => import("./components/AddressSettings.vue"),
+    props: (route) => ({ houseId: route.params.houseId }),
+  },
+  {
+    path: `/events/:houseId`,
     component: () => import("./components/Events.vue"),
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {
-    path: "/faces/:flatId",
+    path: `/faces/:flatId`,
     component: () => import("./components/Faces.vue"),
     props: (route) => ({ flatId: route.params.flatId }),
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(BASE_PATH),
   routes,
 });
 

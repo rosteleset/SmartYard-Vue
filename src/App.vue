@@ -9,6 +9,10 @@ const userStore = useUserStore();
 
 const isMenuOpen = ref(false);
 provide("isMenuOpen", isMenuOpen);
+
+// axios
+//   .post("/fpst/system-api/GetTranslationURL")
+//   .then((r) => console.log(r));
 </script>
 
 <template>

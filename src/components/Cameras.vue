@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import cameraIcon from "../assets/camera.svg";
+import CameraIcon from "../assets/camera.svg?component";
 import { useCameras } from "../hooks/cameras";
 import { useAddressesStore } from "../store/addresses";
 import Label from "./Label.vue";
@@ -8,9 +8,11 @@ import Map from "./Map.vue";
 import Video from "./Video.vue";
 import { useConfigStore } from "../store/config";
 
-const { houseId } = defineProps<{
+console.log(typeof CameraIcon);
+const { houseId, overview } = defineProps<{
   houseId?: string;
   compact?: boolean;
+  overview?: boolean;
 }>();
 
 const { config } = useConfigStore();
@@ -21,7 +23,7 @@ const invalidHouseId = houseId && getAddressByHouseId(houseId) === undefined; //
 // Состояния открытости в компактном режиме
 const isOpen = ref(false);
 
-const { cameras } = useCameras({ houseId, overview: houseId === undefined });
+const { cameras } = useCameras({ houseId, overview: overview });
 
 const handleToggle = (open: boolean) => {
   isOpen.value = open;
@@ -32,7 +34,7 @@ const handleToggle = (open: boolean) => {
   <template v-if="!invalidHouseId">
     <Label
       v-if="compact"
-      :icon="cameraIcon"
+      :icon="CameraIcon"
       :alt="$t('addresses.cameras')"
       :text="$t('addresses.cameras')"
       @toggle="handleToggle"

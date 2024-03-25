@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import closeIcon from "../assets/close.svg";
+import closeIcon from "../assets/close.svg?component";
+import { watch } from "vue";
 const props = defineProps<{
   title?: string;
   isOpen: boolean;
@@ -16,6 +17,13 @@ const close = () => {
 const initClose = () => {
   bodyVisible.value = false;
 };
+watch(
+  () => props.isOpen,
+  () => {
+    if (props.isOpen) document.body.classList.add("scroll-block");
+    else document.body.classList.remove("scroll-block");
+  }
+);
 </script>
 
 <template>
@@ -25,13 +33,13 @@ const initClose = () => {
         <Transition name="modal" @leave="close">
           <div v-if="bodyVisible" class="modal" @click.stop>
             <div class="modal__header">
-              <h3 v-if="title">{{ props.title }}</h3>
+              <h3 v-if="title">{{ title }}</h3>
               <button
                 class="modal__close"
                 :class="{ absolute: !title }"
                 @click="initClose"
               >
-                <img :src="closeIcon" alt="close" />
+                <closeIcon />
               </button>
             </div>
             <div class="modal__body">
