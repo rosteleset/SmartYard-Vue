@@ -97,15 +97,13 @@ onUnmounted(() => {
           background: `linear-gradient(to right, #298BFF ${progress}%, #ccc ${progress}%)`,
         }"
       />
-      <Transition name="fade">
-        <div
-          v-if="isDraggable"
-          class="time-display"
-          :style="{ left: timeDisplayLeft }"
-        >
-          {{ dayjs(range.date).add(currentTime, "seconds").format("HH:mm:ss") }}
-        </div>
-      </Transition>
+      <div
+        class="time-display"
+        :class="{ visible: isDraggable }"
+        :style="{ left: timeDisplayLeft }"
+      >
+        {{ dayjs(range.date).add(currentTime, "seconds").format("HH:mm:ss") }}
+      </div>
     </div>
     <button class="button">
       <SettingsIcon />
@@ -176,9 +174,14 @@ onUnmounted(() => {
     top: -42px; /* Отступ от ползунка вверх */
     left: 0;
     transform: translateX(-50%);
-    background-color: #fff;
+    background-color: var(--color-background);
     padding: 6px;
     border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    &.visible {
+      opacity: 1;
+    }
   }
 
   .button {
@@ -201,6 +204,11 @@ onUnmounted(() => {
       height: unset;
     }
   }
-  
+
+  &:hover {
+    .time-display {
+      opacity: 1;
+    }
+  }
 }
 </style>
