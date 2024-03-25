@@ -29,15 +29,19 @@ export const useUserStore = defineStore("user", () => {
       .catch((_error) => {
         error.value = _error.message;
       });
+
+    // вынес отдельно для обратной совместимости
+    get<Names>("user/getName").then((namesResponse) => {
+      names.value = namesResponse;
+    }).catch((_error) => {
+      error.value = _error.message;
+    });
   };
   
-  // вынес отдельно для обратной совместимости
-  get<Names>("user/getName").then((namesResponse) => {
-    names.value = namesResponse;
-  }).catch((_error) => {
-    error.value = _error.message;
-  });
-
+  const setToken = (token: string) => {
+    localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, token);
+    this.token.value = token;
+  }
   onMounted(load);
 
   return {
@@ -46,6 +50,7 @@ export const useUserStore = defineStore("user", () => {
     notifications,
     isLoaded,
     error,
-    token
+    token,
+    setToken,
   };
 });

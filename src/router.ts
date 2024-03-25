@@ -5,6 +5,10 @@ const BASE_PATH = getBasePath();
 
 const routes: RouteRecordRaw[] = [
   {
+    path: "/",
+    component:()=> import("./components/Auth.vue")
+  },
+  {
     path: `/addresses`,
     name: "AddressesList",
     component: () => import("./components/AddressesList.vue"),
