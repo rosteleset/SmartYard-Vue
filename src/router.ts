@@ -1,12 +1,13 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from "vue-router";
 import { getBasePath } from "./lib/basePath";
+import Auth from "./components/Auth.vue";
 
 const BASE_PATH = getBasePath();
 
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    component:()=> import("./components/Auth.vue")
+    component: Auth,
   },
   {
     path: `/addresses`,

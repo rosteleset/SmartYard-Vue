@@ -2,8 +2,8 @@
 // !!! Возможно стоит переместить
 
 import { Ref, computed, onMounted, ref, watch } from "vue";
-import { get } from "../api";
 import { Event, EventDay } from "../types/events";
+import { useApi } from "./useApi";
 
 export interface EventStoreItem {
   date: EventDay;
@@ -14,6 +14,7 @@ export const useEvents = (
   flatIds: Ref<string[]>,
   eventType?: Ref<string | undefined>
 ) => {
+  const {get} = useApi()
   const eventsMap = ref<{ [key: string]: Event[] }>({});
 
   const events = computed(() =>

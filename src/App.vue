@@ -3,16 +3,25 @@ import { provide, ref } from "vue";
 import Header from "./components/Header.vue";
 import { useAddressesStore } from "./store/addresses";
 import { useUserStore } from "./store/user";
+import { watch } from "vue";
+import { computed } from "vue";
+import { useRouter } from "vue-router";
 
 const addressesStore = useAddressesStore();
 const userStore = useUserStore();
+const router = useRouter();
+
+const isLoaded = computed(() => userStore.isLoaded && addressesStore.isLoaded);
 
 const isMenuOpen = ref(false);
 provide("isMenuOpen", isMenuOpen);
 
-// axios
-//   .post("/fpst/system-api/GetTranslationURL")
-//   .then((r) => console.log(r));
+watch(userStore, () => {
+  console.log(userStore.error);
+  
+  if (userStore.error === "Request failed with status code 401")
+    router.replace("/");
+});
 </script>
 
 <template>
@@ -22,13 +31,9 @@ provide("isMenuOpen", isMenuOpen);
       <div class="content" :key="$route.fullPath">
         <div class="container">
           <component
-            v-if="userStore.isLoaded && addressesStore.isLoaded && Component"
+            v-if="isLoaded && Component"
             :is="Component"
           />
-          <template v-else-if="userStore.error">
-            <div class="global-error">{{ userStore.error }}</div>
-          </template>
-          <div v-else class="welcome">Welcome</div>
         </div>
       </div>
     </Transition>
