@@ -7,7 +7,7 @@ import { Camera } from "../types/camera";
 
 export const useCameras = ({
   houseId,
-  overview = false,
+  overview
 }: {
   houseId?: string;
   overview?: boolean;

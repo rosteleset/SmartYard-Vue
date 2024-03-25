@@ -12,7 +12,7 @@ console.log(typeof CameraIcon);
 const { houseId, overview } = defineProps<{
   houseId?: string;
   compact?: boolean;
-  overview: boolean;
+  overview?: boolean;
 }>();
 
 const { config } = useConfigStore();
