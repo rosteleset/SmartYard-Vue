@@ -18,8 +18,12 @@ const routes: RouteRecordRaw[] = [
     path: `/cameras`,
     name: "CityCameras",
     component: () => import("./components/Cameras.vue"),
+    props: () => ({ overview: true }),
   },
-
+  {
+    path: `/cameras/all`,
+    component: () => import("./components/Cameras.vue"),
+  },
   {
     path: `/cameras/:houseId`,
     component: () => import("./components/Cameras.vue"),
@@ -33,11 +37,11 @@ const routes: RouteRecordRaw[] = [
   {
     path: `/settings`,
     name: "Settings",
-    component: () => import('./components/Settings.vue'),
+    component: () => import("./components/Settings.vue"),
   },
   {
     path: `/settings/:houseId`,
-    component: () => import('./components/AddressSettings.vue'),
+    component: () => import("./components/AddressSettings.vue"),
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {
