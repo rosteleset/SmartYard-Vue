@@ -13,11 +13,13 @@ export const useUserStore = defineStore("user", () => {
   const notifications = ref<Notifications>({});
   const error = ref<string>();
   const token = ref<string | null>(
-    localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
+    localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY) ||
+      import.meta.env.VITE_TMP_TOKEN ||
+      ""
   );
 
   const load = () => {
-    error.value = undefined
+    error.value = undefined;
     Promise.all([
       get<Client[]>("address/getSettingsList"),
       get<Notifications>("user/notification"),
@@ -46,6 +48,7 @@ export const useUserStore = defineStore("user", () => {
     localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, _token);
     token.value = _token;
   };
+
   onMounted(load);
 
   return {
