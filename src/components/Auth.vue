@@ -13,6 +13,7 @@ const { axiosInstance } = useApi();
 const router = useRouter();
 
 const status = ref<string>();
+const inputType = ref("password")
 const tt = computed({
   get() {
     return userStore.token || "";
@@ -48,7 +49,12 @@ onMounted(validate);
 
 <template>
   <div class="wrap">
-    <input type="text" v-model="tt" />
+    <input 
+    :type="inputType" 
+    v-model="tt"
+    @focusin="inputType='text'"
+    @focusout="inputType='password'"
+     />
     <Button
       v-if="status"
       :variant="status === 'Valid token' ? 'sucsses' : 'error'"
