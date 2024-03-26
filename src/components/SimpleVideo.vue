@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Player, PlayerFactory } from "rbt-player/dist/player";
+import { Player, PlayerFactory } from "rbt-player/dist";
 import { StyleValue, computed, onMounted, onUnmounted, ref, watch } from "vue";
 import ArrowIcon from "../assets/arrowRight.svg?component";
 import { Camera, FormatedRange } from "../types/camera";
@@ -77,6 +77,7 @@ onMounted(() => {
   }
 });
 onUnmounted(() => {
+  player.value?.onDestroy()
   document.body.classList.remove("scroll-block");
   window.removeEventListener("resize", resize);
 });

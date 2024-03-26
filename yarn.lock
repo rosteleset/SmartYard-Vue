@@ -828,12 +828,13 @@ proxy-from-env@^1.1.0:
   resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
   integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
 
-rbt-player@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/rbt-player/-/rbt-player-1.0.9.tgz#2d62c93224c47137e2c65d7c887394d2bba63635"
-  integrity sha512-hs02n8KWoKs5jb0YikTDfr7koc7nmN7027vqNaSRBf2/m9TT4HR49T0VKQ/ksU2rb7IeGaQjfwVqfVTQ1Growg==
+rbt-player@^1.0.13:
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/rbt-player/-/rbt-player-1.0.13.tgz#f03b68659d0f7a817bb04bbace1122139f5ee3d5"
+  integrity sha512-Ki9031AmbIo55T12LauBjx27Wvta3fOib03gthkjIs+6oAbOuIz35HIn0Ij5c3ZgG1mlsFzNo6HLJGKtfjAg4w==
   dependencies:
     axios "^1.6.8"
+    dayjs "^1.11.10"
     shaka-player "^4.7.11"
 
 readdirp@~3.6.0:

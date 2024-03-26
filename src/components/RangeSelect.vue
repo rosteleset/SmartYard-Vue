@@ -16,9 +16,11 @@ const { locale, localizedDayjs } = useLocale();
 const { getTheme } = useConfigStore();
 const theme = getTheme();
 const { streams } = useRanges(camera.id);
-const ranges = computed(()=>streams.value.flatMap((stream) =>
-  stream.ranges.flatMap((range) => splitRangeIntoParts(range, stream.stream))
-));
+const ranges = computed(() =>
+  streams.value.flatMap((stream) =>
+    stream.ranges.flatMap((range) => splitRangeIntoParts(range, stream.stream))
+  )
+);
 
 function splitRangeIntoParts(range: Range, stream: string): FormatedRange[] {
   const parts: FormatedRange[] = [];
@@ -50,9 +52,7 @@ function timestampToDate(timestamp: number) {
 
 // Получение массива дат из массива данных
 const datesArray = computed(() =>
-  streams.value.flatMap((item) =>
-    item.ranges.map((range) => timestampToDate(range.from))
-  )
+  ranges.value.map((range) => timestampToDate(range.from))
 );
 const date = ref();
 </script>

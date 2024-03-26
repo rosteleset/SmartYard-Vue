@@ -2,9 +2,9 @@
 import { onMounted, ref } from "vue";
 import { useConfigStore } from "../store/config";
 import { Camera } from "../types/camera";
-// import VideoModal from "./VideoModal.vue";
 import { Player, PlayerFactory } from "rbt-player/dist/player";
 import SimpleVideo from "./SimpleVideo.vue";
+import { onUnmounted } from "vue";
 
 const { camera, index } = defineProps<{ camera: Camera; index?: number }>();
 const { config } = useConfigStore();
@@ -31,6 +31,9 @@ onMounted(() => {
     }
   }
 });
+onUnmounted(()=>{
+  player.value?.onDestroy()
+})
 </script>
 
 <template>
