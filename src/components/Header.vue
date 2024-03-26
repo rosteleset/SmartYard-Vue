@@ -57,7 +57,7 @@ watch(currentRoute, () => {
         <div class="menu" v-if="alwaysMenu || isMenuOpen">
           <div class="menu__list" ref="menuList">
             <RouterLink
-              v-for="route in routes.filter((route) => route.name)"
+              v-for="route in routes.filter((route) => route.name && route.name !== 'Auth')"
               :to="route.path"
               >{{ getRouteName(route) }}</RouterLink
             >

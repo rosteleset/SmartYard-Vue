@@ -1,8 +1,9 @@
 import { onMounted, ref } from "vue";
-import { get, request } from "../api";
 import { Face } from "../types/faces";
+import { useApi } from "./useApi";
 
 export const useFaces = (flatId?: string) => {
+  const { get, request } = useApi();
   const faces = ref<Face[]>([]);
 
   const load = () => {
