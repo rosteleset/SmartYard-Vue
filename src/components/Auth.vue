@@ -36,7 +36,8 @@ const validate = () => {
         addressesStore.load()
       }
     })
-    .catch((err) => {
+    .catch((err:any) => {
+      userStore.error = err.message
       status.value =
         err.response.status === 401 ? "Invalid token" : "Server error";
     });

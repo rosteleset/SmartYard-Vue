@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import { StyleValue, ref } from "vue";
 import cameraIcon from "../assets/camera.svg?component";
 import { Camera } from "../types/camera";
-import SimpleVideo from "./SimpleVideo.vue";
+import VideoModal from "./VideoModal.vue";
 
 // Определение свойств компонента
 const props = defineProps<{
@@ -95,7 +95,7 @@ const handler = (event: any, camera: Camera) => {
       </LMarker>
     </LMap>
     <!-- Модальное окно с видеопотоком -->
-    <SimpleVideo
+    <VideoModal
       v-if="openCamera"
       :camera="openCamera"
       @on-close="openCamera = null"

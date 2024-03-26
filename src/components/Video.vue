@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useConfigStore } from "../store/config";
 import { Camera } from "../types/camera";
 import { Player, PlayerFactory } from "rbt-player/dist/player";
-import SimpleVideo from "./SimpleVideo.vue";
+import VideoModal from "./VideoModal.vue";
 import { onUnmounted } from "vue";
 
 const { camera, index } = defineProps<{ camera: Camera; index?: number }>();
@@ -57,7 +57,7 @@ onUnmounted(()=>{
     />
     <div v-if="index" class="number">{{ index }}</div>
 
-    <SimpleVideo v-if="isOpen" :camera="camera" @on-close="closeHandler" />
+    <VideoModal v-if="isOpen" :camera="camera" @on-close="closeHandler" />
   </div>
 </template>
 

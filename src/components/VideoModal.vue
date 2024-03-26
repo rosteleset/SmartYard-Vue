@@ -5,7 +5,7 @@ import ArrowIcon from "../assets/arrowRight.svg?component";
 import { Camera, FormatedRange } from "../types/camera";
 import CustomControls from "./CustomControls.vue";
 import RangeSelect from "./RangeSelect.vue";
-import SpeedControl from "./SpeedControl.vue"
+import SpeedControl from "./SpeedControl.vue";
 
 const { camera } = defineProps<{
   camera: Camera;
@@ -15,7 +15,7 @@ const emit = defineEmits(["onClose"]);
 // реактивные переменные
 const player = ref<Player>();
 const isOpenInfo = ref(false);
-// const previewElement = ref<HTMLVideoElement | null>(null);
+const previewElement = ref<HTMLVideoElement>();
 const videoElement = ref<HTMLVideoElement | null>(null);
 const videoContainer = ref<HTMLDivElement | null>(null);
 
@@ -69,6 +69,7 @@ onMounted(() => {
     player.value = PlayerFactory.createPlayer({
       camera,
       videoElement: videoElement.value,
+      previewElement: previewElement.value,
       autoplay: true,
     });
     resize();
@@ -77,7 +78,7 @@ onMounted(() => {
   }
 });
 onUnmounted(() => {
-  player.value?.onDestroy()
+  player.value?.onDestroy();
   document.body.classList.remove("scroll-block");
   window.removeEventListener("resize", resize);
 });
@@ -90,13 +91,14 @@ onUnmounted(() => {
       :style="styles"
       @click.stop
     >
+      <video ref="previewElement" class="video-preview" />
+
       <video
         ref="videoElement"
         class="video-element"
         v-on:canplay="onCanPlay"
         :style="videoStyles"
       />
-      <!-- <video ref="previewElement" class="video-preview" /> -->
       <CustomControls
         v-if="videoElement && currentRange"
         :videoElement="videoElement"
@@ -139,6 +141,8 @@ onUnmounted(() => {
     // justify-content: center;
   }
   &-element {
+    position: relative;
+    z-index: 2;
     display: block;
     max-width: 100%;
     max-height: 100%;
@@ -147,6 +151,11 @@ onUnmounted(() => {
   }
   &-preview {
     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 

@@ -1,27 +1,17 @@
 <script setup lang="ts">
-import { provide, ref } from "vue";
+import { computed, provide, ref } from "vue";
 import Header from "./components/Header.vue";
 import { useAddressesStore } from "./store/addresses";
 import { useUserStore } from "./store/user";
-import { watch } from "vue";
-import { computed } from "vue";
-import { useRouter } from "vue-router";
 
 const addressesStore = useAddressesStore();
 const userStore = useUserStore();
-const router = useRouter();
 
 const isLoaded = computed(() => userStore.isLoaded && addressesStore.isLoaded);
 
 const isMenuOpen = ref(false);
 provide("isMenuOpen", isMenuOpen);
 
-watch(userStore, () => {
-  console.log(userStore.error);
-  
-  if (userStore.error === "Request failed with status code 401")
-    router.replace("/");
-});
 </script>
 
 <template>
