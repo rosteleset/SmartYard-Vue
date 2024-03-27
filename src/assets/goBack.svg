@@ -1,0 +1,11 @@
+<svg width="60" height="40" viewbox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+    <g
+      stroke="#fff"
+      stroke-width="4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path id="middle-line" d="M10,20 L50,20 Z"></path>
+      <path id="arrow-line" d=" M20,30 L10,20 L20,10" fill="transparent"></path>
+    </g>
+  </svg>

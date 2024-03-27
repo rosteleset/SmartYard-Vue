@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Player, PlayerFactory } from "rbt-player/dist";
-import { StyleValue, computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
 import ArrowIcon from "../assets/arrowRight.svg?component";
+import useZoom from "../hooks/useZoom";
 import { Camera, FormatedRange } from "../types/camera";
 import CustomControls from "./CustomControls.vue";
 import RangeSelect from "./RangeSelect.vue";
@@ -16,20 +17,14 @@ const emit = defineEmits(["onClose"]);
 const player = ref<Player>();
 const isOpenInfo = ref(false);
 const previewElement = ref<HTMLVideoElement>();
-const videoElement = ref<HTMLVideoElement | null>(null);
+const videoElement = ref<HTMLVideoElement| null>(null);
 const videoContainer = ref<HTMLDivElement | null>(null);
 
 const currentRange = ref<FormatedRange>();
 const styles = ref<StyleValue>();
-const scale = ref(1);
-const offsetX = ref(0);
-const offsetY = ref(0);
-const videoStyles = computed<StyleValue>(() => ({
-  transformOrigin: `${offsetX.value}% ${offsetY.value}%`,
-  transform: `scale(${scale.value})`,
-}));
 
-// переменные
+const { videoStyles } = useZoom(videoElement)
+
 
 const resize = () => {
   styles.value = player.value?.getSize();
@@ -39,22 +34,6 @@ const onCanPlay = () => {
   player.value?.calculateAspectRatio();
   resize();
 };
-
-function handleScroll(event: WheelEvent) {
-  if (!videoElement.value || !videoContainer.value) return;
-  const STEP = 0.2;
-  // Определяем направление скролла
-  const delta = Math.max(-1, Math.min(1, event.deltaY));
-
-  // Получаем позицию курсора относительно элемента видео
-  const rect = videoElement.value.getBoundingClientRect();
-  offsetX.value = ((event.clientX - rect.left) / rect.width) * 100;
-  offsetY.value = ((event.clientY - rect.top) / rect.height) * 100;
-  // Изменяем масштаб в зависимости от направления скролла
-  if (delta < 0) {
-    scale.value += STEP; // Увеличиваем масштаб
-  } else if (scale.value > 1) scale.value -= STEP; // Уменьшаем масштаб
-}
 
 watch(currentRange, () => {
   player.value?.generateStream(
@@ -74,7 +53,6 @@ onMounted(() => {
     });
     resize();
     window.addEventListener("resize", resize);
-    videoElement.value?.addEventListener("wheel", handleScroll);
   }
 });
 onUnmounted(() => {
