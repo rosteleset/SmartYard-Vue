@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import InformationIcon from "../assets/information.svg?component";
-import useEventNames from "../lib/useEventNames";
+import useEventNames from "../hooks/useEventNames";
 import { Event } from "../types/events";
 import Button from "./Button.vue";
 import ImageWithFace from "./ImageWithFace.vue";

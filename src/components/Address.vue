@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { provide, ref } from "vue";
-import ArrowIcon from "../assets/ArrowBottom.svg?component";
-import SettingsIcon from "../assets/settings.svg?component";
-import { useAddressesStore } from "../store/addresses";
-import Cameras from "./Cameras.vue";
-import Door from "./Door.vue";
-import Events from "./Events.vue";
+import ArrowIcon from "@/assets/ArrowBottom.svg?component";
+import SettingsIcon from "@/assets/settings.svg?component";
+import { useAddressesStore } from "@/store/addresses";
+import Cameras from "@/components/Cameras.vue";
+import Door from "@/components/Door.vue";
+import Events from "@/components/Events.vue";
 import { useRouter } from "vue-router";
 
 // Определение свойств компонента
@@ -61,7 +61,7 @@ const settingsOpen = () => {
 </template>
 
 <style scoped lang="scss">
-@use "../style/variables" as *;
+@use "@/style/variables" as *;
 .address {
   background-color: var(--color-second-background);
   @include rounded();

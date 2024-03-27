@@ -41,7 +41,7 @@ watch(currentRange, () => {
     currentRange.value?.duration
   );
 });
-
+// https://fl3.lanta.me:8443/121358/index.m3u8?token=8f30fc67f68ad45736731f506b132f958c602b8a-a42fbd07119abae9db209f7da788e4b1-1711548677-1711537877
 onMounted(() => {
   document.body.classList.add("scroll-block");
   if (videoElement.value) {
@@ -79,6 +79,7 @@ onUnmounted(() => {
       />
       <CustomControls
         v-if="videoElement && currentRange"
+        :player="player"
         :videoElement="videoElement"
         :range="currentRange"
         @pause="player?.pause()"
@@ -120,7 +121,7 @@ onUnmounted(() => {
   }
   &-element {
     position: relative;
-    z-index: 2;
+    // z-index: 2;
     display: block;
     max-width: 100%;
     max-height: 100%;
@@ -134,6 +135,7 @@ onUnmounted(() => {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    z-index: 0;
   }
 }
 
