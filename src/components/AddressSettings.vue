@@ -15,7 +15,7 @@ const clients = getClientsByHouseId(houseId);
 const clientsWithTitles = computed(() =>
   clients.value.map((client) => ({
     tabId: client.flatId,
-    tabTitle: t("addresses.flat", [client.flatId]),
+    tabTitle: t("addresses.flat", [client.flatNumber]),
   }))
 );
 </script>
