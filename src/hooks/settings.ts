@@ -2,12 +2,13 @@
 // !!! Возможно стоит переместить
 
 import { onMounted, ref } from "vue";
-import { get } from "../api";
 import { Settings } from "../types/user";
+import { useApi } from "./useApi";
 
 const url = "address/intercom";
 
 export const useSettings = (flatId: string) => {
+  const {get} = useApi()
   const settings = ref<Settings>();
 
   const load = () => {

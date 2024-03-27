@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import { computed, ref } from "vue";
 import CameraIcon from "../assets/camera.svg?component";
 import { useCameras } from "../hooks/cameras";
 import { useAddressesStore } from "../store/addresses";
@@ -8,10 +8,11 @@ import Map from "./Map.vue";
 import Video from "./Video.vue";
 import { useConfigStore } from "../store/config";
 
-console.log(typeof CameraIcon)
-const { houseId } = defineProps<{
+console.log(typeof CameraIcon);
+const { houseId, overview } = defineProps<{
   houseId?: string;
   compact?: boolean;
+  overview?: boolean;
 }>();
 
 const { config } = useConfigStore();
@@ -22,7 +23,7 @@ const invalidHouseId = houseId && getAddressByHouseId(houseId) === undefined; //
 // Состояния открытости в компактном режиме
 const isOpen = ref(false);
 
-const { cameras } = useCameras({ houseId, overview: !houseId });
+const { cameras } = useCameras({ houseId, overview: overview });
 
 const handleToggle = (open: boolean) => {
   isOpen.value = open;

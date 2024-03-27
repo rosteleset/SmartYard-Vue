@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { get } from "../api";
+import { useApi } from "../hooks/useApi";
 
+const {get} = useApi()
 const inbox = ref();
 
 onMounted(() => {

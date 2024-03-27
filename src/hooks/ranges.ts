@@ -2,10 +2,11 @@
 // !!! Возможно стоит переместить
 
 import { onMounted, ref } from "vue";
-import { get } from "../api";
 import { Stream } from "../types/camera";
+import { useApi } from "./useApi";
 
 export const useRanges = (cameraId: number) => {
+  const {get} = useApi()
   const streams = ref<Stream[]>([]);
 
   onMounted(() => {

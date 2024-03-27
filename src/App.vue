@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { provide, ref } from "vue";
+import { computed, provide, ref } from "vue";
 import Header from "./components/Header.vue";
 import { useAddressesStore } from "./store/addresses";
 import { useUserStore } from "./store/user";
@@ -7,12 +7,11 @@ import { useUserStore } from "./store/user";
 const addressesStore = useAddressesStore();
 const userStore = useUserStore();
 
+const isLoaded = computed(() => userStore.isLoaded && addressesStore.isLoaded);
+
 const isMenuOpen = ref(false);
 provide("isMenuOpen", isMenuOpen);
 
-// axios
-//   .post("/fpst/system-api/GetTranslationURL")
-//   .then((r) => console.log(r));
 </script>
 
 <template>
@@ -22,13 +21,9 @@ provide("isMenuOpen", isMenuOpen);
       <div class="content" :key="$route.fullPath">
         <div class="container">
           <component
-            v-if="userStore.isLoaded && addressesStore.isLoaded && Component"
+            v-if="isLoaded && Component"
             :is="Component"
           />
-          <template v-else-if="userStore.error">
-            <div class="global-error">{{ userStore.error }}</div>
-          </template>
-          <div v-else class="welcome">Welcome</div>
         </div>
       </div>
     </Transition>

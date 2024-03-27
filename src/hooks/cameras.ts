@@ -2,16 +2,17 @@
 // !!! Возможно стоит переместить
 
 import { onMounted, ref } from "vue";
-import { get } from "../api";
 import { Camera } from "../types/camera";
+import { useApi } from "./useApi";
 
 export const useCameras = ({
   houseId,
-  overview = false,
+  overview
 }: {
   houseId?: string;
   overview?: boolean;
 }) => {
+  const {get} = useApi()
   const cameras = ref<Camera[]>([]);
   const current = ref<Camera>();
 

@@ -1,19 +1,24 @@
 import { defineStore } from "pinia";
 import { computed, onMounted, ref } from "vue";
-import { get } from "../api";
+import { useApi } from "../hooks/useApi";
 import { Building } from "../types/building";
 import { useUserStore } from "./user";
 
 export const useAddressesStore = defineStore("addresses", () => {
-  const isLoaded = ref(false);
   const userStore = useUserStore();
+  const { get } = useApi();
+  const isLoaded = ref(false);
   const addresses = ref<Building[]>([]);
 
   const load = () => {
-    get<Building[]>("address/getAddressList").then((response) => {
-      addresses.value = response;
-      isLoaded.value = true;
-    });
+    get<Building[]>("address/getAddressList")
+      .then((response) => {
+        addresses.value = response;
+        isLoaded.value = true;
+      })
+      .catch(() => {
+        isLoaded.value = true;
+      });
   };
 
   const getAddressByHouseId = (houseId: string): Building | undefined => {

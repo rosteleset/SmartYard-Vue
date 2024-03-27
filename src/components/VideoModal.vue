@@ -1,26 +1,30 @@
 <script setup lang="ts">
+import { Player, PlayerFactory } from "rbt-player/dist";
 import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
 import ArrowIcon from "../assets/arrowRight.svg?component";
-import { useRanges } from "../hooks/ranges";
+import useZoom from "../hooks/useZoom";
 import { Camera, FormatedRange } from "../types/camera";
 import CustomControls from "./CustomControls.vue";
 import RangeSelect from "./RangeSelect.vue";
-import { Player, PlayerFactory } from "rbt-player/dist/player";
+import SpeedControl from "./SpeedControl.vue";
 
 const { camera } = defineProps<{
   camera: Camera;
 }>();
 const emit = defineEmits(["onClose"]);
-const { streams } = useRanges(camera.id);
 
 // реактивные переменные
 const player = ref<Player>();
 const isOpenInfo = ref(false);
-// const previewElement = ref<HTMLVideoElement | null>(null);
-const videoElement = ref<HTMLVideoElement | null>(null);
+const previewElement = ref<HTMLVideoElement>();
+const videoElement = ref<HTMLVideoElement| null>(null);
+const videoContainer = ref<HTMLDivElement | null>(null);
+
 const currentRange = ref<FormatedRange>();
 const styles = ref<StyleValue>();
-// переменные
+
+const { videoStyles } = useZoom(videoElement)
+
 
 const resize = () => {
   styles.value = player.value?.getSize();
@@ -39,10 +43,12 @@ watch(currentRange, () => {
 });
 
 onMounted(() => {
+  document.body.classList.add("scroll-block");
   if (videoElement.value) {
     player.value = PlayerFactory.createPlayer({
       camera,
       videoElement: videoElement.value,
+      previewElement: previewElement.value,
       autoplay: true,
     });
     resize();
@@ -50,34 +56,40 @@ onMounted(() => {
   }
 });
 onUnmounted(() => {
+  player.value?.onDestroy();
+  document.body.classList.remove("scroll-block");
   window.removeEventListener("resize", resize);
 });
 </script>
 <template>
   <div class="video-wrap" v-on:click="emit('onClose')">
-    <div class="video-container" :style="styles" @click.stop>
+    <div
+      ref="videoContainer"
+      class="video-container"
+      :style="styles"
+      @click.stop
+    >
+      <video ref="previewElement" class="video-preview" />
+
       <video
         ref="videoElement"
         class="video-element"
         v-on:canplay="onCanPlay"
+        :style="videoStyles"
       />
-      <!-- <video ref="previewElement" class="video-preview" /> -->
       <CustomControls
         v-if="videoElement && currentRange"
         :videoElement="videoElement"
         :range="currentRange"
         @pause="player?.pause()"
       />
+      <SpeedControl v-if="videoElement" :videoElement="videoElement" />
       <div class="info" :class="{ open: isOpenInfo }">
         <button class="toggle-info" @click="isOpenInfo = !isOpenInfo">
           <ArrowIcon />
         </button>
         <div class="info__label">{{ camera.name }}</div>
-        <RangeSelect
-          v-if="streams.length > 0"
-          :streams="streams"
-          v-model:modelValue="currentRange"
-        />
+        <RangeSelect :camera="camera" v-model:modelValue="currentRange" />
       </div>
     </div>
   </div>
@@ -99,7 +111,7 @@ onUnmounted(() => {
   &-container {
     transition: 0.3s;
     position: absolute;
-    background-color: #fff;
+    background-color: var(--color-background);
     overflow: hidden;
     border-radius: 24px;
     // display: flex;
@@ -107,18 +119,26 @@ onUnmounted(() => {
     // justify-content: center;
   }
   &-element {
+    position: relative;
+    z-index: 2;
     display: block;
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+    transition: 0.3s;
   }
   &-preview {
     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
 .toggle-info {
-  background-color: #ffffff;
+  background-color: var(--color-background);
   border: 0;
   box-shadow: none;
   padding: 12px;
@@ -139,7 +159,7 @@ onUnmounted(() => {
   bottom: 0;
   width: min-content;
   padding: 12px;
-  background-color: #ffffff;
+  background-color: var(--color-background);
   transform: translateX(100%);
   transition: 0.5s;
   &.open {

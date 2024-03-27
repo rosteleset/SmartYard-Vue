@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-import { FormatedRange } from "../types/camera";
 import PlayIcon from "../assets/play.svg?component";
+import SettingsIcon from "../assets/settings.svg?component";
+import { FormatedRange } from "../types/camera";
 
 // Определение свойств
 const { videoElement, range } = defineProps<{
@@ -78,7 +79,7 @@ onUnmounted(() => {
 </script>
 <template>
   <div class="custom-controls">
-    <button class="play" @click="emits('pause')">
+    <button class="button" @click="emits('pause')">
       <PlayIcon />
     </button>
     <div class="wrap">
@@ -96,16 +97,17 @@ onUnmounted(() => {
           background: `linear-gradient(to right, #298BFF ${progress}%, #ccc ${progress}%)`,
         }"
       />
-      <Transition name="fade">
-        <div
-          v-if="isDraggable"
-          class="time-display"
-          :style="{ left: timeDisplayLeft }"
-        >
-          {{ dayjs(range.date).add(currentTime, "seconds").format("HH:mm:ss") }}
-        </div>
-      </Transition>
+      <div
+        class="time-display"
+        :class="{ visible: isDraggable }"
+        :style="{ left: timeDisplayLeft }"
+      >
+        {{ dayjs(range.date).add(currentTime, "seconds").format("HH:mm:ss") }}
+      </div>
     </div>
+    <button class="button">
+      <SettingsIcon />
+    </button>
   </div>
 </template>
 <style scoped lang="scss">
@@ -119,6 +121,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 12px;
   .wrap {
     position: relative;
     width: 100%;
@@ -171,12 +174,17 @@ onUnmounted(() => {
     top: -42px; /* Отступ от ползунка вверх */
     left: 0;
     transform: translateX(-50%);
-    background-color: #fff;
+    background-color: var(--color-background);
     padding: 6px;
     border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    &.visible {
+      opacity: 1;
+    }
   }
 
-  .play {
+  .button {
     background: none;
     border: solid 1px #fff;
     box-shadow: none;
@@ -186,10 +194,20 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 12px;
+    padding: 0;
     cursor: pointer;
-    img {
-      display: block;
+    svg {
+      max-width: 70%;
+      max-height: 70%;
+      fill: #298bff;
+      widows: unset;
+      height: unset;
+    }
+  }
+
+  &:hover {
+    .time-display {
+      opacity: 1;
     }
   }
 }

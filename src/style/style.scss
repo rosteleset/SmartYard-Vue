@@ -3,19 +3,27 @@
 
 html[data-theme="light"] {
   $second-background :#FFFFFF;
+  $gradient1: darken($color: #4da6f9, $amount: 1);
+  $gradient2:darken($color: #084eb6, $amount: 1);
   --color-text: #{$darkBlue};
   --color-background: #{$offWhite};
   --color-second-background: #{$second-background};
   --color-accent: #FFFFFF;
+  --gradient-1: #{$gradient1};
+  --gradient-2: #{$gradient2};
 }
 
 html[data-theme="dark"] {
   $second-background :transparentize($offWhite, 0.9);
+  $gradient1: darken($color: #4da6f9, $amount: 20);
+  $gradient2:darken($color: #084eb6, $amount: 20);
   --theme:"dark";
   --color-text: #{$offWhite};
   --color-background: #{$darkBlue};
   --color-second-background: #{$second-background};
   --color-accent: #{$lightGray};
+  --gradient-1: #{$gradient1};
+  --gradient-2: #{$gradient2};
 }
 
 * {
@@ -25,6 +33,9 @@ body {
   margin: 0;
   font-family: "Source Sans 3", sans-serif;
   min-height: 101vh;
+  &.scroll-block {
+    overflow: hidden;
+  }
 }
 
 p {
@@ -35,10 +46,11 @@ p {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: darken($color: #000000, $amount: 0);
   background: radial-gradient(
     189.5% 116.38% at 111.33% -32.22%,
-    #4da6f9 8.92%,
-    #084eb6 77.97%
+    var(--gradient-1) 8.92%,
+    var(--gradient-2) 77.97%
   );
   overflow: hidden;
 }
@@ -75,4 +87,8 @@ p {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+svg path {
+  opacity: .8;
 }
