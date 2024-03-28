@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import { computed, ref, watch } from "vue";
-import resetCode from "../api/resetCode";
-import reloadIcon from "../assets/reload.svg?component";
-import { useSettings } from "../hooks/settings";
-import Button from "./Button.vue";
-import Faces from "./Faces.vue";
-import Switch from "./Switch.vue";
-import convertSettingsBoolean from "../lib/convertSettingsBoolean";
+import resetCode from "@/api/resetCode";
+import reloadIcon from "@/assets/reload.svg?component";
+import useSettings from "@/hooks/useSettings";
+import Button from "@/components/Button.vue";
+import Faces from "@/components/Faces.vue";
+import Switch from "@/components/Switch.vue";
+import convertSettingsBoolean from "@/lib/convertSettingsBoolean";
 import { useRouter } from "vue-router";
 
 // определение свойств

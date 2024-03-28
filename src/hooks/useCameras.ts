@@ -1,11 +1,8 @@
-// Это не глобальный стор. имеет свой набор камер для каждого экземпляра
-// !!! Возможно стоит переместить
-
 import { onMounted, ref } from "vue";
 import { Camera } from "../types/camera";
-import { useApi } from "./useApi";
+import useApi from "./useApi";
 
-export const useCameras = ({
+const useCameras = ({
   houseId,
   overview
 }: {
@@ -31,3 +28,5 @@ export const useCameras = ({
     select,
   };
 };
+
+export default useCameras

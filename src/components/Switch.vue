@@ -36,6 +36,7 @@ const model = defineModel<boolean>();
   }
 
   &__label {
+    color: var(--color-text);
   }
 
   &__slider {

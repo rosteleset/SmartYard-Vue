@@ -70,7 +70,7 @@ const selectOption = (option?: T) => {
 </template>
 
 <style scoped lang="scss">
-@use "../style/variables" as *;
+@use "@/style/variables" as *;
 .warp {
   position: relative;
   min-width: min-content;

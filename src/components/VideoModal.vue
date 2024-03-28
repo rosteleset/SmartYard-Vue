@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { Player, PlayerFactory } from "rbt-player/dist";
-import { StyleValue, computed, onMounted, onUnmounted, ref, watch } from "vue";
-import ArrowIcon from "../assets/arrowRight.svg?component";
-import { Camera, FormatedRange } from "../types/camera";
-import CustomControls from "./CustomControls.vue";
-import RangeSelect from "./RangeSelect.vue";
-import SpeedControl from "./SpeedControl.vue"
+import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
+import ArrowIcon from "@/assets/arrowRight.svg?component";
+import useZoom from "@/hooks/useZoom";
+import { Camera, FormatedRange } from "@/types/camera";
+import CustomControls from "@/components/CustomControls.vue";
+import RangeSelect from "@/components/RangeSelect.vue";
+import SpeedControl from "@/components/SpeedControl.vue";
 
 const { camera } = defineProps<{
   camera: Camera;
@@ -15,21 +16,15 @@ const emit = defineEmits(["onClose"]);
 // реактивные переменные
 const player = ref<Player>();
 const isOpenInfo = ref(false);
-// const previewElement = ref<HTMLVideoElement | null>(null);
-const videoElement = ref<HTMLVideoElement | null>(null);
+const previewElement = ref<HTMLVideoElement>();
+const videoElement = ref<HTMLVideoElement| null>(null);
 const videoContainer = ref<HTMLDivElement | null>(null);
 
 const currentRange = ref<FormatedRange>();
 const styles = ref<StyleValue>();
-const scale = ref(1);
-const offsetX = ref(0);
-const offsetY = ref(0);
-const videoStyles = computed<StyleValue>(() => ({
-  transformOrigin: `${offsetX.value}% ${offsetY.value}%`,
-  transform: `scale(${scale.value})`,
-}));
 
-// переменные
+const { videoStyles } = useZoom(videoElement)
+
 
 const resize = () => {
   styles.value = player.value?.getSize();
@@ -40,44 +35,28 @@ const onCanPlay = () => {
   resize();
 };
 
-function handleScroll(event: WheelEvent) {
-  if (!videoElement.value || !videoContainer.value) return;
-  const STEP = 0.2;
-  // Определяем направление скролла
-  const delta = Math.max(-1, Math.min(1, event.deltaY));
-
-  // Получаем позицию курсора относительно элемента видео
-  const rect = videoElement.value.getBoundingClientRect();
-  offsetX.value = ((event.clientX - rect.left) / rect.width) * 100;
-  offsetY.value = ((event.clientY - rect.top) / rect.height) * 100;
-  // Изменяем масштаб в зависимости от направления скролла
-  if (delta < 0) {
-    scale.value += STEP; // Увеличиваем масштаб
-  } else if (scale.value > 1) scale.value -= STEP; // Уменьшаем масштаб
-}
-
 watch(currentRange, () => {
   player.value?.generateStream(
     currentRange.value?.from,
     currentRange.value?.duration
   );
 });
-
+// https://fl3.lanta.me:8443/121358/index.m3u8?token=8f30fc67f68ad45736731f506b132f958c602b8a-a42fbd07119abae9db209f7da788e4b1-1711548677-1711537877
 onMounted(() => {
   document.body.classList.add("scroll-block");
   if (videoElement.value) {
     player.value = PlayerFactory.createPlayer({
       camera,
       videoElement: videoElement.value,
+      previewElement: previewElement.value,
       autoplay: true,
     });
     resize();
     window.addEventListener("resize", resize);
-    videoElement.value?.addEventListener("wheel", handleScroll);
   }
 });
 onUnmounted(() => {
-  player.value?.onDestroy()
+  player.value?.onDestroy();
   document.body.classList.remove("scroll-block");
   window.removeEventListener("resize", resize);
 });
@@ -90,15 +69,17 @@ onUnmounted(() => {
       :style="styles"
       @click.stop
     >
+      <video ref="previewElement" class="video-preview" />
+
       <video
         ref="videoElement"
         class="video-element"
         v-on:canplay="onCanPlay"
         :style="videoStyles"
       />
-      <!-- <video ref="previewElement" class="video-preview" /> -->
       <CustomControls
         v-if="videoElement && currentRange"
+        :player="player"
         :videoElement="videoElement"
         :range="currentRange"
         @pause="player?.pause()"
@@ -139,6 +120,8 @@ onUnmounted(() => {
     // justify-content: center;
   }
   &-element {
+    position: relative;
+    // z-index: 2;
     display: block;
     max-width: 100%;
     max-height: 100%;
@@ -147,6 +130,12 @@ onUnmounted(() => {
   }
   &-preview {
     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
   }
 }
 

@@ -3,10 +3,10 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import dayjs from "dayjs";
 import { computed, ref } from "vue";
-import { useLocale } from "../hooks/locale";
-import { useRanges } from "../hooks/ranges";
-import { useConfigStore } from "../store/config.ts";
-import { Camera, FormatedRange, Range } from "../types/camera";
+import useLocale from "@/hooks/useLocale";
+import useRanges from "@/hooks/useRanges";
+import { useConfigStore } from "@/store/config.ts";
+import { Camera, FormatedRange, Range } from "@/types/camera";
 const { camera } = defineProps<{
   camera: Camera;
 }>();

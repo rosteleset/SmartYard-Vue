@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useUserStore } from "../store/user.ts";
+import { useUserStore } from "@/store/user";
 import { computed, onMounted, ref } from "vue";
-import Button from "./Button.vue";
-import { useApi } from "../hooks/useApi.ts";
-import debounce from "../lib/debounce.ts";
+import Button from "@/components/Button.vue";
+import useApi from "@/hooks/useApi";
+import debounce from "@/lib/debounce";
 import { useRouter } from "vue-router";
-import { useAddressesStore } from "../store/addresses";
+import { useAddressesStore } from "@/store/addresses";
 
 const userStore = useUserStore();
 const addressesStore = useAddressesStore();
@@ -13,7 +13,7 @@ const { axiosInstance } = useApi();
 const router = useRouter();
 
 const status = ref<string>();
-const inputType = ref("password")
+const inputType = ref("password");
 const tt = computed({
   get() {
     return userStore.token || "";
@@ -32,11 +32,12 @@ const validate = () => {
     .then((res) => {
       status.value = res.status === 204 ? "Valid token" : "Hmm";
       if (res.status === 204) {
-        userStore.load()
-        addressesStore.load()
+        userStore.load();
+        addressesStore.load();
       }
     })
-    .catch((err) => {
+    .catch((err: any) => {
+      userStore.error = err.message;
       status.value =
         err.response.status === 401 ? "Invalid token" : "Server error";
     });
@@ -49,12 +50,12 @@ onMounted(validate);
 
 <template>
   <div class="wrap">
-    <input 
-    :type="inputType" 
-    v-model="tt"
-    @focusin="inputType='text'"
-    @focusout="inputType='password'"
-     />
+    <input
+      :type="inputType"
+      v-model="tt"
+      @focusin="inputType = 'text'"
+      @focusout="inputType = 'password'"
+    />
     <Button
       v-if="status"
       :variant="status === 'Valid token' ? 'sucsses' : 'error'"

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import eventIcon from "../assets/events.svg?component";
-import { useEvents } from "../hooks/events";
-import useEventNames from "../lib/useEventNames";
-import { useAddressesStore } from "../store/addresses";
-import Event from "./Event.vue";
-import Label from "./Label.vue";
-import Select from "./Select.vue";
-import { useLocale } from "../hooks/locale";
+import eventIcon from "@/assets/events.svg?component";
+import useEvents from "@/hooks/useEvents";
+import useEventNames from "@/hooks/useEventNames";
+import { useAddressesStore } from "@/store/addresses";
+import Event from "@/components/Event.vue";
+import Label from "@/components/Label.vue";
+import Select from "@/components/Select.vue";
+import useLocale from "@/hooks/useLocale";
 
 // Интерфейс для опций
 interface OptionType {
@@ -24,7 +24,7 @@ const { houseId } = defineProps<{
 const { getAddressByHouseId, getClientsByHouseId } = useAddressesStore();
 const building = getAddressByHouseId(houseId);
 const clients = getClientsByHouseId(houseId);
-const eventNames = ref(useEventNames().eventNames);
+const {eventNames} = useEventNames();
 const options = computed(() => {
   return Object.entries(eventNames.value)
     .filter(([id]) => id !== "default")
@@ -56,7 +56,7 @@ const handleToggle = (open: boolean) => {
 </script>
 
 <template>
-  <template v-if="houseId && clients.length > 0">
+  <template v-if="houseId && clients && clients.length > 0">
     <Label
       v-if="compact"
       :icon="eventIcon"
@@ -76,7 +76,7 @@ const handleToggle = (open: boolean) => {
             :undefined-text="$t('select.events')"
           />
           <Select
-            v-if="clients.length > 1"
+            v-if="clients && clients.length > 1"
             :options="
               clients.map((client) => ({
                 id: client.flatId,

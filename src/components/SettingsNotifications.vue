@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import Switch from "./Switch.vue";
-import { useUserStore } from "../store/user";
-import convertSettingsBoolean from "../lib/convertSettingsBoolean";
+import Switch from "@/components/Switch.vue";
+import { useUserStore } from "@/store/user";
+import convertSettingsBoolean from "@/lib/convertSettingsBoolean";
 
 const { notifications } = useUserStore();
 

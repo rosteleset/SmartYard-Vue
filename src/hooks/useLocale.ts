@@ -3,7 +3,7 @@ import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { LOCAL_STORAGE_KEY } from "../i18n";
 
-export const useLocale = () => {
+const useLocale = () => {
   const { locale, availableLocales, t } = useI18n();
 
   const localizedDayjs = computed(() => {
@@ -28,3 +28,5 @@ export const useLocale = () => {
     localizedDayjs,
   };
 };
+
+export default useLocale

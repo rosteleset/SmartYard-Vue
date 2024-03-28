@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from "vue";
-import { EventFaceCoordinates } from "../types/events";
+import { EventFaceCoordinates } from "@/types/events";
 
 // Определение пропсов
 const { imageUrl, face, color } = defineProps<{

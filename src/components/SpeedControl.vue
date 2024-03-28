@@ -8,7 +8,7 @@ const { videoElement } = defineProps<{
   videoElement: HTMLVideoElement;
 }>();
 import { ref } from "vue";
-import Select from "./Select.vue";
+import Select from "@/components/Select.vue";
 import { watch } from "vue";
 
 const options = [
@@ -40,10 +40,13 @@ watch(speed, () => {
   position: absolute;
   top: 20px;
   right: 20px;
+  width: 50px;
+  text-align: center;
   background-color: var(--color-background);
   border-radius: 12px 12px 0 0;
   opacity: 0.5;
   transition: 1s;
+  z-index: 3;
   &:hover {
     opacity: 1;
   }

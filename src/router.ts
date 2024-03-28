@@ -1,7 +1,7 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from "vue-router";
-import { getBasePath } from "./lib/basePath";
-import Auth from "./components/Auth.vue";
-import { useUserStore } from "./store/user";
+import { getBasePath } from "@/lib/basePath";
+import Auth from "@/components/Auth.vue";
+import { useUserStore } from "@/store/user";
 import { watch } from "vue";
 
 const BASE_PATH = getBasePath();
@@ -15,7 +15,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: `/addresses`,
     name: "AddressesList",
-    component: () => import("./components/AddressesList.vue"),
+    component: () => import("@/components/AddressesList.vue"),
   },
   {
     path: `/addresses/:houseId`,

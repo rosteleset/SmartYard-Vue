@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FunctionalComponent, ref } from "vue";
-import ArrowIcon from "../assets/arrowRight.svg?component";
+import ArrowIcon from "@/assets/arrowRight.svg?component";
 
 const props = defineProps<{
   icon: FunctionalComponent;

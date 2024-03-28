@@ -5,10 +5,10 @@ import {
   RouteRecord,
   useRouter,
 } from "vue-router";
-import { useLocale } from "../hooks/locale.ts";
-import Arrow from "./Arrow.vue";
-import Nav from "./Nav.vue";
-import { useConfigStore } from "../store/config.ts";
+import useLocale  from "@/hooks/useLocale";
+import GoBack from "@/assets/goBack.svg"
+import NavIcon from "@/components/HeaderNavIcon.vue";
+import { useConfigStore } from "@/store/config.ts";
 
 const { t } = useLocale();
 const { currentRoute, getRoutes, back } = useRouter();
@@ -42,14 +42,14 @@ watch(currentRoute, () => {
     <div class="container">
       <div class="header__grid">
         <Transition name="fade">
-          <Arrow v-if="isFirst" @click="back" />
+          <GoBack v-if="isFirst" @click="back" />
         </Transition>
         <div class="header__label">
           SmartYard-WEB 
           {{ currentRoute && getRouteName(currentRoute) }}
         </div>
         <div v-if="!alwaysMenu" class="nav">
-          <Nav />
+          <NavIcon />
         </div>
       </div>
 

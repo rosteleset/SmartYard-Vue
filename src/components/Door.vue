@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { FunctionalComponent, computed } from "vue";
-import openDoor from "../api/openDoor";
-import barrierIcon from "../assets/barrier.svg?component";
-import entranceIcon from "../assets/entrance.svg?component";
-import gateIcon from "../assets/gate.svg?component";
-import { Domophone } from "../types/domophone";
+import openDoor from "@/api/openDoor";
+import barrierIcon from "@/assets/barrier.svg?component";
+import entranceIcon from "@/assets/entrance.svg?component";
+import gateIcon from "@/assets/gate.svg?component";
+import { Domophone } from "@/types/domophone";
 
 const props = defineProps<{ data: Domophone }>();
 
