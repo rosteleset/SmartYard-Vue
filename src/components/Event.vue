@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import InformationIcon from "../assets/information.svg?component";
-import useEventNames from "../hooks/useEventNames";
-import { Event } from "../types/events";
-import Button from "./Button.vue";
-import ImageWithFace from "./ImageWithFace.vue";
-import Modal from "./Modal.vue";
-import { useFaces } from "../hooks/faces";
-import { useLocale } from "../hooks/locale";
+import InformationIcon from "@/assets/information.svg?component";
+import useEventNames from "@/hooks/useEventNames";
+import { Event } from "@/types/events";
+import Button from "@/components/Button.vue";
+import ImageWithFace from "@/components/ImageWithFace.vue";
+import Modal from "@/components/Modal.vue";
+import useFaces from "@/hooks/useFaces";
+import useLocale from "@/hooks/useLocale";
 
 // Определение пропсов
 const props = defineProps<{ event: Event }>();
@@ -61,11 +61,7 @@ const getEventName = (event: string) => {
     <span class="event__time">{{ time }}</span>
     <InformationIcon class="event__button" />
   </div>
-  <Modal
-    :title="label"
-    :is-open="isModalOpen"
-    @on-close="closeModal"
-  >
+  <Modal :title="label" :is-open="isModalOpen" @on-close="closeModal">
     <p>{{ props.event.mechanizmaDescription }}</p>
     <p>{{ dateTime }}</p>
     <ImageWithFace

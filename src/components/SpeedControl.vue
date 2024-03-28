@@ -8,7 +8,7 @@ const { videoElement } = defineProps<{
   videoElement: HTMLVideoElement;
 }>();
 import { ref } from "vue";
-import Select from "./Select.vue";
+import Select from "@/components/Select.vue";
 import { watch } from "vue";
 
 const options = [

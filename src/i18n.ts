@@ -1,6 +1,6 @@
 import { createI18n } from "vue-i18n";
-import en from "./locales/en.json";
-import ru from "./locales/ru.json";
+import en from "@/locales/en.json";
+import ru from "@/locales/ru.json";
 
 export const LOCAL_STORAGE_KEY = "i18n-locale";
 const DEFAULT_LOCALE: string =

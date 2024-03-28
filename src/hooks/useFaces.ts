@@ -1,8 +1,8 @@
 import { onMounted, ref } from "vue";
 import { Face } from "../types/faces";
-import { useApi } from "./useApi";
+import useApi from "./useApi";
 
-export const useFaces = (flatId?: string) => {
+const useFaces = (flatId?: string) => {
   const { get, request } = useApi();
   const faces = ref<Face[]>([]);
 
@@ -39,3 +39,5 @@ export const useFaces = (flatId?: string) => {
     remove,
   };
 };
+
+export default useFaces

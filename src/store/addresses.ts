@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, onMounted, ref } from "vue";
-import { useApi } from "../hooks/useApi";
+import useApi from "../hooks/useApi";
 import { Building } from "../types/building";
 import { useUserStore } from "./user";
 

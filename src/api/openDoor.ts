@@ -1,4 +1,4 @@
-import { useApi } from "../hooks/useApi";
+import useApi from "../hooks/useApi";
 
 // Функция открытия двери по id домофона
 const openDoor = (domophoneId: number) => {

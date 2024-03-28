@@ -1,20 +1,17 @@
-// Это не глобальный стор. имеет свой набор событий для каждого экземпляра
-// !!! Возможно стоит переместить
-
 import { Ref, computed, onMounted, ref, watch } from "vue";
 import { Event, EventDay } from "../types/events";
-import { useApi } from "./useApi";
+import useApi from "./useApi";
 
 export interface EventStoreItem {
   date: EventDay;
   events: Event[];
 }
 
-export const useEvents = (
+const useEvents = (
   flatIds: Ref<string[]>,
   eventType?: Ref<string | undefined>
 ) => {
-  const {get} = useApi()
+  const { get } = useApi();
   const eventsMap = ref<{ [key: string]: Event[] }>({});
 
   const events = computed(() =>
@@ -57,3 +54,5 @@ export const useEvents = (
     load,
   };
 };
+
+export default useEvents;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import closeIcon from "../assets/close.svg?component";
+import closeIcon from "@/assets/close.svg?component";
 import { watch } from "vue";
 const props = defineProps<{
   title?: string;

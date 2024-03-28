@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import SettingsDetails from "./SettingsDetails.vue";
-import SettingsNotifications from "./SettingsNotifications.vue";
-import SettingsOther from "./SettingsOther.vue";
+import SettingsDetails from "@/components/SettingsDetails.vue";
+import SettingsNotifications from "@/components/SettingsNotifications.vue";
+import SettingsOther from "@/components/SettingsOther.vue";
 
 
 </script>

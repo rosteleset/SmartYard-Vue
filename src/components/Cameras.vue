@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import CameraIcon from "../assets/camera.svg?component";
-import { useCameras } from "../hooks/cameras";
-import { useAddressesStore } from "../store/addresses";
-import Label from "./Label.vue";
-import Map from "./Map.vue";
-import Video from "./Video.vue";
-import { useConfigStore } from "../store/config";
+import CameraIcon from "@/assets/camera.svg?component";
+import useCameras from "@/hooks/useCameras";
+import { useAddressesStore } from "@/store/addresses";
+import Label from "@/components/Label.vue";
+import Map from "@/components/Map.vue";
+import Video from "@/components/Video.vue";
+import { useConfigStore } from "@/store/config";
 
 console.log(typeof CameraIcon);
 const { houseId, overview } = defineProps<{

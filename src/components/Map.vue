@@ -3,9 +3,9 @@ import { LIcon, LMap, LMarker, LTileLayer } from "@vue-leaflet/vue-leaflet";
 import { LatLngBoundsExpression, Map, Point, PointExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { StyleValue, ref } from "vue";
-import cameraIcon from "../assets/camera.svg?component";
-import { Camera } from "../types/camera";
-import VideoModal from "./VideoModal.vue";
+import cameraIcon from "@/assets/camera.svg?component";
+import { Camera } from "@/types/camera";
+import VideoModal from "@/components/VideoModal.vue";
 
 // Определение свойств компонента
 const props = defineProps<{
@@ -104,7 +104,7 @@ const handler = (event: any, camera: Camera) => {
 </template>
 
 <style lang="scss">
-@use "../style/variables" as *;
+@use "@/style/variables" as *;
 .map {
   height: 500px;
   padding: 24px;

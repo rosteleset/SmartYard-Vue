@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { Player, PlayerFactory } from "rbt-player/dist";
 import { StyleValue, onMounted, onUnmounted, ref, watch } from "vue";
-import ArrowIcon from "../assets/arrowRight.svg?component";
-import useZoom from "../hooks/useZoom";
-import { Camera, FormatedRange } from "../types/camera";
-import CustomControls from "./CustomControls.vue";
-import RangeSelect from "./RangeSelect.vue";
-import SpeedControl from "./SpeedControl.vue";
+import ArrowIcon from "@/assets/arrowRight.svg?component";
+import useZoom from "@/hooks/useZoom";
+import { Camera, FormatedRange } from "@/types/camera";
+import CustomControls from "@/components/CustomControls.vue";
+import RangeSelect from "@/components/RangeSelect.vue";
+import SpeedControl from "@/components/SpeedControl.vue";
 
 const { camera } = defineProps<{
   camera: Camera;

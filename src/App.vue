@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, provide, ref } from "vue";
-import Header from "./components/Header.vue";
-import { useAddressesStore } from "./store/addresses";
-import { useUserStore } from "./store/user";
+import Header from "@/components/Header.vue";
+import { useAddressesStore } from "@/store/addresses";
+import { useUserStore } from "@/store/user";
 
 const addressesStore = useAddressesStore();
 const userStore = useUserStore();

@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { useLocale } from "../hooks/locale";
+import  useLocale  from "../hooks/useLocale";
 
 const useEventNames = () => {
   const { t } = useLocale();

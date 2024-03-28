@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useConfigStore } from "../store/config";
-import { Camera } from "../types/camera";
+import { useConfigStore } from "@/store/config";
+import { Camera } from "@/types/camera";
 import { Player, PlayerFactory } from "rbt-player/dist/player";
-import VideoModal from "./VideoModal.vue";
+import VideoModal from "@/components/VideoModal.vue";
 import { onUnmounted } from "vue";
 
 const { camera, index } = defineProps<{ camera: Camera; index?: number }>();

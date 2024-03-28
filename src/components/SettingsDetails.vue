@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import Button from "./Button.vue";
-import sendName from "../api/sendName";
-import { useUserStore } from "../store/user";
+import Button from "@/components/Button.vue";
+import sendName from "@/api/sendName";
+import { useUserStore } from "@/store/user";
 
 const { names } = useUserStore();
 

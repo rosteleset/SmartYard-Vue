@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import deleteIcon from "../assets/delete.svg?component";
-import plusIcon from "../assets/plus.svg?component";
-import { useFaces } from "../hooks/faces";
-import { useAddressesStore } from "../store/addresses";
-import { Face } from "../types/faces";
-import Button from "./Button.vue";
-import Modal from "./Modal.vue";
+import deleteIcon from "@/assets/delete.svg?component";
+import plusIcon from "@/assets/plus.svg?component";
+import useFaces from "@/hooks/useFaces";
+import { useAddressesStore } from "@/store/addresses";
+import { Face } from "@/types/faces";
+import Button from "@/components/Button.vue";
+import Modal from "@/components/Modal.vue";
 
 const { flatId } = defineProps<{
   flatId: string;
@@ -31,7 +31,7 @@ const openEventsHandler = () => {
 };
 </script>
 <template>
-  <div class="label">{{ $t('settings.frs') }}</div>
+  <div class="label">{{ $t("settings.frs") }}</div>
   <div class="list">
     <div class="face" v-for="face in faces" :key="face.faceId">
       <img
@@ -41,11 +41,11 @@ const openEventsHandler = () => {
         @click="selectedFace = face"
       />
       <button @click="removedFace = face">
-        <deleteIcon/>
+        <deleteIcon />
       </button>
     </div>
     <div class="face__plus" @click="openEventsHandler">
-      <plusIcon/>
+      <plusIcon />
     </div>
   </div>
   <p>

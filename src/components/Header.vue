@@ -5,10 +5,10 @@ import {
   RouteRecord,
   useRouter,
 } from "vue-router";
-import { useLocale } from "../hooks/locale.ts";
-import GoBack from "../assets/goBack.svg"
-import NavIcon from "./HeaderNavIcon.vue";
-import { useConfigStore } from "../store/config.ts";
+import useLocale  from "@/hooks/useLocale";
+import GoBack from "@/assets/goBack.svg"
+import NavIcon from "@/components/HeaderNavIcon.vue";
+import { useConfigStore } from "@/store/config.ts";
 
 const { t } = useLocale();
 const { currentRoute, getRoutes, back } = useRouter();

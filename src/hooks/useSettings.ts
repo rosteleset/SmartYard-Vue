@@ -1,14 +1,11 @@
-// Это не глобальный стор. имеет свой набор камер для каждого экземпляра
-// !!! Возможно стоит переместить
-
 import { onMounted, ref } from "vue";
 import { Settings } from "../types/user";
-import { useApi } from "./useApi";
+import useApi from "./useApi";
 
 const url = "address/intercom";
 
-export const useSettings = (flatId: string) => {
-  const {get} = useApi()
+const useSettings = (flatId: string) => {
+  const { get } = useApi();
   const settings = ref<Settings>();
 
   const load = () => {
@@ -31,3 +28,5 @@ export const useSettings = (flatId: string) => {
     save,
   };
 };
+
+export default useSettings;

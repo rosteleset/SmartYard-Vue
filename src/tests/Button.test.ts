@@ -1,6 +1,6 @@
-import { mount } from "@vue/test-utils";
-import { expect, test, vi } from "vitest";
 import Button from "@/components/Button.vue";
+import { mount } from "@vue/test-utils";
+import { expect, test } from "vitest";
 
 test("рендерит кнопку с правильными классами и свойствами", async () => {
   const wrapper = mount(Button, {

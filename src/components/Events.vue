@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import eventIcon from "../assets/events.svg?component";
-import { useEvents } from "../hooks/events";
-import useEventNames from "../hooks/useEventNames";
-import { useAddressesStore } from "../store/addresses";
-import Event from "./Event.vue";
-import Label from "./Label.vue";
-import Select from "./Select.vue";
-import { useLocale } from "../hooks/locale";
+import eventIcon from "@/assets/events.svg?component";
+import useEvents from "@/hooks/useEvents";
+import useEventNames from "@/hooks/useEventNames";
+import { useAddressesStore } from "@/store/addresses";
+import Event from "@/components/Event.vue";
+import Label from "@/components/Label.vue";
+import Select from "@/components/Select.vue";
+import useLocale from "@/hooks/useLocale";
 
 // Интерфейс для опций
 interface OptionType {

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useLocale } from "../hooks/locale";
-import { useAddressesStore } from "../store/addresses";
-import FlatSettings from "./FlatSettings.vue";
-import Tabs from "./Tabs.vue";
+import useLocale from "@/hooks/useLocale";
+import { useAddressesStore } from "@/store/addresses";
+import FlatSettings from "@/components/FlatSettings.vue";
+import Tabs from "@/components/Tabs.vue";
 
 const { houseId } = defineProps<{ houseId: string }>();
 
@@ -44,6 +44,6 @@ const clientsWithTitles = computed(() =>
   margin: 24px 0;
 }
 .container {
-//   max-width: 600px;
+  //   max-width: 600px;
 }
 </style>

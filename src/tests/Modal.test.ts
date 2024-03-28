@@ -1,7 +1,6 @@
 import ModalComponent from "@/components/Modal.vue";
 import { mount } from "@vue/test-utils";
 import { expect, test } from "vitest";
-import { ref } from "vue";
 
 // beforeEach(() => {
 //   // create teleport target

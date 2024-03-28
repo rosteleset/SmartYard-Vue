@@ -1,7 +1,7 @@
 import { onMounted, ref } from "vue";
 import { Client, Names, Notifications } from "../types/user";
 import { defineStore } from "pinia";
-import { useApi } from "../hooks/useApi";
+import useApi from "../hooks/useApi";
 
 const LOCAL_STORAGE_TOKEN_KEY = "jwt-token";
 

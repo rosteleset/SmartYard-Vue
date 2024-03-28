@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { useLocale } from "../hooks/locale";
-import { useConfigStore } from "../store/config";
-import Select from "./Select.vue";
-import Switch from "./Switch.vue";
+import useLocale from "@/hooks/useLocale";
+import { useConfigStore } from "@/store/config";
+import Select from "@/components/Select.vue";
+import Switch from "@/components/Switch.vue";
 
 const { availableLocales, locale, changeLocale, t } = useLocale();
 const configStore = useConfigStore();
