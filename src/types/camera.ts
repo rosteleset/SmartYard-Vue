@@ -2,10 +2,11 @@ export interface Camera {
   houseId?: number;
   id: number;
   name: string;
-  lat: number;
-  lon: number;
+  lat: string;
+  lon: string;
   serverType: string;
   hlsMode?: string;
+  hasSound?:boolean;
   url: string;
   token: string;
 }

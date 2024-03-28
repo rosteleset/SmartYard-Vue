@@ -80,7 +80,7 @@ const handler = (event: any, camera: Camera) => {
       <LMarker
         v-for="camera in cameras"
         :key="camera.id"
-        :latLng="[camera.lat, camera.lon]"
+        :latLng="[Number(camera.lat), Number(camera.lon)]"
         :name="'test'"
         @click="handler($event, camera)"
       >

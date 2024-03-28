@@ -11,9 +11,9 @@ const mockEvent: EventType = {
   timezone: 3, // UTC+3 (Московское время)
   uuid: "12345678-1234-1234-1234-123456789abc",
   image: "87654321-4321-4321-4321-ba9876543210",
-  objectId: 1,
-  objectType: 0,
-  objectMechanizma: 1,
+  objectId: "1",
+  objectType: "0",
+  objectMechanizma: "1",
   mechanizmaDescription: "Описание двери",
   event: "1",
   preview: "https://example.com/image.jpg",

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-import PlayIcon from "@/assets/play.svg?component";
-import SettingsIcon from "@/assets/settings.svg?component";
-import { FormatedRange } from "@/types/camera";
+import PlayIcon from "../assets/play.svg?component";
+import SettingsIcon from "../assets/settings.svg?component";
+import { FormatedRange } from "../types/camera";
 
 // Определение свойств
 const { videoElement, range } = defineProps<{

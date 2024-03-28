@@ -8,7 +8,9 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest --ui"
+    "test": "vitest --ui",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@vue-leaflet/vue-leaflet": "^0.10.1",
@@ -22,17 +24,26 @@
     "sass": "^1.71.1",
     "vue": "^3.4.19",
     "vue-i18n": "9",
-    "vue-router": "4",
-    "shaka-player": "^4.7.11"
+    "vue-router": "4"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^1.2.25",
     "@pinia/testing": "^0.1.3",
+    "@storybook/addon-essentials": "^8.0.5",
+    "@storybook/addon-interactions": "^8.0.5",
+    "@storybook/addon-links": "^8.0.5",
+    "@storybook/blocks": "^8.0.5",
+    "@storybook/test": "^8.0.5",
+    "@storybook/vue3": "^8.0.5",
+    "@storybook/vue3-vite": "^8.0.5",
     "@types/leaflet": "^1.9.8",
     "@types/node": "^20.11.24",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vitest/ui": "^1.4.0",
     "@vue/test-utils": "^2.4.5",
     "happy-dom": "^14.3.1",
+    "storybook": "^8.0.5",
+    "storybook-addon-mock": "^4.3.0",
     "typescript": "^5.2.2",
     "vite": "^5.1.4",
     "vite-plugin-env-compatible": "^2.0.1",

@@ -25,3 +25,4 @@ dist-ssr
 
 # Игнорировать файл .env
 .env
+*storybook.log
