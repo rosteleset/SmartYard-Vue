@@ -35,9 +35,7 @@ const selectOption = (option?: T) => {
       class="select-box"
       :class="{ open: dropdownOpen }"
     >
-      <span>{{
-        model ? model.name : `${$t("select.all")} ${undefinedText || ""}`
-      }}</span>
+      <span>{{model ? model.name : `${$t("select.all")} ${undefinedText || ""}` }}</span>
     </div>
     <Transition name="dropdown">
       <div v-if="dropdownOpen" class="dropdown" ref="dropdown">

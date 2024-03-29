@@ -1,5 +1,5 @@
-import { Ref, computed, onMounted, ref, watch } from "vue";
-import { Event, EventDay } from "../types/events";
+import {computed, Ref} from "vue";
+import {Event, EventDay} from "../types/events";
 import useApi from "./useApi";
 
 export interface EventStoreItem {
@@ -14,18 +14,31 @@ const useEvents = (
   const { get } = useApi();
 
   const getDays = async () => {
-      const response = await get<EventDay[]>(`address/plogDays`, { flatIds });
-      return response || [];
+      try {
+          const result:EventDay[] = []
+          for (const flatId of flatIds.value) {
+              const response =await get<EventDay[]>(`address/plogDays`, {flatId, events: eventType?.value});
+              result.push(...response)
+          }
+          return result;
+      } catch (_error) {
+      return [];
+      }
   }
 
   const getEvents = async (day:EventDay) => {
       try {
-          const response = await get<Event[]>(`address/plog`, { flatIds, day})
-          return response.filter((event) =>!eventType?.value || event.event === eventType?.value);
-      } catch (error) {
+          console.log("getEvents", day)
+          const result:Event[] = []
+          for (const flatId of flatIds.value) {
+              const response = await get<Event[]>(`address/plog`, { flatId, day})
+              result.push(...response)
+          }
+
+          return result
+      } catch (_error) {
           return [];
       }
-
   }
 
   return {

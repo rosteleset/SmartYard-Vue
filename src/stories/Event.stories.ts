@@ -1,4 +1,4 @@
-import Event from "@/components/Event.vue";
+import Event from "@/components/EventsListItem.vue";
 import type { Meta, StoryObj } from "@storybook/vue3";
 
 const meta = {

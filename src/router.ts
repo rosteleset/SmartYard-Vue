@@ -54,12 +54,12 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: `/events/:houseId`,
-    component: () => import("./components/Events.vue"),
+    component: () => import("@/views/Events.vue"),
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {
     path: `/faces/:flatId`,
-    component: () => import("./views/Faces.vue"),
+    component: () => import("@/views/Faces.vue"),
     props: (route) => ({ flatId: route.params.flatId }),
   },
 ];

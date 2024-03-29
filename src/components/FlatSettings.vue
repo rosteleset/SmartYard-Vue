@@ -5,7 +5,6 @@ import resetCode from "@/api/resetCode";
 import reloadIcon from "@/assets/reload.svg?component";
 import useSettings from "@/hooks/useSettings";
 import Button from "@/components/Button.vue";
-import Faces from "@/components/Faces.vue";
 import Switch from "@/components/Switch.vue";
 import convertSettingsBoolean from "@/lib/convertSettingsBoolean";
 import { useRouter } from "vue-router";
@@ -26,8 +25,6 @@ const doorCode = ref(settings.value?.doorCode);
 const isAutoOpen = computed(() =>
   dayjs().isBefore(dayjs(settings.value?.autoOpen))
 );
-
-const isFacesOpen = ref(false);
 
 const openFacesHandler = () => {
   router.push(`/faces/${flatId}`);
@@ -155,13 +152,12 @@ watch(settings, (newSettings) => {
 
       <div class="faces-block">
         <Button
-          v-if="settings.FRSDisabled === 'f' && !isFacesOpen"
+          v-if="settings.FRSDisabled === 'f'"
           variant="primary"
           @click="openFacesHandler"
         >
           {{ $t("settings.frs") }}
         </Button>
-        <Faces v-if="isFacesOpen" :flatId="flatId" />
       </div>
     </div>
   </div>

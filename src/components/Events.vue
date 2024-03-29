@@ -4,7 +4,7 @@ import eventIcon from "@/assets/events.svg?component";
 import useEvents from "@/hooks/useEvents";
 import useEventNames from "@/hooks/useEventNames";
 import { useAddressesStore } from "@/store/addresses";
-import Event from "@/components/Event.vue";
+import Event from "@/components/EventsListItem.vue";
 import Label from "@/components/Label.vue";
 import Select from "@/components/Select.vue";
 import useLocale from "@/hooks/useLocale";

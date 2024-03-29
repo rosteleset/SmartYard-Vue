@@ -1,6 +1,6 @@
 import { test, expect, vi } from "vitest";
 import { mount } from "@vue/test-utils";
-import Event from "@/components/Event.vue";
+import Event from "@/components/EventsListItem.vue";
 import { Event as EventType } from "@/types/events";
 import { createTestingPinia } from "@pinia/testing";
 import dayjs from "dayjs";
