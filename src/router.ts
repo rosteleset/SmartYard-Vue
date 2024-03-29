@@ -59,7 +59,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: `/faces/:flatId`,
-    component: () => import("./components/Faces.vue"),
+    component: () => import("./views/Faces.vue"),
     props: (route) => ({ flatId: route.params.flatId }),
   },
 ];
