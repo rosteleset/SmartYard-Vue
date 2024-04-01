@@ -1,5 +1,4 @@
 import EventsListDay from "@/components/EventsListDay.vue";
-import { Event } from "@/types/events";
 import type { Meta, StoryObj } from "@storybook/vue3";
 import { mockGetPlog, mockGetPlogDays } from "./fakeData";
 
@@ -23,5 +22,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  
+  parameters: {
+    mockData: [mockGetPlogDays,mockGetPlog],
+  },
 };

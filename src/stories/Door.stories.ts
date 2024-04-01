@@ -15,7 +15,7 @@ const meta = {
     data: {
       domophoneId: 123,
       doorId: 456,
-      icon: "entrance", 
+      icon: "entrance",
       name: "калитка",
     },
   },
@@ -30,7 +30,7 @@ export const Entrance: Story = {
     data: {
       domophoneId: 123,
       doorId: 456,
-      icon: "entrance", 
+      icon: "entrance",
       name: "entrance",
     },
   },
@@ -41,7 +41,7 @@ export const Wicket: Story = {
     data: {
       domophoneId: 123,
       doorId: 456,
-      icon: "wicket", 
+      icon: "wicket",
       name: "wicket",
     },
   },
@@ -52,7 +52,7 @@ export const Gate: Story = {
     data: {
       domophoneId: 123,
       doorId: 456,
-      icon: "gate", 
+      icon: "gate",
       name: "gate",
     },
   },
@@ -63,9 +63,8 @@ export const Barrier: Story = {
     data: {
       domophoneId: 123,
       doorId: 456,
-      icon: "barrier", 
+      icon: "barrier",
       name: "barrier",
     },
   },
 };
-

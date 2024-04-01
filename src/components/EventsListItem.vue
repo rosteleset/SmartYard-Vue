@@ -29,8 +29,7 @@ const canLike = computed(() => props.event.detailX.flags?.includes("canLike"));
 const canDislike = computed(() =>
   props.event.detailX.flags?.includes("canDislike")
 );
-const liked = computed(() => props.event.detailX.flags?.includes("liked"));
-const color = computed(() => (liked ? "#1FBC62" : "#FF3B30"));
+const color = computed(() => (props.event.detailX.flags?.includes("liked") ? "#1FBC62" : "#FF3B30"));
 const isUpdated = ref(false);
 
 // Функции для работы с модальным окном

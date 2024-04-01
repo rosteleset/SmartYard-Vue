@@ -8,16 +8,16 @@ interface Roommate {
 }
 
 export interface Client {
-  clientId: number;
-  clientName: string;
-  contractName: string;
-  flatOwner: SettingsBoolean;
-  contractOwner: SettingsBoolean;
-  hasGates: SettingsBoolean;
-  houseId: string;
+  clientId?: number;
+  clientName?: string;
+  contractName?: string;
+  flatOwner?: SettingsBoolean;
+  contractOwner?: SettingsBoolean;
+  hasGates?: SettingsBoolean;
+  houseId?: string;
   flatId: string;
-  flatNumber: number;
-  hasPlog: SettingsBoolean;
+  flatNumber?: string;
+  hasPlog?: SettingsBoolean;
   address: string;
   services: (
     | "internet"
@@ -28,8 +28,8 @@ export interface Client {
     | "domophone"
     | "gsm"
   )[]; // список подключенных услуг
-  lcab: string;
-  roommates: Roommate[];
+  lcab?: string;
+  roommates?: Roommate[];
 }
 
 export interface Settings {

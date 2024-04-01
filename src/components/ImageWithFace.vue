@@ -53,10 +53,10 @@ const drawFaceRectangle = (
   if (!face) return;
 
   const scaledFace = {
-    left: face.left * scaleX,
-    top: face.top * scaleY,
-    width: face.width * scaleX,
-    height: face.height * scaleY,
+    left: Number(face.left) * scaleX,
+    top: Number(face.top) * scaleY,
+    width: Number(face.width) * scaleX,
+    height: Number(face.height) * scaleY,
   };
 
   ctx.beginPath();

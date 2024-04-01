@@ -1,35 +1,90 @@
+import { Building } from "@/types/building";
+import { Client } from "@/types/user";
+
 const SERVER_URL =
-  import.meta.env.MODE === "development" && !import.meta.env.VITE_SERVER_URL.includes('http')
+  import.meta.env.MODE === "development" &&
+  !import.meta.env.VITE_SERVER_URL.includes("http")
     ? import.meta.env.VITE_DEV_PROXY_PREFIX + import.meta.env.VITE_SERVER_URL
     : import.meta.env.VITE_SERVER_URL;
+
+export const fakeAddresses: Building[] = [
+  {
+    houseId: "1",
+    address: "ул. Главная, дом 123",
+    doors: [
+      {
+        domophoneId: 1,
+        doorId: 1,
+        icon: "entrance",
+        name: "входная",
+      },
+      {
+        domophoneId: 2,
+        doorId: 2,
+        icon: "entrance",
+        name: "задняя",
+      },
+    ],
+    hasPlog: "t",
+    cctv: 2,
+  },
+  {
+    houseId: "2",
+    address: "ул. Вязовая, дом 456",
+    doors: [
+      {
+        domophoneId: 1,
+        doorId: 1,
+        icon: "entrance",
+        name: "входная",
+      },
+      {
+        domophoneId: 2,
+        doorId: 2,
+        icon: "entrance",
+        name: "задняя",
+      },
+    ],
+    hasPlog: "f",
+    cctv: 1,
+  },
+];
+
+export const fakeClients: Client[] = [
+  {
+    address:
+      "ул. Главная, дом 1, квартира 1",
+    houseId: "10",
+    flatId: "1",
+    flatNumber: "2",
+    flatOwner: "f",
+    hasGates: "f",
+    hasPlog: "t",
+    services: ["domophone"],
+    contractOwner: "f",
+    roommates: [],
+  },
+  {
+    address:
+      "ул. Главная, дом 1, квартира 2",
+    houseId: "10",
+    flatId: "2",
+    flatNumber: "2",
+    flatOwner: "f",
+    hasGates: "f",
+    hasPlog: "t",
+    services: ["domophone"],
+    contractOwner: "f",
+    roommates: [],
+  },
+];
 
 export const mockGetAddressList = {
   url: `${SERVER_URL}/address/getAddressList`,
   method: "POST",
   status: 200,
   response: {
-    data: [
-      {
-        houseId: "1",
-        address: "ул. Главная, дом 123",
-        doors: [
-          { doorId: "1", type: "входная" },
-          { doorId: "2", type: "задняя" },
-        ],
-        hasPlog: "t",
-        cctv: 2,
-      },
-      {
-        houseId: "2",
-        address: "ул. Вязовая, дом 456",
-        doors: [
-          { doorId: "3", type: "входная" },
-          { doorId: "4", type: "задняя" },
-        ],
-        hasPlog: "f",
-        cctv: 1,
-      },
-    ],
+    data: fakeAddresses,
   },
 };
 
@@ -38,44 +93,7 @@ export const mockGetSettingsList = {
   method: "POST",
   status: 200,
   response: {
-    data: [
-      {
-        clientId: 1,
-        clientName: "Иванов Иван Иванович",
-        contractName: "Договор №12345",
-        flatOwner: "т",
-        contractOwner: "т",
-        hasGates: "т",
-        houseId: "1",
-        flatId: "1",
-        flatNumber: 1,
-        hasPlog: "т",
-        address: "ул. Главная, дом 1, квартира 1",
-        services: ["интернет", "iptv", "телефон"],
-        lcab: "12345",
-        roommates: [
-          { roommateId: 1, name: "Петров Петр Петрович", age: 30 },
-          { roommateId: 2, name: "Сидоров Сидор Сидорович", age: 35 },
-        ],
-      },
-      {
-        clientId: 2,
-        clientName: "Петров Петр Петрович",
-        contractName: "Договор №67890",
-        flatOwner: "н",
-        contractOwner: "т",
-        hasGates: "н",
-        houseId: "2",
-        flatId: "2",
-        flatNumber: 2,
-        hasPlog: "т",
-        address: "ул. Вторичная, дом 2, квартира 2",
-        services: ["интернет", "iptv", "телефон", "видеонаблюдение"],
-        lcab: "67890",
-        roommates: [],
-      },
-      // Добавьте больше данных по вашему усмотрению
-    ],
+    data: fakeClients,
   },
 };
 // user/notification
@@ -115,7 +133,7 @@ export const mockGetPlogDays = {
       },
       {
         day: "2024-03-26",
-        events: "1",
+        events: "2",
       },
     ],
   },
@@ -128,12 +146,8 @@ export const mockGetPlog = {
   response: {
     data: [
       {
-        date: "2024-03-07 12:38:46",
-        uuid: "bbb67f91-ade1-4834-ac9c-b7ce29a41a9b",
-        previewType: 2,
-        objectId: "2",
-        objectType: "0",
-        objectMechanizma: "0",
+        date: new Date().toString(),
+        uuid: "1234",
         mechanizmaDescription: "Подъезд 1",
         event: "4",
         detailX: {
@@ -144,11 +158,27 @@ export const mockGetPlog = {
             height: "167",
           },
           flags: ["canLike"],
-          phone: "79046392984",
+          phone: "79000000000",
         },
-        preview:
-          "https://rbt-demo.lanta.me/mobile/address/plogCamshot/10001000-65e9-8b71-3f1f-e2147b695b42",
-      }
+        preview: "https://placehold.co/200x100",
+      },
+      {
+        date: new Date().toString(),
+        uuid: "2345",
+        mechanizmaDescription: "Подъезд 2",
+        event: "2",
+        detailX: {
+          face: {
+            left: "556",
+            top: "410",
+            width: "140",
+            height: "167",
+          },
+          flags: ["canDislike"],
+          phone: "79000000000",
+        },
+        preview: "https://placehold.co/100x100",
+      },
     ],
   },
 };

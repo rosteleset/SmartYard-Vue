@@ -4,6 +4,7 @@ import useLocale from "@/hooks/useLocale";
 import { useEventsStore } from "@/store/events";
 import { Event, EventDay } from "@/types/events.ts";
 import { useElementVisibility, watchOnce } from "@vueuse/core";
+import { computed } from "vue";
 import { ref, watch } from "vue";
 
 const { day } = defineProps<{
@@ -12,6 +13,9 @@ const { day } = defineProps<{
 
 const eventsStore = useEventsStore();
 const { localizedDayjs } = useLocale();
+const localizedText = computed(() =>
+  localizedDayjs.value(day.day).format("dddd, D MMMM")
+);
 const events = ref<Event[]>([]);
 const target = ref(null);
 const targetIsVisible = useElementVisibility(target);
@@ -33,12 +37,10 @@ watch(eventsStore, () => {
 <template>
   <Transition>
     <div v-if="!isEmpty">
-      <h3 ref="target">{{ localizedDayjs(day.day).format("dddd, D MMMM") }}</h3>
+      <h3 ref="target">{{ localizedText }}</h3>
       <TransitionGroup appear name="events">
         <div v-for="event in events" :key="event.uuid">
-          <EventsListItem
-            :event="event"
-          />
+          <EventsListItem :event="event" />
         </div>
       </TransitionGroup>
     </div>
