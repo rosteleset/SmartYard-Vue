@@ -1,29 +1,20 @@
 <script setup lang="ts">
-import EventsList from "@/components/EventsList.vue";
-import useEventsNew from "@/hooks/useEventsNew.ts";
-import {useAddressesStore} from "@/store/addresses.ts";
-import {computed, provide, ref} from "vue";
-import {computedAsync} from "@vueuse/core";
 import EventsFilter from "@/components/EventsFilter.vue";
-import {useEventsStore} from "@/store/events.ts";
+import EventsList from "@/components/EventsList.vue";
+import { useAddressesStore } from "@/store/addresses.ts";
 
-const {houseId} = defineProps<{
+const { houseId } = defineProps<{
   houseId: string;
 }>();
-const {getClientsByHouseId} = useAddressesStore()
-const clients = getClientsByHouseId(houseId)
-const selectedFlatId = ref<string>()
-const selectedType = ref<string>()
+const { getClientsByHouseId } = useAddressesStore();
+const clients = getClientsByHouseId(houseId);
 
-const eventsStore = useEventsStore()
-
-const {days} = eventsStore.getDays()
 </script>
 
 <template>
   <h1>Events</h1>
   <EventsFilter :clients="clients" />
-  <EventsList :days="days"/>
+  <EventsList :clients="clients" />
 </template>
 
 <style scoped lang="scss">
@@ -32,27 +23,9 @@ const {days} = eventsStore.getDays()
   margin: 24px 0;
 }
 
-.events {
-  &__list {
-    padding: 24px;
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 12px;
-  }
 
-  &__day {
-    margin-bottom: 24px;
-  }
 
-  &__title {
-    font-size: 70%;
-  }
-}
 
-.filters {
-  display: flex;
-  gap: 24px;
-}
 
 .v-enter-active,
 .v-leave-active {

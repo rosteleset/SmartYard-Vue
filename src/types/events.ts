@@ -7,10 +7,10 @@ export interface EventDay {
 type EventDetailFlag = "canLike" | "canDislike" | "liked"
 
 export interface EventFaceCoordinates {
-    left: number;
-    top: number;
-    width: number;
-    height: number;
+    left: string;
+    top: string;
+    width: string;
+    height: string;
 }
 
 interface EventDetail {

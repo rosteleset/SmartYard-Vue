@@ -1,49 +1,76 @@
-import {defineStore} from "pinia";
+import { defineStore } from "pinia";
 import useApi from "@/hooks/useApi.ts";
-import {computed, ref} from "vue";
-import {EventDay,Event} from "@/types/events.ts";
+import { Ref, computed, onMounted, ref, watch } from "vue";
+import { EventDay, Event } from "@/types/events.ts";
+import { asyncComputed } from "@vueuse/core";
+import { error } from "console";
+import dayjs from "dayjs";
+import { useUserStore } from "./user";
 
 export const useEventsStore = defineStore("events", () => {
-    const {get} = useApi();
+  const { get } = useApi();
+  const { clients } = useUserStore();
+  const flatIds = ref<string[]>(clients.map((client) => client.flatId));
+  const eventTypes = ref<string[]>([]);
+  const days = ref<EventDay[]>([]);
 
-    const flatIds = ref<string[]>([]);
-    const eventTypes = ref<string[]>([]);
+  const getDays = async () => {
+    const result: EventDay[] = [];
+    for (const flatId of flatIds.value) {
+      try {
+        const response = await get<EventDay[]>(`address/plogDays`, {
+          flatId,
+          events:
+            eventTypes.value.length > 0
+              ? eventTypes.value.join(",")
+              : undefined,
+        });
 
-    const getDays = () => {
-        const result: EventDay[] = []
-        for (const flatId of flatIds.value) {
-            get<EventDay[]>(`address/plogDays`, {flatId, events: eventTypes.value.join(",")})
-                .then((response) => result.push(...response))
-        }
+        result.push(...response);
+      } catch (_error) {}
+    }
+    const uniqueEventsArray = result.filter(
+      (event, index, self) =>
+        index === self.findIndex((t) => t.day === event.day)
+    );
+    return uniqueEventsArray.sort(
+      (a, b) => new Date(b.day).getTime() - new Date(a.day).getTime()
+    );
+  };
 
-        const days = computed(() => {
-            return result;
-        })
-        return {
-            days
-        }
+  const getEvents = async (day: EventDay) => {
+    const result: Event[] = [];
+    for (const flatId of flatIds.value) {
+      try {
+        const response = await get<Event[]>(`address/plog`, {
+          flatId,
+          day: day.day,
+        });
+
+        result.push(...response);
+      } catch (_error) {
+        console.log(_error);
+      }
     }
 
-    const getEvents = (day: EventDay) => {
-        const result: Event[] = []
-        for (const flatId of flatIds.value) {
-            get<Event[]>(`address/plog`, {flatId, day: day.day})
-                .then((response) => result.push(...response))
-        }
+    return result.filter(
+      (event) =>
+        eventTypes.value.length === 0 || eventTypes.value.includes(event.event)
+    );
+  };
 
-        const events = computed(() => {
-            return result.filter(event => eventTypes.value.includes(event.event));
-        })
-        return {
-            events
-        }
-    }
+  watch([flatIds, eventTypes], () => {
+    getDays().then((result) => (days.value = result));
+  });
 
-    return {
-        flatIds,
-        eventTypes,
-        getDays,
-        getEvents
-    }
-})
-
+  // onMounted(() => {
+  //   flatIds.value = clients.map((client) => client.flatId);
+  // });
+  return {
+    flatIds,
+    eventTypes,
+    getDays,
+    getEvents,
+    days,
+  };
+});
