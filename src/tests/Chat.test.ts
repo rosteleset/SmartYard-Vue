@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { test, expect, vi } from "vitest";
-import Chat from "@/components/Chat.vue";
+import Chat from "@/views/Chat.vue";
 // Создаем фиктивные моки и стабы
 const mockGet = vi.fn(() =>
   Promise.resolve({ code: "<p>Текст входящего сообщения</p>" })

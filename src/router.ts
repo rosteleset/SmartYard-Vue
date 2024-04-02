@@ -25,22 +25,22 @@ const routes: RouteRecordRaw[] = [
   {
     path: `/cameras`,
     name: "CityCameras",
-    component: () => import("./components/Cameras.vue"),
+    component: () => import("@/views/Cameras.vue"),
     props: () => ({ overview: true }),
   },
   {
     path: `/cameras/all`,
-    component: () => import("./components/Cameras.vue"),
+    component: () => import("@/views/Cameras.vue"),
   },
   {
     path: `/cameras/:houseId`,
-    component: () => import("./components/Cameras.vue"),
+    component: () => import("@/views/Cameras.vue"),
     props: (route) => ({ houseId: route.params.houseId }),
   },
   {
     path: `/chat`,
     name: "Chat",
-    component: () => import("./components/Chat.vue"),
+    component: () => import("@/views/Chat.vue"),
   },
   {
     path: `/settings`,

@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import {computed, ref} from "vue";
 import CameraIcon from "@/assets/camera.svg?component";
 import useCameras from "@/hooks/useCameras";
-import { useAddressesStore } from "@/store/addresses";
+import {useAddressesStore} from "@/store/addresses";
 import Label from "@/components/Label.vue";
 import Map from "@/components/Map.vue";
-import Video from "@/components/Video.vue";
-import { useConfigStore } from "@/store/config";
+import {useConfigStore} from "@/store/config";
+import CamerasList from "@/components/CamerasList.vue";
 
 console.log(typeof CameraIcon);
-const { houseId, overview } = defineProps<{
+const { houseId } = defineProps<{
   houseId?: string;
   compact?: boolean;
-  overview?: boolean;
 }>();
 
 const { config } = useConfigStore();
@@ -23,7 +22,7 @@ const invalidHouseId = houseId && getAddressByHouseId(houseId) === undefined; //
 // Состояния открытости в компактном режиме
 const isOpen = ref(false);
 
-const { cameras } = useCameras({ houseId, overview: overview });
+const { cameras } = useCameras({ houseId });
 
 const handleToggle = (open: boolean) => {
   isOpen.value = open;
@@ -41,14 +40,7 @@ const handleToggle = (open: boolean) => {
     />
     <Transition name="cameras">
       <div v-if="isOpen || !compact">
-        <div class="cameras__list">
-          <Video
-            v-for="camera in cameras"
-            :key="camera.id"
-            :camera="camera"
-            :index="cameras.indexOf(camera) + 1"
-          />
-        </div>
+        <CamerasList :cameras="cameras" />
         <Map :cameras="cameras" />
       </div>
     </Transition>

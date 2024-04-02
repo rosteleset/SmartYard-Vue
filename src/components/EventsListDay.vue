@@ -37,7 +37,7 @@ watch(eventsStore, () => {
 <template>
   <Transition>
     <div v-if="!isEmpty">
-      <h3 ref="target">{{ localizedText }}</h3>
+      <div class="day-label" ref="target">{{ localizedText }}</div>
       <TransitionGroup appear name="events">
         <div v-for="event in events" :key="event.uuid">
           <EventsListItem :event="event" />
@@ -48,6 +48,11 @@ watch(eventsStore, () => {
 </template>
 
 <style scoped lang="scss">
+.day-label {
+  font-size: 18px;
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
 /* 1. declare transition */
 .events-move,
 .events-enter-active,
