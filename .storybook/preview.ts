@@ -6,9 +6,11 @@ import '@/style/style.scss'
 import {
     fakeAddresses,
     fakeClients,
-    mockGetAddressList, mockGetCameras,
+    mockGetAddressList,
+    mockGetCameras,
     mockGetName,
-    mockGetNotification, mockGetPlog,
+    mockGetNotification,
+    mockGetPlog,
     mockGetPlogDays,
     mockGetSettingsList,
 } from "../src/stories/__fakeData";
@@ -16,8 +18,6 @@ import "dayjs/locale/en";
 import "dayjs/locale/ru";
 import {useConfigStore} from "../src/store/config";
 import {addons} from "@storybook/addons";
-import {useUserStore} from "../src/store/user";
-import {useAddressesStore} from "../src/store/addresses";
 import {useEventsStore} from "../src/store/events";
 
 
