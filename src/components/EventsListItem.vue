@@ -71,7 +71,7 @@ const getEventName = (event: string) => {
     />
     <p v-else class="error">{{ $t("events.image-error") }}</p>
     <div v-if="!isUpdated" class="event__buttons">
-      <Button variant="sucsses" v-if="canLike" @click="likeHandler">{{
+      <Button variant="success" v-if="canLike" @click="likeHandler">{{
         $t("events.like")
       }}</Button>
       <Button variant="error" v-if="canDislike" @click="disLikeHandler">{{

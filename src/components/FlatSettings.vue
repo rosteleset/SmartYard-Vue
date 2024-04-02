@@ -143,7 +143,7 @@ watch(settings, (newSettings) => {
           {{ $t("settings.guest-access") }}
         </div>
         <Button
-          :variant="isAutoOpen ? 'sucsses' : 'primary'"
+          :variant="isAutoOpen ? 'success' : 'primary'"
           @click="setAutoOpen"
         >
           {{ isAutoOpen ? "открыто" : "открыть" }}

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-type Variant = 'primary' | 'sucsses' | 'error'
+type Variant = 'primary' | 'success' | 'error'
 
 const props = defineProps<{
     variant: Variant,
@@ -47,7 +47,7 @@ const emit = defineEmits<{
         color: #FF3B30;
     }
 
-    &-sucsses {
+    &-success {
         background-color: #1FBC62;
         border-color: #1FBC62;
         color: #1FBC62;

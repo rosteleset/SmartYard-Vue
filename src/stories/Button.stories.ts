@@ -7,7 +7,7 @@ const meta = {
   tags: ["autodocs"],
   argTypes: {
     variant: {
-      options: ["primary", "sucsses", "error"],
+      options: ["primary", "success", "error"],
     },
   },
   args: {
@@ -23,8 +23,8 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: { variant: "primary" },
 };
-export const Sucsses: Story = {
-  args: { variant: "sucsses" },
+export const Success: Story = {
+  args: { variant: "success" },
 };
 export const Error: Story = {
   args: { variant: "error" },
