@@ -33,6 +33,7 @@ body {
   margin: 0;
   font-family: "Source Sans 3", sans-serif;
   min-height: 101vh;
+  color: var(--color-text);
   &.scroll-block {
     overflow: hidden;
   }

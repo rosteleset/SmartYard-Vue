@@ -55,6 +55,7 @@ export const useConfigStore = defineStore(STORE_NAME, () => {
   return {
     config,
     updateConfig,
-    getTheme
+    getTheme,
+    updateTheme
   };
 });
