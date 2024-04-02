@@ -3,22 +3,9 @@ import {computed, provide, ref} from "vue";
 import Header from "@/components/Header.vue";
 import {useAddressesStore} from "@/store/addresses";
 import {useUserStore} from "@/store/user";
-import {useConfigStore} from "@/store/config.ts";
 
 const addressesStore = useAddressesStore();
 const userStore = useUserStore();
-// const configStore = useConfigStore();
-// switch (configStore.getTheme()) {
-//   case "dark":
-//     import("@/style/dark.scss")
-//     break;
-//   case "light":
-//     import("@/style/light.scss")
-//     break;
-//   default:
-//     import("@/style/light.scss")
-//     break;
-// }
 
 const isLoaded = computed(() => userStore.isLoaded && addressesStore.isLoaded);
 

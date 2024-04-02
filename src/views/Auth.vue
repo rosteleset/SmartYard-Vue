@@ -58,7 +58,7 @@ onMounted(validate);
     />
     <Button
       v-if="status"
-      :variant="status === 'Valid token' ? 'sucesses' : 'error'"
+      :variant="status === 'Valid token' ? 'success' : 'error'"
       >{{ status }}</Button
     >
     <Button v-if="status === 'Valid token'" @click="handler" variant="primary"

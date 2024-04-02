@@ -1,4 +1,4 @@
-import {computed, Ref} from "vue";
+import {Ref} from "vue";
 import {Event, EventDay} from "../types/events";
 import useApi from "./useApi";
 
