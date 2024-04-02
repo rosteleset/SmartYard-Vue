@@ -1,20 +1,35 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { useConfigStore } from "@/store/config";
-import { Camera } from "@/types/camera";
-import { Player, PlayerFactory } from "rbt-player/dist/player";
+import {onMounted, ref, StyleValue} from "vue";
+import {useConfigStore} from "@/store/config";
+import {Camera} from "@/types/camera";
+import {Player, PlayerFactory} from "rbt-player/dist/player";
 import VideoModal from "@/components/VideoModal.vue";
-import { onUnmounted } from "vue";
+import {onUnmounted} from "vue";
 
-const { camera, index } = defineProps<{ camera: Camera; index?: number }>();
-const { config } = useConfigStore();
+const {camera, index} = defineProps<{ camera: Camera; index?: number }>();
+const {config} = useConfigStore();
 const player = ref<Player>();
 const previewContainer = ref<HTMLVideoElement>();
 const previewElement = ref<HTMLVideoElement>();
 const videoElement = ref<HTMLVideoElement>();
 const isOpen = ref(false);
+const styles = ref<StyleValue>();
+// const openHandler = () => (isOpen.value = true);
 
-const openHandler = () => (isOpen.value = true);
+const openHandler = () => {
+  console.log("open")
+  if (previewContainer.value && previewElement.value) {
+    const rect = previewContainer.value.getBoundingClientRect();
+    styles.value = {
+      top: `${rect?.top}px`,
+      left: `${rect?.left}px`,
+      width: `${rect?.width}px`,
+      height: `${rect?.height}px`,
+    };
+    console.log(styles.value)
+    isOpen.value = true;
+  }
+}
 const closeHandler = () => (isOpen.value = false);
 
 onMounted(() => {
@@ -31,33 +46,33 @@ onMounted(() => {
     }
   }
 });
-onUnmounted(()=>{
+onUnmounted(() => {
   player.value?.onDestroy()
 })
 </script>
 
 <template>
   <div
-    v-if="camera.url"
-    ref="previewContainer"
-    class="video"
-    :id="`camera-${camera.id}`"
+      v-if="camera.url"
+      ref="previewContainer"
+      class="video"
+      :id="`camera-${camera.id}`"
   >
     <video
-      autoplay
-      ref="previewElement"
-      class="video__preview"
-      v-on:click="openHandler"
+        autoplay
+        ref="previewElement"
+        class="video__preview"
+        v-on:click="openHandler"
     />
     <video
-      muted
-      ref="videoElement"
-      class="video__player"
-      v-on:click="openHandler"
+        muted
+        ref="videoElement"
+        class="video__player"
+        v-on:click="openHandler"
     />
     <div v-if="index" class="number">{{ index }}</div>
 
-    <VideoModal v-if="isOpen" :camera="camera" @on-close="closeHandler" />
+    <VideoModal v-if="isOpen" :camera="camera" @on-close="closeHandler" :styles="styles"/>
   </div>
 </template>
 
@@ -85,6 +100,7 @@ onUnmounted(()=>{
     height: 100%;
     object-fit: cover;
     z-index: 0;
+
     &.active {
       z-index: 2;
     }

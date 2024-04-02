@@ -14,6 +14,7 @@ import {
     mockGetPlogDays,
     mockGetSettingsList,
 } from "../src/stories/__fakeData";
+
 import "dayjs/locale/en";
 import "dayjs/locale/ru";
 import {useConfigStore} from "../src/store/config";
