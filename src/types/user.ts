@@ -14,7 +14,7 @@ export interface Client {
   flatOwner?: SettingsBoolean;
   contractOwner?: SettingsBoolean;
   hasGates?: SettingsBoolean;
-  houseId?: string;
+  houseId: string;
   flatId: string;
   flatNumber?: string;
   hasPlog?: SettingsBoolean;
