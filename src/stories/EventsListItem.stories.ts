@@ -3,7 +3,7 @@ import { Event } from "@/types/events";
 import type { Meta, StoryObj } from "@storybook/vue3";
 
 const meta = {
-  title: "EventsListItem",
+  title: "Events List Item",
   component: EventsListItem,
   tags: ["autodocs"],
   args: {

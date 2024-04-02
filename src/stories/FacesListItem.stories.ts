@@ -1,9 +1,8 @@
 import FacesListItem from "@/components/FacesListItem.vue";
-import { Face } from "@/types/faces";
-import type { Meta, StoryObj } from "@storybook/vue3";
+import type {Meta, StoryObj} from "@storybook/vue3";
 
 const meta = {
-  title: "FacesListItem",
+  title: "Faces List Item",
   component: FacesListItem,
   tags: ["autodocs"],
 

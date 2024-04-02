@@ -1,13 +1,12 @@
 import EventsList from "@/components/EventsList.vue";
 import type { Meta, StoryObj } from "@storybook/vue3";
-import { fakeClients, mockGetPlog, mockGetPlogDays } from "./fakeData";
+import { fakeClients, mockGetPlog, mockGetPlogDays } from "./__fakeData.ts";
 
 const meta = {
-  title: "EventsList",
+  title: "Events List",
   component: EventsList,
   tags: ["autodocs"],
   parameters: {
-    mockData: [mockGetPlogDays,mockGetPlog],
   },
   args: {
     clients: [fakeClients[0]],

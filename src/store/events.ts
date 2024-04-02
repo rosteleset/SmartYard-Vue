@@ -1,16 +1,13 @@
-import { defineStore } from "pinia";
+import {defineStore} from "pinia";
 import useApi from "@/hooks/useApi.ts";
-import { Ref, computed, onMounted, ref, watch } from "vue";
-import { EventDay, Event } from "@/types/events.ts";
-import { asyncComputed } from "@vueuse/core";
-import { error } from "console";
-import dayjs from "dayjs";
-import { useUserStore } from "./user";
+import {ref, watch} from "vue";
+import {Event, EventDay} from "@/types/events.ts";
+import {useUserStore} from "./user";
 
 export const useEventsStore = defineStore("events", () => {
   const { get } = useApi();
   const { clients } = useUserStore();
-  const flatIds = ref<string[]>(clients.map((client) => client.flatId));
+  const flatIds = ref<string[]>(clients.map((client) => client.flatId)|| []);
   const eventTypes = ref<string[]>([]);
   const days = ref<EventDay[]>([]);
 

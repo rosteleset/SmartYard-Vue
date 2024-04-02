@@ -2,7 +2,7 @@ import FacesList from "@/components/FacesList.vue";
 import type { Meta, StoryObj } from "@storybook/vue3";
 
 const meta = {
-  title: "FacesList",
+  title: "Faces List",
   component: FacesList,
   tags: ["autodocs"],
   

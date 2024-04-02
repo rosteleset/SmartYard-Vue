@@ -1,5 +1,6 @@
 import { Building } from "@/types/building";
 import { Client } from "@/types/user";
+import {Camera} from "@/types/camera.ts";
 
 const SERVER_URL =
   import.meta.env.MODE === "development" &&
@@ -54,7 +55,7 @@ export const fakeClients: Client[] = [
   {
     address:
       "ул. Главная, дом 1, квартира 1",
-    houseId: "10",
+    houseId: "1",
     flatId: "1",
     flatNumber: "2",
     flatOwner: "f",
@@ -67,7 +68,7 @@ export const fakeClients: Client[] = [
   {
     address:
       "ул. Главная, дом 1, квартира 2",
-    houseId: "10",
+    houseId: "1",
     flatId: "2",
     flatNumber: "2",
     flatOwner: "f",
@@ -77,6 +78,42 @@ export const fakeClients: Client[] = [
     contractOwner: "f",
     roommates: [],
   },
+];
+
+export const fakeCameras: Camera[] = [
+  {
+    id: 1,
+    name: "Камера беварда",
+    lat: "52.77087",
+    url: "https://rbt-demo.lanta.me:8443/fail",
+    token: "phei9quohmoochoth5es3eo9Koh5ua9i",
+    lon: "41.404396",
+    serverType: "flussonic",
+    hasSound: true,
+    hlsMode: "mpegts"
+  },
+  {
+    id: 2,
+    name: "Камера беварда",
+    lat: "52.77087",
+    url: "https://rbt-demo.lanta.me:8443/fail",
+    token: "phei9quohmoochoth5es3eo9Koh5ua9i",
+    lon: "41.404396",
+    serverType: "flussonic",
+    hasSound: true,
+    hlsMode: "mpegts"
+  },
+  {
+    id: 3,
+    name: "Камера беварда",
+    lat: "52.77087",
+    url: "https://rbt-demo.lanta.me:8443/fail",
+    token: "phei9quohmoochoth5es3eo9Koh5ua9i",
+    lon: "41.404396",
+    serverType: "flussonic",
+    hasSound: true,
+    hlsMode: "mpegts"
+  }
 ];
 
 export const mockGetAddressList = {
@@ -180,5 +217,14 @@ export const mockGetPlog = {
         preview: "https://placehold.co/100x100",
       },
     ],
+  },
+};
+
+export const mockGetCameras = {
+  url: `${SERVER_URL}/cctv/all`,
+  method: "POST",
+  status: 200,
+  response: {
+    data: fakeCameras
   },
 };

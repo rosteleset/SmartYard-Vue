@@ -3,19 +3,23 @@ import {setup} from "@storybook/vue3";
 import store from "../src/store";
 import i18n from "../src/i18n";
 import '@/style/style.scss'
-import {mockGetAddressList, mockGetName, mockGetNotification, mockGetSettingsList,} from "../src/stories/fakeData";
+import {
+    fakeAddresses,
+    fakeClients,
+    mockGetAddressList, mockGetCameras,
+    mockGetName,
+    mockGetNotification, mockGetPlog,
+    mockGetPlogDays,
+    mockGetSettingsList,
+} from "../src/stories/__fakeData";
 import "dayjs/locale/en";
 import "dayjs/locale/ru";
 import {useConfigStore} from "../src/store/config";
 import {addons} from "@storybook/addons";
+import {useUserStore} from "../src/store/user";
+import {useAddressesStore} from "../src/store/addresses";
+import {useEventsStore} from "../src/store/events";
 
-store.state.value = {
-    ...store.state.value,
-    events: {
-        ...store.state.value["events"],
-        ...{flatIds: ["1", "2"], eventTypes: []},
-    },
-};
 
 setup((app) => {
     app.use(store);
@@ -23,6 +27,21 @@ setup((app) => {
     app.mixin({
         /* My mixin */
     });
+    useEventsStore()
+    store.state.value = {
+        ...store.state.value,
+        user: {
+            ...store.state.value["user"],
+            ...{clients: fakeClients},
+        },
+        addresses: {
+            addresses: fakeAddresses
+        },
+        events: {
+            flatIds: ["1", "2"],
+            eventTypes:[]
+        }
+    };
 });
 
 let channel = addons.getChannel();
@@ -54,18 +73,23 @@ const preview: Preview = {
                 mockGetSettingsList,
                 mockGetNotification,
                 mockGetName,
+                mockGetPlogDays,
+                mockGetPlog,
+                mockGetCameras
             ],
         },
     },
     decorators: [
         (story, context) => {
+            // await new Promise((resolve) => setTimeout(resolve, 1000));
+
 
             if (context.globals.locale)
                 i18n.global.locale.value = context.globals.locale;
             const configStore = useConfigStore()
             // if (context.globals.backgrounds) {
-                const theme = context.parameters.backgrounds.values.find(background => background.value === context.globals.backgrounds?.value)?.name || "light";
-                configStore.updateConfig({theme})
+            const theme = context.parameters.backgrounds.values.find(background => background.value === context.globals.backgrounds?.value)?.name || "light";
+            configStore.updateConfig({theme})
             // }
             return {
                 components: {story},

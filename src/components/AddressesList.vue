@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { useAddressesStore } from "@/store/addresses";
-import Address from "@/components/Address.vue";
+import {useAddressesStore} from "@/store/addresses";
+import AddressesListItem from "@/components/AddressesListItem.vue";
 
 const { addresses } = useAddressesStore();
 </script>
 
 <template>
-  <Address
+  <AddressesListItem
     v-for="item in addresses"
     :key="item.houseId"
-    :houseId="item.houseId"
+    :building="item"
   />
 </template>
 
