@@ -7,7 +7,6 @@ import {mockGetAddressList, mockGetName, mockGetNotification, mockGetSettingsLis
 import "dayjs/locale/en";
 import "dayjs/locale/ru";
 import {useConfigStore} from "../src/store/config";
-import {UPDATE_GLOBALS, STORY_ARGS_UPDATED, SET_GLOBALS} from "@storybook/core-events";
 import {addons} from "@storybook/addons";
 
 store.state.value = {
@@ -56,8 +55,7 @@ const preview: Preview = {
                 mockGetNotification,
                 mockGetName,
             ],
-            refreshStoryOnUpdate: true,
-            disableUsingOriginal: false,
+            disable:false,
         },
     },
     decorators: [
@@ -65,12 +63,11 @@ const preview: Preview = {
 
             if (context.globals.locale)
                 i18n.global.locale.value = context.globals.locale;
-            const theme = context.parameters.backgrounds.values.find(background => background.value === context.globals.backgrounds.value)?.name || "light";
-
             const configStore = useConfigStore()
-
-            configStore.updateConfig({theme})
-
+            // if (context.globals.backgrounds) {
+                const theme = context.parameters.backgrounds.values.find(background => background.value === context.globals.backgrounds?.value)?.name || "light";
+                configStore.updateConfig({theme})
+            // }
             return {
                 components: {story},
                 template: `
