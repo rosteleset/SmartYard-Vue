@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { label } = defineProps<{
+const {label} = defineProps<{
   label?: string;
   justify?: string;
 }>();
@@ -11,7 +11,7 @@ const model = defineModel<boolean>();
   <div class="toggle-switch__container" :style="justify && { justifyContent: justify }">
     <div v-if="label" class="toggle-switch__label">{{ label }}</div>
     <label class="toggle-switch" :class="{ 'toggle-switch--checked': model }">
-      <input type="checkbox" v-model="model" />
+      <input type="checkbox" v-model="model"/>
       <span class="toggle-switch__slider"></span>
     </label>
   </div>

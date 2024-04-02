@@ -1,6 +1,5 @@
 import Button from "@/components/Button.vue";
 import type {Meta, StoryObj} from "@storybook/vue3";
-import {fn} from "@storybook/test";
 
 const meta = {
     title: "Button",
@@ -13,9 +12,9 @@ const meta = {
     },
     args: {
         variant: "primary",
-        onClick:fn(),
         default: "Button",
     },
+
 } satisfies Meta<typeof Button>;
 
 export default meta;

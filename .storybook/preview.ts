@@ -55,7 +55,6 @@ const preview: Preview = {
                 mockGetNotification,
                 mockGetName,
             ],
-            disable:false,
         },
     },
     decorators: [
