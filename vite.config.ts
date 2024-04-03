@@ -2,6 +2,7 @@ import { ProxyOptions, defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import svgLoader from 'vite-svg-loader'
 import { fileURLToPath } from "url";
+import {VitePWA} from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -22,7 +23,7 @@ export default defineConfig(({ mode }) => {
     };
 
   return {
-    plugins: [vue(), svgLoader()],
+    plugins: [vue(),VitePWA(), svgLoader()],
     base: BASE_PATH,
     resolve: {
       alias: [
