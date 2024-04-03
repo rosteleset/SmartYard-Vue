@@ -17,27 +17,27 @@ Smartyard Web - это веб-приложение, построенное с и
 
 1. Склонируйте репозиторий:
 
-```
-https://github.com/rosteleset/SmartYard-Vue.git
-```
+   ```
+   https://github.com/rosteleset/SmartYard-Vue.git
+   ```
 
 2. Перейдите в директорию проекта:
 
-```
-cd SmartYard-Web
-```
+   ```
+   cd SmartYard-Web
+   ```
 
 3. Установите зависимости, используя npm или yarn:
 
-```
-npm install
-```
+   ```
+   npm install
+   ```
 
-или
-
-```
-yarn
-```
+   или
+   
+   ```
+   yarn
+   ```
 
 ## Использование
 

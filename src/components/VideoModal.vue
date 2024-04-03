@@ -26,7 +26,7 @@ const videoContainer = ref<HTMLDivElement | null>(null);
 const currentRange = ref<FormatedRange>();
 const styles = ref<StyleValue>();
 
-const {videoStyles} = useZoom(videoElement)
+const {onDrag, videoStyles} = useZoom(videoElement)
 
 
 const resize = () => {
@@ -38,13 +38,17 @@ const onCanPlay = () => {
   resize();
 };
 
+const playPause = () => {
+  if (!onDrag.value) videoElement.value?.paused ? player.value?.play() : player.value?.pause();
+}
+
 watch(currentRange, () => {
   player.value?.generateStream(
       currentRange.value?.from,
       currentRange.value?.duration
   );
 });
-// https://fl3.lanta.me:8443/121358/index.m3u8?token=8f30fc67f68ad45736731f506b132f958c602b8a-a42fbd07119abae9db209f7da788e4b1-1711548677-1711537877
+
 onMounted(() => {
   document.body.classList.add("scroll-block");
 
@@ -66,20 +70,21 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <div class="video-wrap" v-on:click="emit('onClose')">
+  <div class="video-wrap" v-on:mousedown="emit('onClose')">
     <div
         ref="videoContainer"
         class="video-container"
         :style="styles || props.styles"
-        @click.stop
+        @mousedown.stop
     >
-      <video ref="previewElement" class="video-preview" v-on:canplay="onCanPlay" />
+      <video ref="previewElement" class="video-preview" v-on:canplay="onCanPlay"/>
 
       <video
           ref="videoElement"
           class="video-element"
-          v-on:canplay="onCanPlay"
           :style="videoStyles"
+          v-on:canplay="onCanPlay"
+          @click="playPause"
       />
       <CustomControls
           v-if="videoElement && currentRange"
