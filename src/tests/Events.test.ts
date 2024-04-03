@@ -16,12 +16,14 @@ vi.mock("../store/addresses", () => ({
     getClientsByHouseId: () => ref([{} as Client]),
   }),
 }));
-vi.mock("../hooks/locale", () => ({
-  useLocale: () => ({
-    localizedDayjs: { value: dayjs },
-    t: mockTFunction,
-  }),
-}));
+vi.mock("@/hooks/useLocale", () => {
+  return {
+    default: () => ({
+      localizedDayjs: {value: dayjs},
+      t: mockTFunction
+    })
+  }
+});
 vi.mock("../hooks/events", () => ({
   useEvents: () => ({
     events: [],
@@ -41,5 +43,6 @@ test("Component renders correctly", async () => {
     },
   });
 
-  expect(wrapper.find(".events__list").exists()).toBe(true);
+  expect(wrapper.find(".label").exists()).toBe(true);
+  expect(wrapper.find(".events__list").exists()).toBe(false);
 });

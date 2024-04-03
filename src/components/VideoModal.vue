@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Player, PlayerFactory} from "rbt-player/dist";
+import {Player, PlayerFactory} from "rbt-player/dist/player";
 import {StyleValue, onMounted, onUnmounted, ref, watch} from "vue";
 import ArrowIcon from "@/assets/arrowRight.svg?component";
 import useZoom from "@/hooks/useZoom";
@@ -73,7 +73,7 @@ onUnmounted(() => {
         :style="styles || props.styles"
         @click.stop
     >
-      <video ref="previewElement" class="video-preview" v-on:canplay="onCanPlay"/>
+      <video ref="previewElement" class="video-preview" v-on:canplay="onCanPlay" />
 
       <video
           ref="videoElement"

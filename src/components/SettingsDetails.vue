@@ -43,6 +43,7 @@ const updateNames = async () => {
   input {
     padding: 12px;
     border: solid 1px #f0f0f1;
+    border-radius: 6px;
     &:focus {
       outline: solid 1px #298bff;
     }
