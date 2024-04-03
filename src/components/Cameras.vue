@@ -8,7 +8,6 @@ import Map from "@/components/Map.vue";
 import {useConfigStore} from "@/store/config";
 import CamerasList from "@/components/CamerasList.vue";
 
-console.log(typeof CameraIcon);
 const { houseId } = defineProps<{
   houseId?: string;
   compact?: boolean;

@@ -3,6 +3,8 @@ import {computed, provide, ref} from "vue";
 import Header from "@/components/Header.vue";
 import {useAddressesStore} from "@/store/addresses";
 import {useUserStore} from "@/store/user";
+import {initializeApp} from "firebase/app";
+import {getMessaging, onMessage, getToken} from "firebase/messaging";
 
 const addressesStore = useAddressesStore();
 const userStore = useUserStore();
@@ -12,6 +14,25 @@ const isLoaded = computed(() => userStore.isLoaded && addressesStore.isLoaded);
 const isMenuOpen = ref(false);
 provide("isMenuOpen", isMenuOpen);
 
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAFkbkOT0gId8ZVh44nSBVpkMeQQbCN6oc",
+  authDomain: "rosteleset-d38e1.firebaseapp.com",
+  projectId: "rosteleset-d38e1",
+  storageBucket: "rosteleset-d38e1.appspot.com",
+  messagingSenderId: "13160569054",
+  appId: "1:13160569054:web:c6bbb75e09b56844078a4f"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+onMessage(messaging, (payload) => {
+  console.log('Message received. ', payload);
+});
+console.log(app)
+getToken(messaging, {vapidKey: "BNCFz9Y0C8bn6siEF-_Mu2CrdITso6rWKLXhF30yh2aa8vFkNp8dgmSfe6n5nq3ORPoynmH3kQuAKJC-KKy7rIc"})
+.then(r=>console.log(r))
 </script>
 
 <template>
