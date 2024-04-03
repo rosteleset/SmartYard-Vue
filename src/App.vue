@@ -3,6 +3,7 @@ import {computed, provide, ref} from "vue";
 import Header from "@/components/Header.vue";
 import {useAddressesStore} from "@/store/addresses";
 import {useUserStore} from "@/store/user";
+import {getFirebaseToken} from "@/firebase.ts";
 
 const addressesStore = useAddressesStore();
 const userStore = useUserStore();
@@ -12,6 +13,7 @@ const isLoaded = computed(() => userStore.isLoaded && addressesStore.isLoaded);
 const isMenuOpen = ref(false);
 provide("isMenuOpen", isMenuOpen);
 
+getFirebaseToken().then((token) => console.log(token));
 </script>
 
 <template>
