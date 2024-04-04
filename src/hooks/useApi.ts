@@ -39,6 +39,7 @@ const useApi = () => {
     try {
       const body = JSON.stringify(params);
       const response = await axiosInstance.value.post(path, body);
+      console.log(response)
       return response.data.data;
     } catch (error: any) {
       console.error("Ошибка во время запроса", error.message);

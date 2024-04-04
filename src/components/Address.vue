@@ -19,8 +19,8 @@ provide("houseId", building.houseId);
   <div class="address__doors">
     <Door v-for="door in building.doors" :key="door.doorId" :data="door"/>
   </div>
-  <Cameras :houseId="building.houseId" compact/>
-  <Events :houseId="building.houseId" compact/>
+  <Cameras :houseId="building.houseId"/>
+  <Events :houseId="building.houseId" />
 
 </template>
 
