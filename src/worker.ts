@@ -15,5 +15,9 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 const messaging = getMessaging(firebaseApp);
 
+onMessage(messaging, (payload) => {
+    console.log('0 Message received. ', payload);
+});
+
 console.log("kok");
 

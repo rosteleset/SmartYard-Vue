@@ -23,19 +23,19 @@ const firebaseConfig = {
   projectId: "rosteleset-d38e1",
   storageBucket: "rosteleset-d38e1.appspot.com",
   messagingSenderId: "13160569054",
-  appId: "1:13160569054:web:c6bbb75e09b56844078a4f",
+  appId: "1:13160569054:web:c6bbb75e09b56844078a4f"
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
 
 const messaging = getMessaging(firebaseApp);
-// navigator.serviceWorker.getRegistration().then((registration) => {
-//   getToken(messaging, {
-//     vapidKey: "BNCFz9Y0C8bn6siEF-_Mu2CrdITso6rWKLXhF30yh2aa8vFkNp8dgmSfe6n5nq3ORPoynmH3kQuAKJC-KKy7rIc",
-//     serviceWorkerRegistration: registration
-//   })
-//       .then(r => console.log(r))
-// })
+navigator.serviceWorker.getRegistration().then((registration) => {
+  getToken(messaging, {
+    vapidKey: "BHaq4kHRwVnOBHflKbtFZiR62afSwimSy3lOMYQ68zg_Ormar4OERaRhWa2NnW5eHD0fPJDn2p7VI93iZn5ECjI",
+    serviceWorkerRegistration: registration
+  })
+      .then(r => console.log(r))
+})
 
 onMessage(messaging, (payload) => {
   console.log('Message received. ', payload);

@@ -13,7 +13,6 @@ export const useAddressesStore = defineStore("addresses", () => {
   const load = () => {
     get<Building[]>("address/getAddressList")
       .then((response) => {
-        console.log(response)
         addresses.value = response;
         isLoaded.value = true;
       })
