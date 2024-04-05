@@ -31,6 +31,13 @@ onBackgroundMessage(messaging, (payload) => {
     }
 
     if (server) {
+        const title =  "Вызов";
+        return self.registration.showNotification(title, {
+            badge: payload.data?.badge,
+            body: payload.data?.callerId,
+            icon: `https://rbt-demo.lanta.me/mobile/call/camshot/${payload.data?.hash}`,
+            data: payload
+        })
 
     }
 });

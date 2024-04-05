@@ -1,29 +1,49 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
 import {computed} from "vue";
+import {Inviter, SessionState, SIPExtension, UserAgent} from "sip.js";
+import {Web} from "sip.js";
+
+// Helper function to get an HTML audio element
+function getAudioElement(id: string): HTMLAudioElement {
+  const el = document.getElementById(id);
+  if (!(el instanceof HTMLAudioElement)) {
+    throw new Error(`Element "${id}" not found or not an audio element.`);
+  }
+  return el;
+}
+
+// Options for SimpleUser
+const options: Web.SimpleUserOptions = {
+  aor: "sip:alice@example.com", // caller
+  media: {
+    constraints: {audio: true, video: true}, // audio only call
+    // remote: {audio: getAudioElement("remoteAudio")} // play remote audio
+  }
+};
+
 
 const router = useRouter()
 const query = computed(() => router.currentRoute.value.query)
-const image = computed(() => `https://rbt-demo.lanta.me/call/camshot/${query.value.hash}`)
+const image = computed(() => `https://rbt-demo.lanta.me/mobile/call/camshot/${query.value.hash}`)
 
+// WebSocket server to connect with
+const server = `wss://${query.value.server}:${query.value.port}`;
 
-var socket = new JsSIP.WebSocketInterface('wss://your-asterisk-server-ip:8089/ws');
-var configuration = {
-  sockets: [socket],
-  uri: 'sip:2000002848@your-asterisk-server-ip',
-  authorization_user: '2000002848',
-  password: '14b4fef2ee59cf08d5501c64c46a8b7d',
-  register: true,
-  session_timers: false,
-  no_answer_timeout: 60,
-  stun_servers: ['stun:stun.l.google.com:19302']
-};
+// Construct a SimpleUser instance
+const simpleUser = new Web.SimpleUser(server, options);
 
+// Connect to server and place call
+simpleUser.connect()
+    .then(() => simpleUser.call(`sip:${query.value.extension}`))
+    .catch((error: Error) => {
+      console.log(error.message)
+    });
 
 </script>
 
 <template>
-  <h1>Вызов {{query.callerId}}</h1>
+  <h1>Вызов {{ query.callerId }}</h1>
   <img :src="image" alt="call"/>
 </template>
 
