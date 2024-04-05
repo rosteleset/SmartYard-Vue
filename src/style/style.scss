@@ -14,7 +14,7 @@ html[data-theme="light"] {
 }
 
 html[data-theme="dark"] {
-  $second-background :transparentize($offWhite, 0.9);
+  $second-background :lighten($darkBlue, 5);
   $gradient1: darken($color: #4da6f9, $amount: 20);
   $gradient2:darken($color: #084eb6, $amount: 20);
   --theme:"dark";

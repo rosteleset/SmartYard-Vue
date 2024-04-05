@@ -6,6 +6,7 @@ import {useUserStore} from "@/store/user";
 import {useRegisterSW} from 'virtual:pwa-register/vue'
 import {initializeApp} from "firebase/app";
 import {getMessaging, getToken,onMessage} from "firebase/messaging";
+import Push from "@/components/Push.vue";
 
 const addressesStore = useAddressesStore();
 const userStore = useUserStore();
@@ -15,37 +16,11 @@ const isLoaded = computed(() => userStore.isLoaded && addressesStore.isLoaded);
 const isMenuOpen = ref(false);
 provide("isMenuOpen", isMenuOpen);
 
-
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAFkbkOT0gId8ZVh44nSBVpkMeQQbCN6oc",
-  authDomain: "rosteleset-d38e1.firebaseapp.com",
-  projectId: "rosteleset-d38e1",
-  storageBucket: "rosteleset-d38e1.appspot.com",
-  messagingSenderId: "13160569054",
-  appId: "1:13160569054:web:c6bbb75e09b56844078a4f"
-};
-
-const firebaseApp = initializeApp(firebaseConfig);
-
-const messaging = getMessaging(firebaseApp);
-navigator.serviceWorker.getRegistration().then((registration) => {
-  getToken(messaging, {
-    vapidKey: "BHaq4kHRwVnOBHflKbtFZiR62afSwimSy3lOMYQ68zg_Ormar4OERaRhWa2NnW5eHD0fPJDn2p7VI93iZn5ECjI",
-    serviceWorkerRegistration: registration
-  })
-      .then(r => console.log(r))
-})
-
-onMessage(messaging, (payload) => {
-  console.log('Message received. ', payload);
-});
-
-
 </script>
 
 <template>
   <Header/>
+  <Push />
   <router-view v-slot="{ Component }">
     <Transition name="route" mode="out-in">
       <div class="content" :key="$route.fullPath">

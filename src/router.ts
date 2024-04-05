@@ -62,6 +62,10 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/views/Faces.vue"),
     props: (route) => ({ flatId: route.params.flatId }),
   },
+  {
+    path: `/call`,
+    component: () => import("@/views/Call.vue"),
+  }
 ];
 
 const router = createRouter({
