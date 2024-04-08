@@ -4,12 +4,20 @@ import {onMounted, ref} from "vue";
 import {getFirebaseApp, getToken} from "@/firebase";
 import {useRegisterSW} from 'virtual:pwa-register/vue'
 import {useRouter} from "vue-router";
+import useApi from "@/hooks/useApi.ts";
 
+const {request} = useApi()
 const router = useRouter();
 const firebaseApp = getFirebaseApp();
 const messaging = getMessaging(firebaseApp);
 const messages = ref<MessagePayload[]>([])
-getToken().then(r => console.log(r))
+getToken().then(token => {
+  const storageToken = localStorage.getItem('push-token')
+  if (token !== storageToken) {
+    localStorage.setItem('push-token', token)
+    request('user/registerPushToken', {pushToken: token, platform: "android"})
+  }
+})
 
 const removeMessage = (message: MessagePayload) => {
   messages.value = messages.value.filter(m => m.messageId !== message.messageId)
