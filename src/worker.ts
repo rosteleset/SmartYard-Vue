@@ -11,7 +11,6 @@ onBackgroundMessage(messaging, (payload) => {
     console.log('[firebase-messaging-sw.js] Received background message ', payload);
     const action = payload.data?.action;
     const server = payload.data?.server;
-    console.log(1)
     switch (action) {
         case "inbox":
         case "videoReady":
@@ -43,7 +42,6 @@ onBackgroundMessage(messaging, (payload) => {
 });
 
 self.addEventListener('notificationclick', (event) => {
-    console.log(2)
     let url = 'http://localhost:5173/chat';
     event.notification.close(); // Android needs explicit close.
     event.waitUntil(

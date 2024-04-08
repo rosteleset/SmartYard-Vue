@@ -13,22 +13,22 @@ function getAudioElement(id: string): HTMLAudioElement {
   return el;
 }
 
+const router = useRouter()
+const query = computed(() => router.currentRoute.value.query)
+console.log(query)
+const image = computed(() => `https://rbt-demo.lanta.me/mobile/call/live/${query.value.hash}`)
+
+// WebSocket server to connect with
+const server = `wss://${query.value.server}/wss`;
+
 // Options for SimpleUser
 const options: Web.SimpleUserOptions = {
-  aor: "sip:alice@example.com", // caller
+  aor: `sip:${query.value.extension}@${query.value.server}`, // caller
   media: {
     constraints: {audio: true, video: true}, // audio only call
     // remote: {audio: getAudioElement("remoteAudio")} // play remote audio
   }
 };
-
-
-const router = useRouter()
-const query = computed(() => router.currentRoute.value.query)
-const image = computed(() => `https://rbt-demo.lanta.me/mobile/call/camshot/${query.value.hash}`)
-
-// WebSocket server to connect with
-const server = `wss://${query.value.server}:${query.value.port}`;
 
 // Construct a SimpleUser instance
 const simpleUser = new Web.SimpleUser(server, options);
@@ -44,9 +44,15 @@ simpleUser.connect()
 
 <template>
   <h1>Вызов {{ query.callerId }}</h1>
-  <img :src="image" alt="call"/>
+  <img :src="image" alt="call" class="image"/>
+  <video class="video" />
 </template>
 
 <style scoped lang="scss">
-
+.image {
+  width: 300px;
+}
+.video {
+  width: 300px;
+}
 </style>
