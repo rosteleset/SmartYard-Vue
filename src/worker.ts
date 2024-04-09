@@ -1,7 +1,12 @@
-export type {};
-declare const self: ServiceWorkerGlobalScope;
-import {getMessaging, onBackgroundMessage} from "firebase/messaging/sw";
-import {getFirebaseApp} from "@/firebase";
+import { precacheAndRoute } from 'workbox-precaching'
+
+declare let self: ServiceWorkerGlobalScope
+
+precacheAndRoute(self.__WB_MANIFEST)
+
+import {getMessaging, onBackgroundMessage,} from "firebase/messaging/sw";
+import { getFirebaseApp } from './firebase';
+
 
 const firebaseApp = getFirebaseApp();
 
@@ -30,7 +35,7 @@ onBackgroundMessage(messaging, (payload) => {
     }
 
     if (server) {
-        const title =  "Вызов";
+        const title =  "call";
         return self.registration.showNotification(title, {
             badge: payload.data?.badge,
             body: payload.data?.callerId,
@@ -66,6 +71,6 @@ self.addEventListener('notificationclick', (event) => {
 });
 
 
-console.log("worker ok");
+console.log("worker ok 2");
 
 

@@ -3,9 +3,6 @@ import {computed, provide, ref} from "vue";
 import Header from "@/components/Header.vue";
 import {useAddressesStore} from "@/store/addresses";
 import {useUserStore} from "@/store/user";
-import {useRegisterSW} from 'virtual:pwa-register/vue'
-import {initializeApp} from "firebase/app";
-import {getMessaging, getToken,onMessage} from "firebase/messaging";
 import Push from "@/components/Push.vue";
 
 const addressesStore = useAddressesStore();

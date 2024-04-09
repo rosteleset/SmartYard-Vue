@@ -37,7 +37,7 @@ export default defineConfig(({ mode }) => {
 
                 devOptions: {
                     enabled: true,
-                    type: "module"
+                    type: "module",
                 },
             }),
             svgLoader()

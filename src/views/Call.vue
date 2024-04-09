@@ -1,119 +1,76 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
 import {computed, ref} from "vue";
-import {
-  Invitation, InvitationAcceptOptions,
-  Inviter, Referral,
-  Registerer,
-  RegistererOptions, Session,
-  SessionState,
-  SIPExtension,
-  UserAgent,
-  UserAgentOptions
-} from "sip.js";
-import {SimpleUser, SimpleUserOptions} from "sip.js/lib/platform/web";
+import {debug, UA, WebSocketInterface} from "jssip";
+import {IncomingRTCSessionEvent, UAConfiguration} from "jssip/lib/UA";
+import {AnswerOptions} from "jssip/lib/RTCSession";
 
 const video = ref<HTMLVideoElement>()
 const audio = ref<HTMLVideoElement>()
 
 const router = useRouter()
-const query = computed(() => router.currentRoute.value.query)
+const {server, extension, pass, callerId, hash, stun} = router.currentRoute.value.query
 
-console.log(query.value)
-const image = computed(() => `https://rbt-demo.lanta.me/mobile/call/live/${query.value.hash}`)
+const image = computed(() => `https://rbt-demo.lanta.me/mobile/call/live/${hash}`)
 
-const options: SimpleUserOptions = {
-  aor: `sip:${query.value.extension}@${query.value.server}`,
-  userAgentOptions: {
-    authorizationPassword: query.value.pass?.toString(),
-    logLevel: "error",
-    delegate: {
-      onInvite: (inv) => {
-        console.log(inv)
-        inv.accept()
-      }
-    }
-  },
-  media: {
-    remote: {
-      audio: audio.value,
-    }
-  }
+debug.enable('JsSIP:*')
+
+const socket = new WebSocketInterface(`wss://${server}/wss`);
+const configuration: UAConfiguration = {
+  sockets: [socket],
+  uri: `sip:${extension}@${server}`,
+  password: pass?.toString(),
 };
 
+navigator.mediaDevices.getUserMedia({video: false, audio: true})
+    .then(stream => {
+      const userAgent = new UA(configuration);
 
-const simpleUser = new SimpleUser(`wss://${query.value.server}/wss`, options);
+      userAgent.start();
 
-// Supply delegate to handle inbound calls (optional)
-simpleUser.delegate = {
-  onCallReceived: async () => {
-    console.log("received call")
-    await simpleUser.answer();
-  }
-};
+      const options: AnswerOptions = {
+        'mediaConstraints': {'audio': true, 'video': false},
+        mediaStream: stream,
+        pcConfig: {
+          iceServers: [{urls: stun?.toString() || "stun:stun.l.google.com:19302"}]
+        }
+      };
 
-// Connect to server
-await simpleUser.connect().then(() => console.log("Connected"));
-// Register to receive inbound calls (optional)
-await simpleUser.register().then(() => console.log("Registered"));
+      userAgent.on('newRTCSession', (event: IncomingRTCSessionEvent) => {
+        const session = event.session;
 
-console.log(simpleUser)
+        if (session.direction === "incoming") {
+          session.answer(options)
+          // incoming call here
+          session.on("accepted", function () {
+            // the call has answered
+            console.log(1)
+          });
+          session.on("confirmed", function () {
+            console.log(2)
+          });
+          session.on("ended", function () {
+            // the call has ended
+            console.log(3)
+          });
+          session.on("failed", function (e) {
+            // unable to establish the call
+            console.log(e)
+          });
 
-await simpleUser.call("sip:100002@rbt-demo.lanta.me");
+          // Reject call (or hang up it)
+          // session.terminate();
+        }
+      })
+    })
 
-// const onInvite = (invitation: Invitation) => {
-//   console.log(invitation)
-//   let constrainsDefault: MediaStreamConstraints = {
-//     audio: true,
-//     video: false,
-//   }
-//
-//   const options: InvitationAcceptOptions = {
-//     sessionDescriptionHandlerOptions: {
-//       constraints: constrainsDefault
-//     },
-//   }
-//   invitation.accept(options);
-// }
-//
-// // Create user agent instance (caller)
-// const userAgent = new UserAgent({
-//   uri: UserAgent.makeURI(`sip:${query.value.extension}@${query.value.server}`),
-//   authorizationUsername: query.value.extension?.toString(),
-//   authorizationPassword: query.value.pass?.toString(),
-//   logLevel: "error",
-//
-//   sessionDescriptionHandlerFactoryOptions: {
-//     iceGatheringTimeout: 500, //currently, the smallest allowed value
-//     peerConnectionConfiguration: {
-//       iceServers: [{urls: [query.value.stun?.toString()]}]
-//     }
-//   },
-//   transportOptions: {
-//     server: `wss://${query.value.server}/wss`
-//   },
-//   delegate: {
-//     onInvite
-//   }
-// });
-//
-// const registererOptions: RegistererOptions = { /* ... */};
-// const registerer = new Registerer(userAgent, registererOptions);
-//
-//
-// // Connect the user agent
-userAgent.start().then(() => {
 
-  registerer.register()
-  console.log("ok")
+// const session = userAgent.call('100002@rbt-demo.lanta.me', options);
 
-  console.log(userAgent)
-
-});
 </script>
 
 <template>
-  <h1>Вызов {{ query.callerId }}</h1>
+  <h1>Вызов {{ callerId }}</h1>
   <img :src="image" alt="call" class="image"/>
   <video ref="video" class="video"/>
   <audio ref="audio" class="audio"/>
