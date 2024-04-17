@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
 import {computed, ref} from "vue";
-import {debug, UA, WebSocketInterface} from "jssip";
-import {IncomingRTCSessionEvent, UAConfiguration} from "jssip/lib/UA";
-import {AnswerOptions} from "jssip/lib/RTCSession";
+import {Invitation, Inviter, UserAgent, UserAgentOptions} from "sip.js";
 
 const video = ref<HTMLVideoElement>()
 const audio = ref<HTMLVideoElement>()
@@ -13,65 +11,40 @@ const {server, extension, pass, callerId, hash, stun} = router.currentRoute.valu
 
 const image = computed(() => `https://rbt-demo.lanta.me/mobile/call/live/${hash}`)
 
-debug.enable('JsSIP:*')
+function onInvite(invitation: Invitation) {
+  invitation.accept();
+}
 
-const socket = new WebSocketInterface(`wss://${server}/wss`);
-const configuration: UAConfiguration = {
-  sockets: [socket],
-  uri: `sip:${extension}@${server}`,
-  password: pass?.toString(),
+const uri = UserAgent.makeURI("sip:4000000001@preyai.ddns.net");
+
+const transportOptions = {
+  server: "wss://preyai.ddns.net/wss"
 };
 
-navigator.mediaDevices.getUserMedia({video: false, audio: true})
-    .then(stream => {
-      const userAgent = new UA(configuration);
+const userAgentOptions: UserAgentOptions = {
+  authorizationPassword: '4000000001',
+  authorizationUsername: '4000000001',
+  delegate: {
+    onInvite
+  },
+  transportOptions,
+  uri
+};
 
-      userAgent.start();
+const userAgent = new UserAgent(userAgentOptions);
 
-      const options: AnswerOptions = {
-        'mediaConstraints': {'audio': true, 'video': false},
-        mediaStream: stream,
-        pcConfig: {
-          iceServers: [{urls: stun?.toString() || "stun:stun.l.google.com:19302"}]
-        }
-      };
-
-      userAgent.on('newRTCSession', (event: IncomingRTCSessionEvent) => {
-        const session = event.session;
-
-        if (session.direction === "incoming") {
-          session.answer(options)
-          // incoming call here
-          session.on("accepted", function () {
-            // the call has answered
-            console.log(1)
-          });
-          session.on("confirmed", function () {
-            console.log(2)
-          });
-          session.on("ended", function () {
-            // the call has ended
-            console.log(3)
-          });
-          session.on("failed", function (e) {
-            // unable to establish the call
-            console.log(e)
-          });
-
-          // Reject call (or hang up it)
-          // session.terminate();
-        }
-      })
-    })
-
-
-// const session = userAgent.call('100002@rbt-demo.lanta.me', options);
-
+userAgent.start().then(() => {
+  // const target = UserAgent.makeURI("sip:7000000000@preyai.ddns.net");
+  // if (target) {
+  //   const inviter = new Inviter(userAgent, target);
+  //   inviter.invite();
+  // }
+});
 </script>
 
 <template>
   <h1>Вызов {{ callerId }}</h1>
-  <img :src="image" alt="call" class="image"/>
+  <!--  <img :src="image" alt="call" class="image"/>-->
   <video ref="video" class="video"/>
   <audio ref="audio" class="audio"/>
 
