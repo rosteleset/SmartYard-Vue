@@ -2,9 +2,9 @@
 import {onMounted, ref, StyleValue} from "vue";
 import {useConfigStore} from "@/store/config";
 import {Camera} from "@/types/camera";
-import {Player, PlayerFactory} from "rbt-player/dist/player";
 import VideoModal from "@/components/VideoModal.vue";
 import {onUnmounted} from "vue";
+import {Player, PlayerFactory} from "rbt-player";
 
 const {camera, index} = defineProps<{ camera: Camera; index?: number }>();
 const {config} = useConfigStore();

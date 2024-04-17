@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Player, PlayerFactory} from "rbt-player/dist/player";
+import {Player, PlayerFactory, ZoomController} from "rbt-player";
 import {StyleValue, onMounted, onUnmounted, ref, watch} from "vue";
 import ArrowIcon from "@/assets/arrowRight.svg?component";
 import useZoom from "@/hooks/useZoom";
@@ -26,8 +26,8 @@ const videoContainer = ref<HTMLDivElement | null>(null);
 const currentRange = ref<FormatedRange>();
 const styles = ref<StyleValue>();
 
-const {onDrag, videoStyles} = useZoom(videoElement)
-
+// const {onDrag, videoStyles} = useZoom(videoElement)
+const z = ref<ZoomController>()
 
 const resize = () => {
   styles.value = player.value?.getSize();
@@ -39,7 +39,7 @@ const onCanPlay = () => {
 };
 
 const playPause = () => {
-  if (!onDrag.value) videoElement.value?.paused ? player.value?.play() : player.value?.pause();
+  if (!z.value?.isDragging) videoElement.value?.paused ? player.value?.play() : player.value?.pause();
 }
 
 watch(currentRange, () => {
@@ -59,6 +59,7 @@ onMounted(() => {
       previewElement: previewElement.value,
       autoplay: true,
     });
+    z.value = new ZoomController(videoElement.value)
     window.addEventListener("resize", resize);
   }
 
@@ -82,7 +83,6 @@ onUnmounted(() => {
       <video
           ref="videoElement"
           class="video-element"
-          :style="videoStyles"
           v-on:canplay="onCanPlay"
           @click="playPause"
       />
