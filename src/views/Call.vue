@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
 import {computed, ref} from "vue";
-import {Invitation, Inviter, Registerer, UserAgent, UserAgentOptions} from "sip.js";
+import {Invitation, Inviter, Registerer, Session, SessionState, UserAgent, UserAgentOptions} from "sip.js";
 import {SimpleUser} from "sip.js/lib/platform/web";
 
 const video = ref<HTMLVideoElement>()
@@ -11,6 +11,7 @@ const router = useRouter()
 const {server, extension, pass, callerId, hash, stun} = router.currentRoute.value.query
 
 const image = computed(() => `https://rbt-demo.lanta.me/mobile/call/live/${hash}`)
+
 
 
 const uri = UserAgent.makeURI(`sip:${extension}@${server}`);
@@ -23,7 +24,7 @@ const transportOptions = {
 const userAgentOptions: UserAgentOptions = {
   authorizationPassword: pass?.toString(),
   authorizationUsername: extension?.toString(),
-  logLevel: 'debug',
+  logLevel: 'error',
   transportOptions,
   uri,
 };
@@ -33,7 +34,12 @@ const registerer = new Registerer(userAgent);
 userAgent.delegate = {
   onInvite(invitation: Invitation): void {
     console.log("!!! invite", invitation)
-    invitation.accept();
+    invitation.accept({
+      sessionDescriptionHandlerOptions:{
+        constraints: { audio: false, video: false }
+      }
+    })
+    // invitation.reject();
   },
   onConnect() {
     console.log('!!! connect')
