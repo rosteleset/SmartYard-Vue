@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
 import {computed, ref} from "vue";
-import {Invitation, Inviter, UserAgent, UserAgentOptions} from "sip.js";
+import {Invitation, Inviter, Registerer, UserAgent, UserAgentOptions} from "sip.js";
 import {SimpleUser} from "sip.js/lib/platform/web";
 
 const video = ref<HTMLVideoElement>()
@@ -12,29 +12,28 @@ const {server, extension, pass, callerId, hash, stun} = router.currentRoute.valu
 
 const image = computed(() => `https://rbt-demo.lanta.me/mobile/call/live/${hash}`)
 
-function onInvite(invitation: Invitation) {
-  console.log("!!!!!!! invite")
-  invitation.accept();
-}
 
-const uri = UserAgent.makeURI(`sip:${extension}@preyai.ddns.net`);
+const uri = UserAgent.makeURI(`sip:${extension}@${server}`);
 
 const transportOptions = {
-  server: "wss://preyai.ddns.net/wss"
+  server: `wss://${server}/wss`,
+  stunServers: [stun?.toString() || "stun:stun.l.google.com:19302"]
 };
 
 const userAgentOptions: UserAgentOptions = {
   authorizationPassword: pass?.toString(),
   authorizationUsername: extension?.toString(),
-  logLevel: 'error',
+  logLevel: 'debug',
   transportOptions,
-  uri
+  uri,
 };
 
 const userAgent = new UserAgent(userAgentOptions);
+const registerer = new Registerer(userAgent);
 userAgent.delegate = {
   onInvite(invitation: Invitation): void {
     console.log("!!! invite", invitation)
+    invitation.accept();
   },
   onConnect() {
     console.log('!!! connect')
@@ -48,6 +47,7 @@ userAgent.delegate = {
 }
 userAgent.start().then(() => {
   console.log("!@!", userAgent)
+  registerer.register();
   // const target = UserAgent.makeURI("sip:7000000000@preyai.ddns.net");
   // if (target) {
   //   const inviter = new Inviter(userAgent, target);

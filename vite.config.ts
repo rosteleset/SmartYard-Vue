@@ -28,7 +28,6 @@ export default defineConfig(({ mode }) => {
             VitePWA({
                 strategies: 'injectManifest',
                 injectManifest: {
-                    rollupFormat: 'iife',
                 },
                 registerType: 'autoUpdate',
                 srcDir: 'src',
