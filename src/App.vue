@@ -17,7 +17,7 @@ provide("isMenuOpen", isMenuOpen);
 
 <template>
   <Header/>
-  <Push />
+  <Push v-if="userStore.isLoaded && !userStore.error"/>
   <router-view v-slot="{ Component }">
     <Transition name="route" mode="out-in">
       <div class="content" :key="$route.fullPath">

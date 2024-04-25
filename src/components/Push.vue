@@ -4,12 +4,15 @@ import {onMounted, ref} from "vue";
 import {getFirebaseApp, getToken} from "@/firebase";
 import {useRouter} from "vue-router";
 import useApi from "@/hooks/useApi.ts";
+import {useUserStore} from "@/store/user.ts";
+import CloseIcon from "@/assets/close.svg?component";
 
+const {} = useUserStore()
 const {request} = useApi()
 const router = useRouter();
 const firebaseApp = getFirebaseApp();
 const messaging = getMessaging(firebaseApp);
-const messages = ref<MessagePayload[]>([])
+const messages = ref<MessagePayload[]>([]);
 
 getToken().then(token => {
   const storageToken = localStorage.getItem('push-token')
@@ -43,7 +46,8 @@ onMounted(() => {
 
 <template>
   <div class="list">
-    <div v-for="message in messages" :key="message.messageId" class="item" @click="removeMessage(message)">
+    <div v-for="message in messages" :key="message.messageId" class="item" @click="router.push('/chat')">
+      <CloseIcon class="close-icon" @click.stop="removeMessage(message)"/>
       <p>Title: {{ message.notification?.title }}</p>
       <p>Body: {{ message.notification?.body }}</p>
       <p>Badge: {{ message.data?.badge }}</p>
@@ -54,7 +58,8 @@ onMounted(() => {
 <style scoped lang="scss">
 .list {
   position: absolute;
-  right: 0;
+  right: 24px;
+  top: 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62,14 +67,22 @@ onMounted(() => {
 }
 
 .item {
+  position: relative;
   background-color: var(--color-second-background);
   padding: 24px;
   border-radius: 12px;
   margin-bottom: 12px;
   min-width: 300px;
-
+  box-shadow: 0 0 12px 3px var(--color-background);
+  cursor: pointer;
   p {
     margin: 0;
   }
+}
+.close-icon {
+  cursor: pointer;
+  position: absolute;
+  top: 12px;
+  right: 12px;
 }
 </style>
