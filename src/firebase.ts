@@ -14,9 +14,8 @@ const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY;
 const getFirebaseApp = () => initializeApp(firebaseConfig);
 
 
-const getToken = async () => {
+const getToken = async (registration: ServiceWorkerRegistration) => {
     const messaging = getMessaging(getFirebaseApp());
-    const registration = await navigator.serviceWorker.getRegistration()
 
     return await messagingGetToken(messaging, {
         vapidKey,

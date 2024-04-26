@@ -7,21 +7,12 @@ import useApi from "@/hooks/useApi.ts";
 import {useUserStore} from "@/store/user.ts";
 import CloseIcon from "@/assets/close.svg?component";
 
-const {} = useUserStore()
 const {request} = useApi()
 const router = useRouter();
 const firebaseApp = getFirebaseApp();
 const messaging = getMessaging(firebaseApp);
 const messages = ref<MessagePayload[]>([]);
 
-getToken().then(token => {
-  const storageToken = localStorage.getItem('push-token')
-  console.log(token)
-  if (token !== storageToken) {
-    localStorage.setItem('push-token', token)
-    request('user/registerPushToken', {pushToken: token, platform: "android"})
-  }
-})
 
 const removeMessage = (message: MessagePayload) => {
   messages.value = messages.value.filter(m => m.messageId !== message.messageId)
@@ -36,11 +27,31 @@ onMessage(messaging, (event) => {
   }
 })
 
-onMounted(() => {
+const init = (registration: ServiceWorkerRegistration) => {
+  getToken(registration).then(token => {
+    const storageToken = localStorage.getItem('push-token')
+    console.log(token)
+    if (token !== storageToken) {
+      localStorage.setItem('push-token', token)
+      request('user/registerPushToken', {pushToken: token, platform: "android"})
+    }
+  })
   navigator.serviceWorker.addEventListener("message", (event) => {
     if (event.data.type === "push-message")
       messages.value.push(event.data.payload)
   });
+}
+
+onMounted(() => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register(
+        import.meta.env.MODE === 'production' ? 'firebase-messaging-sw.js' : 'dev-sw.js?dev-sw', {
+          scope: './',
+          type: import.meta.env.MODE === 'production' ? 'classic' : 'module'
+        }
+    ).then(init)
+  }
+
 })
 </script>
 
@@ -75,10 +86,12 @@ onMounted(() => {
   min-width: 300px;
   box-shadow: 0 0 12px 3px var(--color-background);
   cursor: pointer;
+
   p {
     margin: 0;
   }
 }
+
 .close-icon {
   cursor: pointer;
   position: absolute;

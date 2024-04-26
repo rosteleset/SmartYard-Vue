@@ -1,37 +1,39 @@
-import { defineConfig, loadEnv, ProxyOptions } from "vite";
+import {defineConfig, loadEnv, ProxyOptions} from "vite";
 import vue from "@vitejs/plugin-vue";
 import svgLoader from "vite-svg-loader";
-import { fileURLToPath } from "url";
-import { VitePWA } from "vite-plugin-pwa";
+import {fileURLToPath} from "url";
+import {VitePWA} from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
-  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+export default defineConfig(({mode}) => {
+    process.env = {...process.env, ...loadEnv(mode, process.cwd())};
 
-  const BASE_PATH = process.env.VITE_BASE_PATH || "/";
-  const PROXY_TARGET = process.env.VITE_DEV_PROXY_TARGET;
-  const PROXY_PREFIX = process.env.VITE_DEV_PROXY_PREFIX;
+    const BASE_PATH = process.env.VITE_BASE_PATH || "/";
+    const PROXY_TARGET = process.env.VITE_DEV_PROXY_TARGET;
+    const PROXY_PREFIX = process.env.VITE_DEV_PROXY_PREFIX;
 
-  const proxy: Record<string, ProxyOptions> = {};
+    const proxy: Record<string, ProxyOptions> = {};
 
-  if (PROXY_TARGET && PROXY_PREFIX)
-    proxy[PROXY_PREFIX] = {
-      target: PROXY_TARGET,
-      changeOrigin: false,
-      secure: false,
-      rewrite: (path) => path.replace(new RegExp(`^\\${PROXY_PREFIX}`), ""),
-    };
+    if (PROXY_TARGET && PROXY_PREFIX)
+        proxy[PROXY_PREFIX] = {
+            target: PROXY_TARGET,
+            changeOrigin: false,
+            secure: false,
+            rewrite: (path) => path.replace(new RegExp(`^\\${PROXY_PREFIX}`), ""),
+        };
 
     return {
         plugins: [
             vue(),
             VitePWA({
-                strategies: 'injectManifest',
+                srcDir: "src",
+                filename: "firebase-messaging-sw.ts",
+                strategies: "injectManifest",
+                injectRegister: false,
+                manifest: false,
                 injectManifest: {
+                    injectionPoint: undefined,
                 },
-                registerType: 'autoUpdate',
-                srcDir: 'src',
-                filename: 'worker.ts',
 
                 devOptions: {
                     enabled: true,
