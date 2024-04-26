@@ -10,7 +10,10 @@ const useRanges = (cameraId: number) => {
     const url = "cctv/ranges";
     get<Stream[]>(url, { cameraId }).then(
       (response) => (streams.value = response || [])
-    );
+    )
+        .catch(_error=>{
+          console.log(_error)
+        })
   });
 
   return {

@@ -54,11 +54,15 @@ onMounted(() => {
 
   if (videoElement.value) {
     player.value = PlayerFactory.createPlayer({
-      camera,
-      videoElement: videoElement.value,
-      previewElement: previewElement.value,
-      autoplay: true,
-    });
+      camera: {...camera, ...{serverType: 'flussonic'}},
+      videoElement:
+      videoElement.value,
+      previewElement:
+      previewElement.value,
+      autoplay:
+          true,
+    })
+    ;
     z.value = new ZoomController(videoElement.value)
     window.addEventListener("resize", resize);
   }

@@ -40,7 +40,7 @@ export const useUserStore = defineStore("user", () => {
         names.value = namesResponse;
       })
       .catch((_error) => {
-        error.value = _error.message;
+        // error.value = _error.message;
       });
   };
 

@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import {onMounted, ref, StyleValue} from "vue";
+import {onMounted, ref, StyleValue, watch} from "vue";
 import {useConfigStore} from "@/store/config";
 import {Camera} from "@/types/camera";
 import VideoModal from "@/components/VideoModal.vue";
 import {onUnmounted} from "vue";
 import {Player, PlayerFactory} from "rbt-player";
+import {useElementVisibility} from "@vueuse/core";
+import {value} from "happy-dom/lib/PropertySymbol.d.ts.js";
 
 const {camera, index} = defineProps<{ camera: Camera; index?: number }>();
 const {config} = useConfigStore();
@@ -14,7 +16,8 @@ const previewElement = ref<HTMLVideoElement>();
 const videoElement = ref<HTMLVideoElement>();
 const isOpen = ref(false);
 const styles = ref<StyleValue>();
-// const openHandler = () => (isOpen.value = true);
+const targetIsVisible = useElementVisibility(previewContainer);
+const timer = ref<NodeJS.Timeout>()
 
 const openHandler = () => {
   console.log("open")
@@ -30,25 +33,44 @@ const openHandler = () => {
     isOpen.value = true;
   }
 }
+
 const closeHandler = () => (isOpen.value = false);
 
-onMounted(() => {
-  if (videoElement.value) {
-    try {
-      player.value = PlayerFactory.createPlayer({
-        camera,
-        videoElement: videoElement.value,
-        previewElement: previewElement.value,
-        autoplay: config.watchmanMode,
-      });
-    } catch (error: any) {
-      console.log(error.message);
-    }
+const mount = () => {
+  if (!videoElement.value)
+    return
+  try {
+    player.value = PlayerFactory.createPlayer({
+      camera: {...camera, ...{serverType: 'flussonic'}},
+      videoElement: videoElement.value,
+      previewElement: previewElement.value,
+      autoplay: config.watchmanMode,
+    });
+  } catch (error: any) {
+    console.warn(error.message);
   }
-});
-onUnmounted(() => {
+}
+
+const dismount = () => {
   player.value?.onDestroy()
+  player.value = undefined;
+}
+
+watch(targetIsVisible, () => {
+  if (targetIsVisible.value) {
+    if (timer.value)
+      clearTimeout(timer.value)
+    if (player.value)
+      player.value?.play()
+    else
+      mount()
+  } else if (player.value && videoElement.value?.played) {
+    player.value?.pause()
+    timer.value = setTimeout(dismount, 20000);
+  }
 })
+
+onUnmounted(dismount)
 </script>
 
 <template>
