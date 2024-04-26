@@ -1,11 +1,7 @@
-import { precacheAndRoute } from 'workbox-precaching'
+import {getMessaging, onBackgroundMessage,} from "firebase/messaging/sw";
+import {getFirebaseApp} from './firebase';
 
 declare let self: ServiceWorkerGlobalScope
-
-precacheAndRoute(self.__WB_MANIFEST)
-
-import {getMessaging, onBackgroundMessage,} from "firebase/messaging/sw";
-import { getFirebaseApp } from './firebase';
 
 
 const firebaseApp = getFirebaseApp();
@@ -35,7 +31,7 @@ onBackgroundMessage(messaging, (payload) => {
     }
 
     if (server) {
-        const title =  "call";
+        const title = "call";
         return self.registration.showNotification(title, {
             badge: payload.data?.badge,
             body: payload.data?.callerId,
