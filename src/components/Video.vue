@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import {onMounted, ref, StyleValue, watch} from "vue";
+import {onUnmounted, ref, StyleValue, watch} from "vue";
 import {useConfigStore} from "@/store/config";
 import {Camera} from "@/types/camera";
 import VideoModal from "@/components/VideoModal.vue";
-import {onUnmounted} from "vue";
 import {Player, PlayerFactory} from "rbt-player";
 import {useElementVisibility} from "@vueuse/core";
-import {value} from "happy-dom/lib/PropertySymbol.d.ts.js";
 
 const {camera, index} = defineProps<{ camera: Camera; index?: number }>();
 const {config} = useConfigStore();
