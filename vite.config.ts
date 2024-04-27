@@ -3,6 +3,7 @@ import vue from "@vitejs/plugin-vue";
 import svgLoader from "vite-svg-loader";
 import {fileURLToPath} from "url";
 import {VitePWA} from "vite-plugin-pwa";
+import basicSsl from '@vitejs/plugin-basic-ssl'
 
 // https://vitejs.dev/config/
 export default defineConfig(({mode}) => {
@@ -14,12 +15,12 @@ export default defineConfig(({mode}) => {
 
     const proxy: Record<string, ProxyOptions> = {};
 
-    if (PROXY_TARGET && PROXY_PREFIX)
-        proxy[PROXY_PREFIX] = {
-            target: PROXY_TARGET,
-            changeOrigin: false,
+    // if (PROXY_TARGET && PROXY_PREFIX)
+        proxy['/api/'] = {
+            target: 'https://dm.lanta.me/',
+            changeOrigin: true,
             secure: false,
-            rewrite: (path) => path.replace(new RegExp(`^\\${PROXY_PREFIX}`), ""),
+            // rewrite: (path) => path.replace(new RegExp(`^\\${PROXY_PREFIX}`), ""),
         };
 
     return {
@@ -40,7 +41,8 @@ export default defineConfig(({mode}) => {
                     type: "module",
                 },
             }),
-            svgLoader()
+            svgLoader(),
+            basicSsl()
         ],
         base: BASE_PATH,
         resolve: {

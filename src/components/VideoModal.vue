@@ -53,8 +53,11 @@ onMounted(() => {
   document.body.classList.add("scroll-block");
 
   if (videoElement.value) {
+    const _camera = {...camera}
+    if (!_camera.serverType)
+      _camera['serverType'] = 'flussonic'
     player.value = PlayerFactory.createPlayer({
-      camera: {...camera, ...{serverType: 'flussonic'}},
+      camera:_camera,
       videoElement:
       videoElement.value,
       previewElement:

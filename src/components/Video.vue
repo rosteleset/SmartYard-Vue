@@ -18,7 +18,6 @@ const targetIsVisible = useElementVisibility(previewContainer);
 const timer = ref<NodeJS.Timeout>()
 
 const openHandler = () => {
-  console.log("open")
   if (previewContainer.value && previewElement.value) {
     const rect = previewContainer.value.getBoundingClientRect();
     styles.value = {
@@ -27,7 +26,6 @@ const openHandler = () => {
       width: `${rect?.width}px`,
       height: `${rect?.height}px`,
     };
-    console.log(styles.value)
     isOpen.value = true;
   }
 }
@@ -38,8 +36,11 @@ const mount = () => {
   if (!videoElement.value)
     return
   try {
+    const _camera = {...camera}
+    if (!_camera.serverType)
+      _camera['serverType'] = 'flussonic'
     player.value = PlayerFactory.createPlayer({
-      camera: {...camera, ...{serverType: 'flussonic'}},
+      camera:_camera,
       videoElement: videoElement.value,
       previewElement: previewElement.value,
       autoplay: config.watchmanMode,

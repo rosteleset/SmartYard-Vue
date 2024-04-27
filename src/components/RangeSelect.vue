@@ -15,7 +15,7 @@ const model = defineModel<FormatedRange>();
 const { locale, localizedDayjs } = useLocale();
 const { getTheme } = useConfigStore();
 const theme = getTheme();
-const { streams } = useRanges(camera.id);
+const { streams } = useRanges(camera);
 const ranges = computed(() =>
   streams.value.flatMap((stream) =>
     stream.ranges.flatMap((range) => splitRangeIntoParts(range, stream.stream))
