@@ -4,7 +4,6 @@ import {onMounted, ref} from "vue";
 import {getFirebaseApp, getToken} from "@/firebase";
 import {useRouter} from "vue-router";
 import useApi from "@/hooks/useApi.ts";
-import {useUserStore} from "@/store/user.ts";
 import CloseIcon from "@/assets/close.svg?component";
 
 const {request} = useApi()

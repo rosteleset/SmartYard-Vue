@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {Player, PlayerFactory, ZoomController} from "rbt-player";
-import {StyleValue, onMounted, onUnmounted, ref, watch} from "vue";
+import {Player, PlayerFactory} from "rbt-player";
+import {onMounted, onUnmounted, ref, StyleValue, watch} from "vue";
 import ArrowIcon from "@/assets/arrowRight.svg?component";
 import useZoom from "@/hooks/useZoom";
 import {Camera, FormatedRange} from "@/types/camera";
