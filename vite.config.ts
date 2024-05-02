@@ -16,12 +16,12 @@ export default defineConfig(({mode}) => {
     const proxy: Record<string, ProxyOptions> = {};
 
     // if (PROXY_TARGET && PROXY_PREFIX)
-        proxy['/api/'] = {
-            target: 'https://dm.lanta.me/',
-            changeOrigin: true,
-            secure: false,
-            // rewrite: (path) => path.replace(new RegExp(`^\\${PROXY_PREFIX}`), ""),
-        };
+    proxy[`${PROXY_PREFIX}`] = {
+        target: PROXY_TARGET,
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(new RegExp(`^\\${PROXY_PREFIX}`), ""),
+    };
 
     return {
         plugins: [
@@ -42,7 +42,7 @@ export default defineConfig(({mode}) => {
                 },
             }),
             svgLoader(),
-            basicSsl()
+            // basicSsl()
         ],
         base: BASE_PATH,
         resolve: {

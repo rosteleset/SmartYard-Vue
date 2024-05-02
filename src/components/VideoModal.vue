@@ -26,8 +26,7 @@ const videoContainer = ref<HTMLDivElement | null>(null);
 const currentRange = ref<FormatedRange>();
 const styles = ref<StyleValue>();
 
-// const {onDrag, videoStyles} = useZoom(videoElement)
-const z = ref<ZoomController>()
+const {onDrag, videoStyles} = useZoom(videoElement)
 
 const resize = () => {
   styles.value = player.value?.getSize();
@@ -39,7 +38,7 @@ const onCanPlay = () => {
 };
 
 const playPause = () => {
-  if (!z.value?.isDragging) videoElement.value?.paused ? player.value?.play() : player.value?.pause();
+  if (!onDrag.value) videoElement.value?.paused ? player.value?.play() : player.value?.pause();
 }
 
 watch(currentRange, () => {
@@ -57,16 +56,14 @@ onMounted(() => {
     if (!_camera.serverType)
       _camera['serverType'] = 'flussonic'
     player.value = PlayerFactory.createPlayer({
-      camera:_camera,
+      camera: _camera,
       videoElement:
       videoElement.value,
       previewElement:
       previewElement.value,
       autoplay:
           true,
-    })
-    ;
-    z.value = new ZoomController(videoElement.value)
+    });
     window.addEventListener("resize", resize);
   }
 
@@ -90,6 +87,7 @@ onUnmounted(() => {
       <video
           ref="videoElement"
           class="video-element"
+          :style="videoStyles"
           v-on:canplay="onCanPlay"
           @click="playPause"
       />
@@ -144,7 +142,6 @@ onUnmounted(() => {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    transition: 0.3s;
   }
 
   &-preview {

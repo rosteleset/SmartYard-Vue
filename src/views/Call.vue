@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
 import {computed, ref} from "vue";
-import {Invitation, Inviter, Registerer, Session, SessionState, UserAgent, UserAgentOptions} from "sip.js";
-import {SimpleUser} from "sip.js/lib/platform/web";
+import {Invitation, Registerer, UserAgent, UserAgentOptions} from "sip.js";
+import Button from "@/components/Button.vue";
 
 const video = ref<HTMLVideoElement>()
 const audio = ref<HTMLVideoElement>()
@@ -11,7 +11,6 @@ const router = useRouter()
 const {server, extension, pass, callerId, hash, stun} = router.currentRoute.value.query
 
 const image = computed(() => `https://rbt-demo.lanta.me/mobile/call/live/${hash}`)
-
 
 
 const uri = UserAgent.makeURI(`sip:${extension}@${server}`);
@@ -35,8 +34,8 @@ userAgent.delegate = {
   onInvite(invitation: Invitation): void {
     console.log("!!! invite", invitation)
     invitation.accept({
-      sessionDescriptionHandlerOptions:{
-        constraints: { audio: false, video: false }
+      sessionDescriptionHandlerOptions: {
+        constraints: {audio: false, video: false}
       }
     })
     // invitation.reject();
@@ -54,11 +53,6 @@ userAgent.delegate = {
 userAgent.start().then(() => {
   console.log("!@!", userAgent)
   registerer.register();
-  // const target = UserAgent.makeURI("sip:7000000000@preyai.ddns.net");
-  // if (target) {
-  //   const inviter = new Inviter(userAgent, target);
-  //   inviter.invite();
-  // }
 });
 
 
@@ -66,9 +60,14 @@ userAgent.start().then(() => {
 
 <template>
   <h1>Вызов {{ callerId }}</h1>
-  <!--  <img :src="image" alt="call" class="image"/>-->
+  <img :src="image" alt="call" class="image"/>
   <video ref="video" class="video"/>
   <audio ref="audio" class="audio"/>
+
+  <div class="flex">
+    <Button variant="success">{{ $t('call.answer') }}</Button>
+    <Button variant="error">{{ $t('call.ignore') }}</Button>
+  </div>
 
 </template>
 
@@ -79,5 +78,11 @@ userAgent.start().then(() => {
 
 .video {
   width: 300px;
+}
+.flex {
+  display: flex;
+  gap: 24px;
+  padding: 12px;
+  align-items: center;
 }
 </style>
