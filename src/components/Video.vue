@@ -33,6 +33,7 @@ const openHandler = () => {
 const closeHandler = () => (isOpen.value = false);
 
 const mount = () => {
+  console.log('hi')
   if (!videoElement.value)
     return
   try {

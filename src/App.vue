@@ -51,7 +51,7 @@ provide("isMenuOpen", isMenuOpen);
   overflow-y: auto;
 
   &::-webkit-scrollbar {
-    width: $size / 2;
+    width: calc($size / 2);
     overflow: hidden;
     border-radius: 24px;
   }

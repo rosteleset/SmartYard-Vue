@@ -2,11 +2,12 @@
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import dayjs from "dayjs";
-import { computed, ref } from "vue";
+import {computed, ref} from "vue";
 import useLocale from "@/hooks/useLocale";
 import useRanges from "@/hooks/useRanges";
-import { useConfigStore } from "@/store/config.ts";
-import { Camera, FormatedRange, Range } from "@/types/camera";
+import {useConfigStore} from "@/store/config.ts";
+import {Camera, FormatedRange, Range} from "@/types/camera";
+
 const { camera } = defineProps<{
   camera: Camera;
 }>();
@@ -46,8 +47,8 @@ function splitRangeIntoParts(range: Range, stream: string): FormatedRange[] {
 }
 
 function timestampToDate(timestamp: number) {
-  const date = new Date(timestamp * 1000); // Умножаем на 1000, так как Unix timestamp в секундах
-  return date;
+   // Умножаем на 1000, так как Unix timestamp в секундах
+  return new Date(timestamp * 1000);
 }
 
 // Получение массива дат из массива данных
