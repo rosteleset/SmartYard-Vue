@@ -3,17 +3,18 @@ import useCameras from "@/hooks/useCameras";
 import {useAddressesStore} from "@/store/addresses";
 import Map from "@/components/Map.vue";
 import CamerasList from "@/components/CamerasList.vue";
+import NotFound from "@/components/NotFound.vue";
 
-const { houseId, overview } = defineProps<{
+const {houseId, overview} = defineProps<{
   houseId?: string;
   overview?: boolean;
 }>();
 
-const { getAddressByHouseId } = useAddressesStore();
+const {getAddressByHouseId} = useAddressesStore();
 
 const invalidHouseId = houseId && getAddressByHouseId(houseId) === undefined; //проверка на наличие дома если в роутрере указан houseId
 
-const { cameras } = useCameras({ houseId, overview: overview });
+const {cameras} = useCameras({houseId, overview: overview});
 
 
 </script>
@@ -21,12 +22,12 @@ const { cameras } = useCameras({ houseId, overview: overview });
 <template>
   <template v-if="!invalidHouseId">
 
-        <CamerasList :cameras="cameras"/>
-        <Map :cameras="cameras" />
+    <CamerasList :cameras="cameras"/>
+    <Map :cameras="cameras"/>
 
   </template>
   <template v-else>
-    <div class="global-error">404</div>
+    <NotFound/>
   </template>
 </template>
 

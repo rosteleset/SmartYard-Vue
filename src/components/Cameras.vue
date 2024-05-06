@@ -7,6 +7,7 @@ import Label from "@/components/Label.vue";
 import Map from "@/components/Map.vue";
 import {useConfigStore} from "@/store/config";
 import CamerasList from "@/components/CamerasList.vue";
+import NotFound from "@/components/NotFound.vue";
 
 const { houseId } = defineProps<{
   houseId?: string;
@@ -43,7 +44,7 @@ const handleToggle = (open: boolean) => {
     </Transition>
   </template>
   <template v-else>
-    <div class="global-error">404</div>
+    <NotFound/>
   </template>
 </template>
 

@@ -2,9 +2,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
 
 html[data-theme="light"] {
-  $second-background :#FFFFFF;
+  $second-background: #FFFFFF;
   $gradient1: darken($color: #4da6f9, $amount: 1);
-  $gradient2:darken($color: #084eb6, $amount: 1);
+  $gradient2: darken($color: #084eb6, $amount: 1);
   --color-text: #{$darkBlue};
   --color-background: #{$offWhite};
   --color-second-background: #{$second-background};
@@ -14,10 +14,10 @@ html[data-theme="light"] {
 }
 
 html[data-theme="dark"] {
-  $second-background :lighten($darkBlue, 5);
+  $second-background: lighten($darkBlue, 5);
   $gradient1: darken($color: #4da6f9, $amount: 20);
-  $gradient2:darken($color: #084eb6, $amount: 20);
-  --theme:"dark";
+  $gradient2: darken($color: #084eb6, $amount: 20);
+  --theme: "dark";
   --color-text: #{$offWhite};
   --color-background: #{$darkBlue};
   --color-second-background: #{$second-background};
@@ -29,12 +29,14 @@ html[data-theme="dark"] {
 * {
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
   font-family: "Source Sans 3", sans-serif;
   color: var(--color-text);
   height: 100vh;
   overflow: hidden;
+
   &.scroll-block {
     overflow: hidden;
   }
@@ -42,6 +44,11 @@ body {
 
 p {
   white-space: pre-line;
+}
+
+a {
+  text-decoration: none;
+  color: $blue;
 }
 
 #app {
@@ -55,7 +62,6 @@ p {
   );
   overflow: hidden;
 }
-
 
 
 .container {
