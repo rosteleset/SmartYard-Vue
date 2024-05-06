@@ -7678,10 +7678,10 @@ raw-body@2.5.2:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
-rbt-player@^1.1.6:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/rbt-player/-/rbt-player-1.1.6.tgz#30cd2066ca0b1a6a5ad75372aa3c12b00665d029"
-  integrity sha512-NWJ2f7k5L0fkyJXp50auvyom5Q0QQ2/c3xVCJopkxIgFN5rcDRsvDkx0Y9usc87PD3l4M9ftIc2mv0Vj/KLosA==
+rbt-player@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/rbt-player/-/rbt-player-1.1.8.tgz#1bf13bdd2a3ed2d8d822ed284242edaf77508807"
+  integrity sha512-ul3EDkOCUMo4nJpmsXdQuEnWBLSD/QRECJuBfzGlwksCiXRsdj/NkrjDvyIO6SWgmLX1S0AKerAB8mhqlQl/oQ==
   dependencies:
     axios "^1.6.8"
     dayjs "^1.11.10"

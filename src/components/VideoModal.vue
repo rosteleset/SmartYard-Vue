@@ -46,6 +46,8 @@ watch(currentRange, () => {
       currentRange.value?.from,
       currentRange.value?.duration
   );
+  player.value?.initializeVideoStream()
+  isOpenInfo.value = false
 });
 
 onMounted(() => {
@@ -183,6 +185,7 @@ onUnmounted(() => {
   background-color: var(--color-background);
   transform: translateX(100%);
   transition: 0.5s;
+  z-index: 10;
 
   &.open {
     transform: translateX(0);
