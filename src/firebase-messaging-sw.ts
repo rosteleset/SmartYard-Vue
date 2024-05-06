@@ -67,6 +67,4 @@ self.addEventListener('notificationclick', (event) => {
 });
 
 
-console.log("worker ok 2");
-
 

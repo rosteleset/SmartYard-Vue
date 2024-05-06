@@ -1,5 +1,5 @@
-import useApi from "../hooks/useApi";
-import { Names } from "../types/user";
+import useApi from "../hooks/useApi.ts";
+import { Names } from "../types/user.ts";
 
 const url = "user/sendName";
 
