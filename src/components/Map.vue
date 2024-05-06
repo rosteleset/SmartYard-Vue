@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { LIcon, LMap, LMarker, LTileLayer } from "@vue-leaflet/vue-leaflet";
-import { LatLngBoundsExpression, Map, Point, PointExpression } from "leaflet";
-import "leaflet/dist/leaflet.css";
-import { StyleValue, ref } from "vue";
+import {LIcon, LMap, LMarker, LTileLayer} from "@vue-leaflet/vue-leaflet";
+import {LMarkerClusterGroup} from 'vue-leaflet-markercluster'
+import {LatLngBoundsExpression, Map, Point, PointExpression} from "leaflet";
+import {StyleValue, ref} from "vue";
 import cameraIcon from "@/assets/camera.svg?component";
-import { Camera } from "@/types/camera";
+import {Camera} from "@/types/camera";
 import VideoModal from "@/components/VideoModal.vue";
+import "leaflet/dist/leaflet.css";
+import 'vue-leaflet-markercluster/dist/style.css'
 
 // Определение свойств компонента
 const props = defineProps<{
@@ -29,11 +31,11 @@ const getCameraIndex = (camera: Camera): number => {
 const getCenter = (): PointExpression => {
   const length = props.cameras.length;
   const sum = props.cameras.reduce(
-    (prev, camera) => [
-      Number(camera.lat) + prev[0],
-      Number(camera.lon) + prev[1],
-    ],
-    [0, 0]
+      (prev, camera) => [
+        Number(camera.lat) + prev[0],
+        Number(camera.lon) + prev[1],
+      ],
+      [0, 0]
   );
   return [sum[0] / length, sum[1] / length];
 };
@@ -62,53 +64,70 @@ const handler = (event: any, camera: Camera) => {
   }
   openCamera.value = camera;
 };
+
 </script>
 
 <template>
   <div v-if="cameras.length>0" class="map">
     <LMap
-      ref="map"
-      v-model:zoom="zoom"
-      :center="getCenter()"
-      :useGlobalLeaflet="false"
-      :options="{ attributionControl: false }"
-      :crs="CRS"
-      style="z-index: 10"
-      @ready="onReady"
+        ref="map"
+        v-model:zoom="zoom"
+        :center="getCenter()"
+        :useGlobalLeaflet="true"
+        :options="{ attributionControl: false }"
+        :crs="CRS"
+        style="z-index: 10"
+        @ready="onReady"
     >
-      <LTileLayer :url="TILE_SERVER" />
-      <LMarker
-        v-for="camera in cameras"
-        :key="camera.id"
-        :latLng="[Number(camera.lat), Number(camera.lon)]"
-        :name="'test'"
-        @click="handler($event, camera)"
-      >
-        <LIcon
-          :ref="`camera_${camera.id}`"
-          className="map-icon__container"
-          :iconSize="[45, 45]"
+      <LTileLayer :url="TILE_SERVER"/>
+      <LMarkerClusterGroup :showCoverageOnHover="false">
+        <LMarker
+            v-for="camera in cameras"
+            :key="camera.id"
+            :latLng="[Number(camera.lat), Number(camera.lon)]"
+            :name="'test'"
+            @click="handler($event, camera)"
         >
-          <cameraIcon class="map-icon__icon"/>
-          <div class="map-icon__label">{{ getCameraIndex(camera) }}</div>
-        </LIcon>
-      </LMarker>
+          <LIcon
+              :ref="`camera_${camera.id}`"
+              className="map-icon__container"
+              :iconSize="[40, 40]"
+          >
+            <cameraIcon class="map-icon__icon"/>
+            <div class="map-icon__label">{{ getCameraIndex(camera) }}</div>
+          </LIcon>
+        </LMarker>
+      </LMarkerClusterGroup>
     </LMap>
     <!-- Модальное окно с видеопотоком -->
     <VideoModal
-      v-if="openCamera"
-      :camera="openCamera"
-      @on-close="openCamera = null"
+        v-if="openCamera"
+        :camera="openCamera"
+        @on-close="openCamera = null"
     />
   </div>
 </template>
 
 <style lang="scss">
 @use "@/style/variables" as *;
+
 .map {
   height: 500px;
   padding: 24px;
   z-index: 10;
+
+  .marker-cluster div {
+    background-color: $blue;
+  }
+  .marker-cluster-small {
+    background-color: transparentize($blue, .8);
+  }
+  .marker-cluster-medium {
+    background-color: transparentize($blue, .6);
+  }
+  .marker-cluster-large {
+    background-color: $blue;
+  }
   .map-icon {
     &__container {
       box-sizing: border-box;
@@ -120,6 +139,7 @@ const handler = (event: any, camera: Camera) => {
       border-radius: 50%;
       padding: 5px;
     }
+
     &__icon {
       flex: 1;
       grid-area: icon;
@@ -128,6 +148,7 @@ const handler = (event: any, camera: Camera) => {
         fill: $darkBlue;
       }
     }
+
     &__label {
       grid-area: label;
       color: #298bff;

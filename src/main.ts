@@ -6,7 +6,9 @@ import store from '@/store';
 import i18n from '@/i18n';
 import 'dayjs/locale/en';
 import 'dayjs/locale/ru';
+import L from 'leaflet'
 
+globalThis.L = L
 createApp(App)
     .use(router)
     .use(store)

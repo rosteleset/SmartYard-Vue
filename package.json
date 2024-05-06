@@ -28,6 +28,7 @@
     "sip.js": "^0.21.2",
     "vue": "^3.4.19",
     "vue-i18n": "9",
+    "vue-leaflet-markercluster": "^0.6.1",
     "vue-router": "4"
   },
   "devDependencies": {
