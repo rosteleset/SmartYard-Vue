@@ -33,7 +33,6 @@ const openHandler = () => {
 const closeHandler = () => (isOpen.value = false);
 
 const mount = () => {
-  console.log('hi')
   if (!videoElement.value)
     return
   try {
@@ -60,7 +59,7 @@ watch(targetIsVisible, () => {
   if (targetIsVisible.value) {
     if (timer.value)
       clearTimeout(timer.value)
-    if (player.value)
+    if (player.value && config.watchmanMode)
       player.value?.play()
     else
       mount()

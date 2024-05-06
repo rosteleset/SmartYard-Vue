@@ -7678,10 +7678,10 @@ raw-body@2.5.2:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
-rbt-player@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/rbt-player/-/rbt-player-1.1.4.tgz#827e7f408f3d0ee8c144a160c8d36f0afc919a68"
-  integrity sha512-Vy3oYySgvqO8uVtjZXPBi1LqXzH/oEwbUUUxPiXtLdBCgebY7K+ypzJfZW2lyHR16M2K0aU9V5wy0KTC+tP5HA==
+rbt-player@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/rbt-player/-/rbt-player-1.1.6.tgz#30cd2066ca0b1a6a5ad75372aa3c12b00665d029"
+  integrity sha512-NWJ2f7k5L0fkyJXp50auvyom5Q0QQ2/c3xVCJopkxIgFN5rcDRsvDkx0Y9usc87PD3l4M9ftIc2mv0Vj/KLosA==
   dependencies:
     axios "^1.6.8"
     dayjs "^1.11.10"
@@ -8145,6 +8145,13 @@ shaka-player@^4.7.11:
   version "4.7.11"
   resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-4.7.11.tgz#962d2a205b86ff3aecb20949f1738c36b0eb98de"
   integrity sha512-zHyuL/cph3xKbci/Ovba/Swyni6g3cj79cN+84BCCrD3tWR9WEBwc8svcqPIXNQX/7VYb3uwaOa+85eBQKPkMg==
+  dependencies:
+    eme-encryption-scheme-polyfill "^2.1.1"
+
+shaka-player@^4.8.1:
+  version "4.8.1"
+  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-4.8.1.tgz#994f1360ce83e1f08943fb866a6a35131ea9cddd"
+  integrity sha512-n+VTi+EZ4YWzGOxDy+yqascA6wNEliPy1jIvbHGxW2Prk8fitUozRffsP7aRbyoFwQekJ3D0P+Ngk7nSQU6IZA==
   dependencies:
     eme-encryption-scheme-polyfill "^2.1.1"
 

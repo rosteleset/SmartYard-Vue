@@ -49,6 +49,7 @@ watch(currentRange, () => {
 });
 
 onMounted(() => {
+  console.log(props)
   document.body.classList.add("scroll-block");
 
   if (videoElement.value) {
@@ -79,7 +80,7 @@ onUnmounted(() => {
     <div
         ref="videoContainer"
         class="video-container"
-        :style="styles || props.styles"
+        :style="styles"
         @mousedown.stop
     >
       <video ref="previewElement" class="video-preview" v-on:canplay="onCanPlay"/>

@@ -5,6 +5,7 @@ import Cameras from "@/components/Cameras.vue";
 import Door from "@/components/Door.vue";
 import Events from "@/components/Events.vue";
 import {Building} from "@/types/building.ts";
+import convertSettingsBoolean from "@/lib/convertSettingsBoolean.ts";
 
 // Определение свойств компонента
 const {building} = defineProps<{ building: Building }>();
@@ -16,11 +17,11 @@ provide("houseId", building.houseId);
 
 <template>
 
-  <div class="address__doors">
+  <div v-if="building.doors" class="address__doors">
     <Door v-for="door in building.doors" :key="door.doorId" :data="door"/>
   </div>
   <Cameras :houseId="building.houseId"/>
-  <Events :houseId="building.houseId" />
+  <Events v-if="convertSettingsBoolean(building.hasPlog)" :houseId="building.houseId"/>
 
 </template>
 
