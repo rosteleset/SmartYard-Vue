@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import { computed, ref, watch } from "vue";
-import resetCode from "@/api/resetCode";
+import resetCode from "@/lib/resetCode.ts";
 import reloadIcon from "@/assets/reload.svg?component";
 import useSettings from "@/hooks/useSettings";
 import Button from "@/components/Button.vue";

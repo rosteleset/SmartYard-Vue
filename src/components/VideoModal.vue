@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {Player, PlayerFactory} from "rbt-player/dist/player";
-import {StyleValue, onMounted, onUnmounted, ref, watch} from "vue";
+import {Player, PlayerFactory} from "rbt-player";
+import {onMounted, onUnmounted, ref, StyleValue, watch} from "vue";
 import ArrowIcon from "@/assets/arrowRight.svg?component";
 import useZoom from "@/hooks/useZoom";
 import {Camera, FormatedRange} from "@/types/camera";
@@ -28,7 +28,6 @@ const styles = ref<StyleValue>();
 
 const {onDrag, videoStyles} = useZoom(videoElement)
 
-
 const resize = () => {
   styles.value = player.value?.getSize();
 };
@@ -50,14 +49,21 @@ watch(currentRange, () => {
 });
 
 onMounted(() => {
+  console.log(props)
   document.body.classList.add("scroll-block");
 
   if (videoElement.value) {
+    const _camera = {...camera}
+    if (!_camera.serverType)
+      _camera['serverType'] = 'flussonic'
     player.value = PlayerFactory.createPlayer({
-      camera,
-      videoElement: videoElement.value,
-      previewElement: previewElement.value,
-      autoplay: true,
+      camera: _camera,
+      videoElement:
+      videoElement.value,
+      previewElement:
+      previewElement.value,
+      autoplay:
+          true,
     });
     window.addEventListener("resize", resize);
   }
@@ -74,7 +80,7 @@ onUnmounted(() => {
     <div
         ref="videoContainer"
         class="video-container"
-        :style="styles || props.styles"
+        :style="styles"
         @mousedown.stop
     >
       <video ref="previewElement" class="video-preview" v-on:canplay="onCanPlay"/>
@@ -137,7 +143,6 @@ onUnmounted(() => {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    transition: 0.3s;
   }
 
   &-preview {

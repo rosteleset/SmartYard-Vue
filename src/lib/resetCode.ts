@@ -1,4 +1,4 @@
-import useApi from "../hooks/useApi";
+import useApi from "../hooks/useApi.ts";
 
 const url = "address/resetCode";
 
@@ -6,8 +6,7 @@ const url = "address/resetCode";
 const resetCode = async (flatId: string) => {
   const { request } = useApi();
   const response = await request(url, { flatId });
-  const code = response.data.code;
-  return code;
+  return response.data.code;
 };
 
 export default resetCode;

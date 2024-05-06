@@ -7,11 +7,10 @@ import Label from "@/components/Label.vue";
 import Map from "@/components/Map.vue";
 import {useConfigStore} from "@/store/config";
 import CamerasList from "@/components/CamerasList.vue";
+import NotFound from "@/components/NotFound.vue";
 
-console.log(typeof CameraIcon);
 const { houseId } = defineProps<{
   houseId?: string;
-  compact?: boolean;
 }>();
 
 const { config } = useConfigStore();
@@ -32,21 +31,20 @@ const handleToggle = (open: boolean) => {
 <template>
   <template v-if="!invalidHouseId">
     <Label
-      v-if="compact"
       :icon="CameraIcon"
       :alt="$t('addresses.cameras')"
       :text="$t('addresses.cameras')"
       @toggle="handleToggle"
     />
     <Transition name="cameras">
-      <div v-if="isOpen || !compact">
+      <div v-if="isOpen">
         <CamerasList :cameras="cameras" />
         <Map :cameras="cameras" />
       </div>
     </Transition>
   </template>
   <template v-else>
-    <div class="global-error">404</div>
+    <NotFound/>
   </template>
 </template>
 

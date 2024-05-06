@@ -89,13 +89,13 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-  <div ref="containerRef" class="cancas-container">
+  <div ref="containerRef" class="canvas-container">
     <div v-if="error" class="error">{{ $t('events.image-error') }}</div>
     <canvas v-else ref="canvasRef"></canvas>
   </div>
 </template>
 <style scoped lang="scss">
-.cancas-container {
+.canvas-container {
   min-width: 40vw;
 }
 .error {

@@ -24,5 +24,5 @@ dist-ssr
 *.sw?
 
 # Игнорировать файл .env
-.env
+*.env
 *storybook.log

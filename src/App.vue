@@ -3,6 +3,7 @@ import {computed, provide, ref} from "vue";
 import Header from "@/components/Header.vue";
 import {useAddressesStore} from "@/store/addresses";
 import {useUserStore} from "@/store/user";
+import Push from "@/components/Push.vue";
 
 const addressesStore = useAddressesStore();
 const userStore = useUserStore();
@@ -16,6 +17,7 @@ provide("isMenuOpen", isMenuOpen);
 
 <template>
   <Header/>
+  <Push v-if="userStore.isLoaded && !userStore.error"/>
   <router-view v-slot="{ Component }">
     <Transition name="route" mode="out-in">
       <div class="content" :key="$route.fullPath">
@@ -30,7 +32,9 @@ provide("isMenuOpen", isMenuOpen);
   </router-view>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "./style/variables" as *;
+
 .welcome {
   margin: 24px 0;
   text-align: center;
@@ -40,6 +44,27 @@ provide("isMenuOpen", isMenuOpen);
 .content {
   transition: 0.3s ease-out;
   z-index: 1;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-radius: $size * 2 $size * 2 0 0;
+  flex: 1;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: calc($size / 2);
+    overflow: hidden;
+    border-radius: 24px;
+  }
+
+  &::-webkit-scrollbar-track {
+    margin-top: $size + 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+    border-radius: 24px;
+  }
 
   &.menu-open {
     margin-top: 50px;

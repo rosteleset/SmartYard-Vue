@@ -7,7 +7,6 @@ import i18n from '@/i18n';
 import 'dayjs/locale/en';
 import 'dayjs/locale/ru';
 
-
 createApp(App)
     .use(router)
     .use(store)

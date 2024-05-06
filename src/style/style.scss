@@ -2,9 +2,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
 
 html[data-theme="light"] {
-  $second-background :#FFFFFF;
+  $second-background: #FFFFFF;
   $gradient1: darken($color: #4da6f9, $amount: 1);
-  $gradient2:darken($color: #084eb6, $amount: 1);
+  $gradient2: darken($color: #084eb6, $amount: 1);
   --color-text: #{$darkBlue};
   --color-background: #{$offWhite};
   --color-second-background: #{$second-background};
@@ -14,10 +14,10 @@ html[data-theme="light"] {
 }
 
 html[data-theme="dark"] {
-  $second-background :transparentize($offWhite, 0.9);
+  $second-background: lighten($darkBlue, 5);
   $gradient1: darken($color: #4da6f9, $amount: 20);
-  $gradient2:darken($color: #084eb6, $amount: 20);
-  --theme:"dark";
+  $gradient2: darken($color: #084eb6, $amount: 20);
+  --theme: "dark";
   --color-text: #{$offWhite};
   --color-background: #{$darkBlue};
   --color-second-background: #{$second-background};
@@ -29,11 +29,14 @@ html[data-theme="dark"] {
 * {
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
   font-family: "Source Sans 3", sans-serif;
-  min-height: 101vh;
   color: var(--color-text);
+  height: 100vh;
+  overflow: hidden;
+
   &.scroll-block {
     overflow: hidden;
   }
@@ -43,26 +46,23 @@ p {
   white-space: pre-line;
 }
 
+a {
+  text-decoration: none;
+  color: $blue;
+}
+
 #app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  background-color: darken($color: #000000, $amount: 0);
-  background: radial-gradient(
-    189.5% 116.38% at 111.33% -32.22%,
-    var(--gradient-1) 8.92%,
-    var(--gradient-2) 77.97%
+  height: 100%;
+  background: darken($color: #000000, $amount: 0) radial-gradient(
+                  189.5% 116.38% at 111.33% -32.22%,
+                  var(--gradient-1) 8.92%,
+                  var(--gradient-2) 77.97%
   );
   overflow: hidden;
 }
 
-.content {
-  background-color: var(--color-background);
-  color: var(--color-text);
-  border-radius: $size * 2 $size * 2 0 0;
-  flex: 1;
-  overflow-y: auto;
-}
 
 .container {
   width: 80%;

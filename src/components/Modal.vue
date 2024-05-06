@@ -54,7 +54,7 @@ watch(
 
 <style scoped lang="scss">
 .modal {
-  background-color: white;
+  background-color: var(--color-second-background);
   padding: 20px;
   border-radius: 5px;
   max-width: 90vw;

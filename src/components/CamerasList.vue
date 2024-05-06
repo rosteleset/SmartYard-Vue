@@ -2,7 +2,7 @@
 import {Camera} from "@/types/camera.ts";
 import {useConfigStore} from "@/store/config.ts";
 import {computed} from "vue";
-import Video from "@/components/Video.vue";
+import Video from "@/components/VideoCard.vue";
 
 const {cameras} = defineProps<{ cameras: Camera[] }>()
 const {config} = useConfigStore();

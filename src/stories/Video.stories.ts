@@ -1,4 +1,4 @@
-import Video from "@/components/Video.vue";
+import Video from "@/components/VideoCard.vue";
 import type {Meta, StoryObj} from "@storybook/vue3";
 import {fakeCameras} from "@/stories/__fakeData.ts";
 

@@ -1,0 +1,100 @@
+<script setup lang="ts">
+import {getMessaging, MessagePayload, onMessage} from "firebase/messaging"
+import {onMounted, ref} from "vue";
+import {getFirebaseApp, getToken} from "@/firebase";
+import {useRouter} from "vue-router";
+import useApi from "@/hooks/useApi.ts";
+import CloseIcon from "@/assets/close.svg?component";
+
+const {request} = useApi()
+const router = useRouter();
+const firebaseApp = getFirebaseApp();
+const messaging = getMessaging(firebaseApp);
+const messages = ref<MessagePayload[]>([]);
+
+
+const removeMessage = (message: MessagePayload) => {
+  messages.value = messages.value.filter(m => m.messageId !== message.messageId)
+}
+
+onMessage(messaging, (event) => {
+  console.log(event)
+  if (event.data?.action)
+    messages.value.push(event)
+  else {
+    router.push({path: "/call", query: event.data})
+  }
+})
+
+const init = (registration: ServiceWorkerRegistration) => {
+  getToken(registration).then(token => {
+    const storageToken = localStorage.getItem('push-token')
+    console.log(token)
+    if (token !== storageToken) {
+      localStorage.setItem('push-token', token)
+      request('user/registerPushToken', {pushToken: token, platform: "android"})
+    }
+  })
+  navigator.serviceWorker.addEventListener("message", (event) => {
+    if (event.data.type === "push-message")
+      messages.value.push(event.data.payload)
+  });
+}
+
+onMounted(() => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register(
+        import.meta.env.MODE === 'production' ? 'firebase-messaging-sw.js' : 'dev-sw.js?dev-sw', {
+          scope: './',
+          type: import.meta.env.MODE === 'production' ? 'classic' : 'module'
+        }
+    ).then(init)
+  }
+
+})
+</script>
+
+<template>
+  <div class="list">
+    <div v-for="message in messages" :key="message.messageId" class="item" @click="router.push('/chat')">
+      <CloseIcon class="close-icon" @click.stop="removeMessage(message)"/>
+      <p>Title: {{ message.notification?.title }}</p>
+      <p>Body: {{ message.notification?.body }}</p>
+      <p>Badge: {{ message.data?.badge }}</p>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.list {
+  position: absolute;
+  right: 24px;
+  top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+}
+
+.item {
+  position: relative;
+  background-color: var(--color-second-background);
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  min-width: 300px;
+  box-shadow: 0 0 12px 3px var(--color-background);
+  cursor: pointer;
+
+  p {
+    margin: 0;
+  }
+}
+
+.close-icon {
+  cursor: pointer;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+</style>

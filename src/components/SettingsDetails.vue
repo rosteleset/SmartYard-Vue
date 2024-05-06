@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Button from "@/components/Button.vue";
-import sendName from "@/api/sendName";
+import sendName from "@/lib/sendName.ts";
 import { useUserStore } from "@/store/user";
 
 const { names } = useUserStore();
@@ -42,10 +42,15 @@ const updateNames = async () => {
   gap: 24px;
   input {
     padding: 12px;
-    border: solid 1px #f0f0f1;
+    border: solid 1px var(--color-second-background);
     border-radius: 6px;
     &:focus {
-      outline: solid 1px #298bff;
+      outline: solid 1px var(--color-second-background);
+    }
+    &:disabled {
+      background: var(--color-second-background);
+      color: var(--color-text);
+
     }
   }
 }
