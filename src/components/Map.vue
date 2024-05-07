@@ -3,7 +3,7 @@ import {LIcon, LMap, LMarker, LTileLayer} from "@vue-leaflet/vue-leaflet";
 import {LMarkerClusterGroup} from 'vue-leaflet-markercluster'
 import {LatLngBoundsExpression, Map, Point, PointExpression} from "leaflet";
 import {StyleValue, ref} from "vue";
-import cameraIcon from "@/assets/camera.svg?component";
+import cameraIcon from "@/assets/cameraSmall.svg?component";
 import {Camera} from "@/types/camera";
 import VideoModal from "@/components/VideoModal.vue";
 import "leaflet/dist/leaflet.css";

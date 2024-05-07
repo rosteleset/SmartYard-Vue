@@ -17,7 +17,7 @@ provide("houseId", building.houseId);
 
 <template>
 
-  <div v-if="building.doors" class="address__doors">
+  <div v-if="building.doors && building.doors.length > 0" class="address__doors">
     <Door v-for="door in building.doors" :key="door.doorId" :data="door"/>
   </div>
   <Cameras :houseId="building.houseId"/>
