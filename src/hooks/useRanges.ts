@@ -11,7 +11,9 @@ const useRanges = (camera: Camera) => {
         const url = "cctv/ranges";
         get<Stream[]>(url, {cameraId: camera.id}).then(
             (response) => (streams.value = response || [])
-        ).catch(getDmRanges)
+        ).catch(e => {
+            console.warn(e)
+        })
     }
 
     const getDmRanges = () => {
