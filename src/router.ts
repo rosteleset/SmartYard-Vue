@@ -1,10 +1,9 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from "vue-router";
-import { getBasePath } from "@/lib/basePath";
 import Auth from "@/views/Auth.vue";
 import { useUserStore } from "@/store/user";
 import { watch } from "vue";
 
-const BASE_PATH = getBasePath();
+const BASE_PATH = import.meta.env.VITE_BASE_PATH || '/';
 
 const routes: RouteRecordRaw[] = [
   {

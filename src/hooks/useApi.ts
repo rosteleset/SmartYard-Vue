@@ -3,6 +3,8 @@ import {computed} from "vue";
 import {useUserStore} from "../store/user";
 import generateDeviceId from "@/lib/generateDeviceId.ts";
 
+const deviceId = generateDeviceId()
+
 // Получение URL сервера и временного токена из окружения
 const SERVER_URL =
     import.meta.env.VITE_DEV_PROXY_PREFIX &&
@@ -12,7 +14,6 @@ const SERVER_URL =
 
 const useApi = () => {
     const userStore = useUserStore();
-    const deviceId = generateDeviceId()
 
     // Создание экземпляра axios с предустановленными параметрами
     const axiosInstance = computed(() =>
