@@ -1,63 +1,16 @@
 <script setup lang="ts">
-import {getMessaging, MessagePayload, onMessage} from "firebase/messaging"
-import {onMounted, ref} from "vue";
-import {getFirebaseApp, getToken} from "@/firebase";
-import {useRouter} from "vue-router";
-import useApi from "@/hooks/useApi.ts";
+import {usePushStore} from "@/store/push.ts";
 import CloseIcon from "@/assets/close.svg?component";
+import {useRouter} from "vue-router";
 
-const {request} = useApi()
 const router = useRouter();
-const firebaseApp = getFirebaseApp();
-const messaging = getMessaging(firebaseApp);
-const messages = ref<MessagePayload[]>([]);
-
-
-const removeMessage = (message: MessagePayload) => {
-  messages.value = messages.value.filter(m => m.messageId !== message.messageId)
-}
-
-onMessage(messaging, (event) => {
-  console.log(event)
-  if (event.data?.action)
-    messages.value.push(event)
-  else {
-    router.push({path: "/call", query: event.data})
-  }
-})
-
-const init = (registration: ServiceWorkerRegistration) => {
-  getToken(registration).then(token => {
-    const storageToken = localStorage.getItem('push-token')
-    console.log(token)
-    if (token !== storageToken) {
-      localStorage.setItem('push-token', token)
-      request('user/registerPushToken', {pushToken: token, platform: "android"})
-    }
-  })
-  navigator.serviceWorker.addEventListener("message", (event) => {
-    if (event.data.type === "push-message")
-      messages.value.push(event.data.payload)
-  });
-}
-
-onMounted(() => {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register(
-        import.meta.env.MODE === 'production' ? 'firebase-messaging-sw.js' : 'dev-sw.js?dev-sw', {
-          scope: './',
-          type: import.meta.env.MODE === 'production' ? 'classic' : 'module'
-        }
-    ).then(init)
-  }
-
-})
+const {notifications, removeNotification} = usePushStore()
 </script>
 
 <template>
   <div class="list">
-    <div v-for="message in messages" :key="message.messageId" class="item" @click="router.push('/chat')">
-      <CloseIcon class="close-icon" @click.stop="removeMessage(message)"/>
+    <div v-for="message in notifications" :key="message.messageId" class="item" @click="router.push('/chat')">
+      <CloseIcon class="close-icon" @click.stop="removeNotification(message)"/>
       <p>Title: {{ message.notification?.title }}</p>
       <p>Body: {{ message.notification?.body }}</p>
       <p>Badge: {{ message.data?.badge }}</p>

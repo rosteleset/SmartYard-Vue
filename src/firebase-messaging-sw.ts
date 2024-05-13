@@ -1,12 +1,19 @@
 import {getMessaging, onBackgroundMessage,} from "firebase/messaging/sw";
 import {getFirebaseApp} from './firebase';
+import {MessagePayload} from "firebase/messaging";
 
 declare let self: ServiceWorkerGlobalScope
-
 
 const firebaseApp = getFirebaseApp();
 
 const messaging = getMessaging(firebaseApp);
+
+function sendToClient(client: WindowClient, payload: MessagePayload) {
+    client.postMessage({
+        msg: payload,
+        type: 'FCM_MESSAGE'
+    });
+}
 
 onBackgroundMessage(messaging, (payload) => {
     console.log('[firebase-messaging-sw.js] Received background message ', payload);
@@ -40,6 +47,13 @@ onBackgroundMessage(messaging, (payload) => {
         })
 
     }
+
+    // self.clients.matchAll({type: 'window'}).then(clients => {
+    //     clients.forEach(client => {
+    //         // Отправка данных на вкладку
+    //         sendToClient(client, payload);
+    //     });
+    // });
 });
 
 self.addEventListener('notificationclick', (event) => {
@@ -49,22 +63,21 @@ self.addEventListener('notificationclick', (event) => {
         self.clients.matchAll({type: 'window'}).then(windowClients => {
             console.log(windowClients)
             for (const windowClient of windowClients) {
-                windowClient.postMessage({
-                    type: 'push-message',
-                    payload: event.notification.data
-                });
                 if ('focus' in windowClient) {
-                    windowClient.postMessage(event.notification.data)
                     return windowClient.focus();
                 }
             }
 
             if (self.clients.openWindow) {
-                return self.clients.openWindow(url);
+                return self.clients.openWindow(url)
             }
+            return null
         })
+            .then(windowClient => {
+                if (windowClient)
+                    sendToClient(windowClient, event.notification.data as MessagePayload)
+            })
     );
 });
-
 
 
