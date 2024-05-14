@@ -1,7 +1,8 @@
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import {computed} from "vue";
 import {useUserStore} from "../store/user";
 import generateDeviceId from "@/lib/generateDeviceId.ts";
+import {usePushStore} from "@/store/push.ts";
 
 const deviceId = generateDeviceId()
 
@@ -14,6 +15,7 @@ const SERVER_URL =
 
 const useApi = () => {
     const userStore = useUserStore();
+    const push = usePushStore()
 
     // Создание экземпляра axios с предустановленными параметрами
     const axiosInstance = computed(() =>
@@ -27,6 +29,21 @@ const useApi = () => {
         })
     );
 
+    const onError = (error: AxiosError<any>) => {
+        if (error.response?.data?.name && error.response?.data?.message) {
+            const notification = {
+                title: error.response.data.name,
+                body: error.response.data.message
+            }
+            push.addNotification({
+                notification,
+                from: 'system',
+                collapseKey: '',
+                messageId: crypto.randomUUID(),
+            })
+        }
+    }
+
     // Функция для отправки запроса
     const request = async (path: string, params?: object) => {
         const body = JSON.stringify(params);
@@ -34,6 +51,7 @@ const useApi = () => {
             const response = await axiosInstance.value.post(path, body);
             return response.data;
         } catch (error: any) {
+            onError(error);
             throw error;
         }
     };
@@ -45,7 +63,7 @@ const useApi = () => {
             const response = await axiosInstance.value.post(path, body);
             return response.data.data;
         } catch (error: any) {
-            console.error("Ошибка во время запроса", error.message);
+            onError(error);
             throw error;
         }
     };

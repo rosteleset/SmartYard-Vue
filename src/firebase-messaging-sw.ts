@@ -16,7 +16,6 @@ function sendToClient(client: WindowClient, payload: MessagePayload) {
 }
 
 onBackgroundMessage(messaging, (payload) => {
-    console.log('[firebase-messaging-sw.js] Received background message ', payload);
     const action = payload.data?.action;
     const server = payload.data?.server;
     switch (action) {
@@ -47,13 +46,6 @@ onBackgroundMessage(messaging, (payload) => {
         })
 
     }
-
-    // self.clients.matchAll({type: 'window'}).then(clients => {
-    //     clients.forEach(client => {
-    //         // Отправка данных на вкладку
-    //         sendToClient(client, payload);
-    //     });
-    // });
 });
 
 self.addEventListener('notificationclick', (event) => {
@@ -61,7 +53,6 @@ self.addEventListener('notificationclick', (event) => {
     event.notification.close(); // Android needs explicit close.
     event.waitUntil(
         self.clients.matchAll({type: 'window'}).then(windowClients => {
-            console.log(windowClients)
             for (const windowClient of windowClients) {
                 if ('focus' in windowClient) {
                     return windowClient.focus();

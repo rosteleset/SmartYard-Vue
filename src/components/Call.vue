@@ -2,6 +2,9 @@
 
 import Modal from "@/components/Modal.vue";
 import {computed} from "vue";
+import {usePushStore} from "@/store/push.ts";
+import openDoor from "@/lib/openDoor.ts";
+import Button from "@/components/Button.vue";
 
 interface Call {
   callerId: string,
@@ -22,22 +25,38 @@ interface Call {
   ttl?: string,
 }
 
-interface CallProps {
-  call: Call
-}
+const push = usePushStore()
 
-const {call} = defineProps<CallProps>()
-
-const isCall = computed(() => !!call)
-
+const call = computed(() => push.call ? {...{}, ...push.call.data} as Call : undefined)
+const image = computed(() => call.value ? `https://rbt-demo.lanta.me/mobile/call/live/${call.value.hash}` : undefined)
 </script>
-<Modal :is-open="isCall">
 
-</Modal>
 <template>
-
+  <Modal :isOpen="!!call" :title="`Вызов ${call?.callerId}`" @onClose="push.setCall">
+    <div v-if="call" class="wrap">
+      <img :src="image" alt="call" class="image"/>
+      <div class="flex">
+        <Button variant="success" @click="openDoor(Number(call.domophoneId))">{{ $t('call.open') }}</Button>
+        <Button variant="error" @click="push.setCall">{{ $t('call.ignore') }}</Button>
+      </div>
+    </div>
+  </Modal>
 </template>
 
 <style scoped lang="scss">
+.wrap {
+  text-align: center;
+}
 
+.image {
+  max-width: 50vh;
+}
+
+.flex {
+  display: flex;
+  gap: 24px;
+  padding: 12px;
+  align-items: center;
+  justify-content: center;
+}
 </style>

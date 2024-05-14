@@ -4,6 +4,7 @@ import Header from "@/components/Header.vue";
 import {useAddressesStore} from "@/store/addresses";
 import {useUserStore} from "@/store/user";
 import Push from "@/components/Push.vue";
+import Call from "@/components/Call.vue";
 
 const addressesStore = useAddressesStore();
 const userStore = useUserStore();
@@ -17,7 +18,10 @@ provide("isMenuOpen", isMenuOpen);
 
 <template>
   <Header/>
-  <Push v-if="userStore.isLoaded && !userStore.error"/>
+  <template v-if="userStore.isLoaded && !userStore.error">
+    <Push/>
+    <Call/>
+  </template>
   <router-view v-slot="{ Component }">
     <Transition name="route" mode="out-in">
       <div class="content" :key="$route.fullPath">

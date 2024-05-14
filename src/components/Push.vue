@@ -2,18 +2,32 @@
 import {usePushStore} from "@/store/push.ts";
 import CloseIcon from "@/assets/close.svg?component";
 import {useRouter} from "vue-router";
+import {MessagePayload} from "firebase/messaging";
 
 const router = useRouter();
-const {notifications, removeNotification} = usePushStore()
+const push = usePushStore();
+
+const handler = (notification: MessagePayload) => {
+  switch (notification.data?.action) {
+    case "inbox":
+    case "videoReady":
+    case "newAddress":
+    case "paySuccess":
+    case "chat":
+      router.push('/chat');
+      break;
+    default:
+      break;
+  }
+}
 </script>
 
 <template>
   <div class="list">
-    <div v-for="message in notifications" :key="message.messageId" class="item" @click="router.push('/chat')">
-      <CloseIcon class="close-icon" @click.stop="removeNotification(message)"/>
-      <p>Title: {{ message.notification?.title }}</p>
-      <p>Body: {{ message.notification?.body }}</p>
-      <p>Badge: {{ message.data?.badge }}</p>
+    <div v-for="message in push.notifications" :key="message.messageId" class="item" @click="handler(message)">
+      <CloseIcon class="close-icon" @click.stop="push.removeNotification(message)"/>
+      <p class="title">{{ message.notification?.title }}</p>
+      <p class="message">{{ message.notification?.body }}</p>
     </div>
   </div>
 </template>
@@ -41,6 +55,14 @@ const {notifications, removeNotification} = usePushStore()
 
   p {
     margin: 0;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .message {
+    font-size: 12px;
   }
 }
 
