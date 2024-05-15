@@ -14,7 +14,6 @@ export const usePushStore = defineStore("push", () => {
 
     const onFocus = (serviceWorker: ServiceWorkerRegistration) => {
         serviceWorker.getNotifications().then(notifications => {
-            console.log(notifications);
             for (const notification of notifications) {
                 onPush(notification.data.FCM_MSG)
                 notification.close()
