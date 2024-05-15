@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import {onMounted, ref} from "vue";
 import closeIcon from "@/assets/close.svg?component";
-import { watch } from "vue";
+import {watch} from "vue";
+
 const props = defineProps<{
   title?: string;
   isOpen: boolean;
@@ -15,15 +16,23 @@ const close = () => {
 };
 
 const initClose = () => {
-  bodyVisible.value = false;
+  if (bodyVisible.value)
+    bodyVisible.value = false;
+  else
+    close()
 };
 watch(
-  () => props.isOpen,
-  () => {
-    if (props.isOpen) document.body.classList.add("scroll-block");
-    else document.body.classList.remove("scroll-block");
-  }
+    () => props.isOpen,
+    () => {
+      if (props.isOpen) document.body.classList.add("scroll-block");
+      else document.body.classList.remove("scroll-block");
+    }
 );
+
+onMounted(() => {
+  if (props.isOpen)
+    bodyVisible.value = true;
+})
 </script>
 
 <template>
@@ -35,11 +44,11 @@ watch(
             <div class="modal__header">
               <h3 v-if="title">{{ title }}</h3>
               <button
-                class="modal__close"
-                :class="{ absolute: !title }"
-                @click="initClose"
+                  class="modal__close"
+                  :class="{ absolute: !title }"
+                  @click="initClose"
               >
-                <closeIcon />
+                <closeIcon/>
               </button>
             </div>
             <div class="modal__body">
@@ -83,6 +92,7 @@ watch(
     margin-bottom: 10px;
 
     h3 {
+      color: var(--color-text);
       margin: 0;
     }
   }
@@ -116,6 +126,7 @@ watch(
     }
   }
 }
+
 .fade-enter-active,
 .fade-leave-active {
   transition: all 0.5s ease;
