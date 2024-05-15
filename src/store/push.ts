@@ -12,22 +12,14 @@ export const usePushStore = defineStore("push", () => {
     const notifications = ref<MessagePayload[]>([])
     const call = ref<MessagePayload>()
 
-    const init = (registration: ServiceWorkerRegistration) => {
-        getToken(registration)
-            .then(token => {
-                const storageToken = localStorage.getItem('push-token')
-                if (token !== storageToken) {
-                    localStorage.setItem('push-token', token)
-                    request('user/registerPushToken', {pushToken: token, platform: "android"}).then(() => {
-                    })
-                }
-            })
-
-        onMessage(messaging, onPush)
-        navigator.serviceWorker.addEventListener("message", (event) => {
-            if (event.data.type === "FCM_MESSAGE")
-                onPush(event.data.msg)
-        });
+    const onFocus = (serviceWorker: ServiceWorkerRegistration) => {
+        serviceWorker.getNotifications().then(notifications => {
+            console.log(notifications);
+            for (const notification of notifications) {
+                onPush(notification.data.FCM_MSG)
+                notification.close()
+            }
+        })
     }
 
     const onPush = (payload: MessagePayload) => {
@@ -38,7 +30,6 @@ export const usePushStore = defineStore("push", () => {
     }
 
     const addNotification = (payload: MessagePayload) => {
-        console.log('addNotification',payload)
         notifications.value.push(payload)
     }
     const removeNotification = (notification: MessagePayload) => {
@@ -48,6 +39,7 @@ export const usePushStore = defineStore("push", () => {
         call.value = payload
     }
 
+
     onMounted(() => {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register(
@@ -55,9 +47,22 @@ export const usePushStore = defineStore("push", () => {
                     scope: './',
                     type: import.meta.env.MODE === 'production' ? 'classic' : 'module'
                 }
-            ).then(init)
+            )
+                .then((registration) => {
+                    getToken(registration)
+                        .then(token => {
+                            request('user/registerPushToken', {pushToken: token, platform: "android"})
+                        })
+                    navigator.serviceWorker.addEventListener("message", (event) => {
+                        if (event.data.type === "FCM_MESSAGE")
+                            onPush(event.data.msg)
+                    });
+                    window.addEventListener("focus", () => onFocus(registration));
+                    onMessage(messaging, onPush);
+                })
         }
     })
+
 
     return {notifications, addNotification, removeNotification, call, setCall}
 })

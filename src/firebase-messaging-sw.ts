@@ -1,56 +1,12 @@
-import {getMessaging, onBackgroundMessage,} from "firebase/messaging/sw";
+import {getMessaging, onBackgroundMessage} from "firebase/messaging/sw";
 import {getFirebaseApp} from './firebase';
-import {MessagePayload} from "firebase/messaging";
+import {SERVER_URL} from "@/lib/const.ts";
 
 declare let self: ServiceWorkerGlobalScope
 
-const firebaseApp = getFirebaseApp();
-
-const messaging = getMessaging(firebaseApp);
-
-function sendToClient(client: WindowClient, payload: MessagePayload) {
-    client.postMessage({
-        msg: payload,
-        type: 'FCM_MESSAGE'
-    });
-}
-
-onBackgroundMessage(messaging, (payload) => {
-    const action = payload.data?.action;
-    const server = payload.data?.server;
-    switch (action) {
-        case "inbox":
-        case "videoReady":
-        case "newAddress":
-        case "paySuccess":
-        case "chat":
-            const title = payload.notification?.title || "smart yard";
-
-            return self.registration.showNotification(title, {
-                badge: payload.data?.badge,
-                body: payload.notification?.body,
-                icon: "/icon.png",
-                data: payload
-            })
-        default:
-            break;
-    }
-
-    if (server) {
-        const title = "call";
-        return self.registration.showNotification(title, {
-            badge: payload.data?.badge,
-            body: payload.data?.callerId,
-            icon: `https://rbt-demo.lanta.me/mobile/call/camshot/${payload.data?.hash}`,
-            data: payload
-        })
-
-    }
-});
-
 self.addEventListener('notificationclick', (event) => {
-    let url = 'http://localhost:5173/chat';
     event.notification.close(); // Android needs explicit close.
+    let url = `${self.registration.scope}chat`;
     event.waitUntil(
         self.clients.matchAll({type: 'window'}).then(windowClients => {
             for (const windowClient of windowClients) {
@@ -66,9 +22,32 @@ self.addEventListener('notificationclick', (event) => {
         })
             .then(windowClient => {
                 if (windowClient)
-                    sendToClient(windowClient, event.notification.data as MessagePayload)
+                    windowClient.postMessage({
+                        msg: event.notification.data.FCM_MSG,
+                        type: 'FCM_MESSAGE'
+                    });
             })
     );
 });
+
+const firebaseApp = getFirebaseApp();
+const messaging = getMessaging(firebaseApp);
+
+onBackgroundMessage(messaging, (payload) => {
+    if (payload.notification) {
+        // payload.notification.image = "/icon.png"
+    } else if (payload.data?.server) {
+        const title = "call";
+        self.registration.showNotification(title, {
+            body: payload.data?.callerId,
+            icon: `${SERVER_URL}/call/camshot/${payload.data?.hash}`,
+            data: {FCM_MSG: payload}
+        })
+    }
+
+    return payload;
+});
+
+
 
 

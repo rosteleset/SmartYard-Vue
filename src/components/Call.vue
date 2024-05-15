@@ -36,7 +36,7 @@ const image = computed(() => call.value ? `https://rbt-demo.lanta.me/mobile/call
     <div v-if="call" class="wrap">
       <img :src="image" alt="call" class="image"/>
       <div class="flex">
-        <Button variant="success" @click="openDoor(Number(call.domophoneId))">{{ $t('call.open') }}</Button>
+        <Button v-if="call.domophoneId" variant="success" @click="openDoor(Number(call.domophoneId))">{{ $t('call.open') }}</Button>
         <Button variant="error" @click="push.setCall">{{ $t('call.ignore') }}</Button>
       </div>
     </div>

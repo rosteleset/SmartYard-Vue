@@ -3,15 +3,9 @@ import {computed} from "vue";
 import {useUserStore} from "../store/user";
 import generateDeviceId from "@/lib/generateDeviceId.ts";
 import {usePushStore} from "@/store/push.ts";
+import {SERVER_URL} from "@/lib/const.ts";
 
 const deviceId = generateDeviceId()
-
-// Получение URL сервера и временного токена из окружения
-const SERVER_URL =
-    import.meta.env.VITE_DEV_PROXY_PREFIX &&
-    !import.meta.env.VITE_SERVER_URL.includes("http")
-        ? import.meta.env.VITE_DEV_PROXY_PREFIX + import.meta.env.VITE_SERVER_URL
-        : import.meta.env.VITE_SERVER_URL;
 
 const useApi = () => {
     const userStore = useUserStore();
