@@ -1,11 +1,9 @@
 import axios, {AxiosError} from "axios";
 import {computed} from "vue";
 import {useUserStore} from "../store/user";
-import generateDeviceId from "@/lib/generateDeviceId.ts";
 import {usePushStore} from "@/store/push.ts";
 import {SERVER_URL} from "@/lib/const.ts";
 
-const deviceId = generateDeviceId()
 
 const useApi = () => {
     const userStore = useUserStore();
@@ -17,7 +15,7 @@ const useApi = () => {
             baseURL: SERVER_URL,
             headers: {
                 Authorization: `Bearer ${userStore.token}`,
-                DeviceId: deviceId,
+                DeviceId: userStore.deviceId,
                 "Content-Type": "application/json",
             },
         })
