@@ -44,7 +44,7 @@ export const useEventsStore = defineStore("events", () => {
           day: day.day,
         });
 
-        result.push(...response);
+        result.push(...response || []);
       } catch (_error) {
         console.log(_error);
       }
