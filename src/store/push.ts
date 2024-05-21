@@ -1,10 +1,12 @@
 import {defineStore} from "pinia";
-import {onMounted, ref} from "vue";
+import {ref, watch} from "vue";
 import {getMessaging, MessagePayload, onMessage} from "firebase/messaging"
 import {getFirebaseApp, getToken} from "@/firebase.ts";
 import useApi from "@/hooks/useApi.ts";
+import {useUserStore} from "@/store/user.ts";
 
 export const usePushStore = defineStore("push", () => {
+    const userStore = useUserStore();
     const {request} = useApi();
     const firebaseApp = getFirebaseApp();
     const messaging = getMessaging(firebaseApp);
@@ -38,8 +40,7 @@ export const usePushStore = defineStore("push", () => {
         call.value = payload
     }
 
-
-    onMounted(() => {
+    const load = () => {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register(
                 import.meta.env.MODE === 'production' ? 'firebase-messaging-sw.js' : 'dev-sw.js?dev-sw', {
@@ -60,8 +61,12 @@ export const usePushStore = defineStore("push", () => {
                     onMessage(messaging, onPush);
                 })
         }
+    }
+
+    watch(userStore, store => {
+        if (store.isAuth)
+            load()
     })
 
-
-    return {notifications, addNotification, removeNotification, call, setCall}
+    return {notifications, addNotification, removeNotification, call, setCall, load}
 })

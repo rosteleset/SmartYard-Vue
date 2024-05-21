@@ -1,69 +1,101 @@
 <script setup lang="ts">
-import { useUserStore } from "@/store/user.ts";
-import { computed, onMounted, ref } from "vue";
+import {ref, watch} from "vue";
 import Button from "@/components/Button.vue";
+import PhoneInput from "@/components/PhoneInput.vue";
 import useApi from "@/hooks/useApi.ts";
-import debounce from "@/lib/debounce.ts";
-import { useRouter } from "vue-router";
-import { useAddressesStore } from "@/store/addresses.ts";
+import {useUserStore} from "@/store/user.ts";
+import {useRouter} from "vue-router";
 
-const userStore = useUserStore();
-const addressesStore = useAddressesStore();
-const { axiosInstance } = useApi();
+const userStore = useUserStore()
+const {request} = useApi()
+
 const router = useRouter();
 
-const status = ref<string>();
-const inputType = ref("password");
-const tt = computed({
-  get() {
-    return userStore.token || "";
-  },
-  set(value: string) {
-    debouncedValidate();
-    userStore.setToken(value);
-  },
-});
+const phone = ref<string>("")
+const code = ref<string>("")
+const status = ref<number>(0);
 
-const handler = () => router.push(`/addresses`);
+const requestCode = () => {
+  const method = 'sms';
+  request('/user/requestCode', {
+    userPhone: phone.value,
+    method
+  }).then(r => {
+    console.log(r)
+    if (r.data.method === method)
+      status.value = 1;
+  })
+}
 
-const validate = () => {
-  axiosInstance.value
-    .post("user/ping")
-    .then((res) => {
-      status.value = res.status === 204 ? "Valid token" : "Hmm";
-      if (res.status === 204) {
-        userStore.load();
-        addressesStore.load();
-      }
-    })
-    .catch((err: any) => {
-      userStore.error = err.message;
-      status.value =
-        err.response.status === 401 ? "Invalid token" : "Server error";
-    });
-};
+const confirmCode = () => {
+  request('/user/confirmCode', {
+    userPhone: phone.value,
+    smsCode: code.value
+  }).then(r => {
+    console.log(r)
+    if (r.data.accessToken)
+      userStore.setToken(r.data.accessToken)
+  })
+}
 
-const debouncedValidate = debounce(validate, 500);
+watch(userStore, store => {
+  if (store.isAuth)
+    router.push('/addresses')
+})
 
-onMounted(validate);
+// const userStore = useUserStore();
+// const addressesStore = useAddressesStore();
+// const { axiosInstance } = useApi();
+// const router = useRouter();
+
+// const status = ref<string>();
+// const inputType = ref("password");
+// const tt = computed({
+//   get() {
+//     return userStore.token || "";
+//   },
+//   set(value: string) {
+//     debouncedValidate();
+//     userStore.setToken(value);
+//   },
+// });
+//
+// const handler = () => router.push(`/addresses`);
+//
+// const validate = () => {
+//   axiosInstance.value
+//     .post("user/ping")
+//     .then((res) => {
+//       status.value = res.status === 204 ? "Valid token" : "Hmm";
+//       if (res.status === 204) {
+//         userStore.load();
+//         addressesStore.load();
+//       }
+//     })
+//     .catch((err: any) => {
+//       userStore.error = err.message;
+//       status.value =
+//         err.response.status === 401 ? "Invalid token" : "Server error";
+//     });
+// };
+//
+// const debouncedValidate = debounce(validate, 500);
+
+// onMounted(validate);
 </script>
 
 <template>
   <div class="wrap">
-    <input
-      :type="inputType"
-      v-model="tt"
-      @focusin="inputType = 'text'"
-      @focusout="inputType = 'password'"
-    />
-    <Button
-      v-if="status"
-      :variant="status === 'Valid token' ? 'success' : 'error'"
-      >{{ status }}</Button
-    >
-    <Button v-if="status === 'Valid token'" @click="handler" variant="primary"
-      >К адресам</Button
-    >
+    <p>{{ phone }}</p>
+    <PhoneInput v-model="phone" :disabled="status !== 0"/>
+    <Button v-if="status === 0" variant="primary" @click="requestCode">Запросить код</Button>
+    <template v-if="status === 1">
+      <input
+          v-model="code"
+          placeholder="Код"
+      />
+      <Button variant="primary" @click="confirmCode">Отправить</Button>
+    </template>
   </div>
 </template>
 

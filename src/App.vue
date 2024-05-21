@@ -9,7 +9,7 @@ import Call from "@/components/Call.vue";
 const addressesStore = useAddressesStore();
 const userStore = useUserStore();
 
-const isLoaded = computed(() => userStore.isLoaded && addressesStore.isLoaded);
+const isLoaded = computed(() => userStore.isLoaded);
 
 const isMenuOpen = ref(false);
 provide("isMenuOpen", isMenuOpen);
@@ -18,8 +18,8 @@ provide("isMenuOpen", isMenuOpen);
 
 <template>
   <Header/>
-  <template v-if="userStore.isLoaded && !userStore.error">
-    <Push/>
+  <Push/>
+  <template v-if="userStore.isLoaded && userStore.isAuth">
     <Call/>
   </template>
   <router-view v-slot="{ Component }">

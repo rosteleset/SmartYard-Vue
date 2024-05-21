@@ -4,9 +4,12 @@ import useLocale from "@/hooks/useLocale";
 import { useConfigStore } from "@/store/config";
 import Select from "@/components/Select.vue";
 import Switch from "@/components/Switch.vue";
+import Button from "@/components/Button.vue";
+import {useUserStore} from "@/store/user.ts";
 
 const { availableLocales, locale, changeLocale, t } = useLocale();
 const configStore = useConfigStore();
+const {logout} = useUserStore();
 const { config, updateConfig } = configStore;
 
 const watchmanMode = ref(config.watchmanMode);
@@ -103,6 +106,7 @@ const localeHandler = (option: { id: string; name: string }) => {
           justify="space-between"
         />
       </div>
+      <Button variant="error" @click="logout">logout</Button>
     </div>
   </div>
 </template>
