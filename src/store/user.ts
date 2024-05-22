@@ -44,11 +44,12 @@ export const useUserStore = defineStore("user", () => {
             load()
     };
 
-    const logout = () => {
+    const logout = async () => {
+        // await request('user/registerPushToken', {pushToken: ""})
         setToken("")
         clients.value = []
         isAuth.value = false
-        router.push('/')
+        await router.push('/')
     }
 
     onMounted(load);
