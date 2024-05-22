@@ -5,6 +5,7 @@ import PhoneInput from "@/components/PhoneInput.vue";
 import useApi from "@/hooks/useApi.ts";
 import {useUserStore} from "@/store/user.ts";
 import {useRouter} from "vue-router";
+import generateDeviceId from "@/lib/generateDeviceId.ts";
 
 const userStore = useUserStore()
 const {request} = useApi()
@@ -30,12 +31,28 @@ const requestCode = () => {
 const confirmCode = () => {
   request('/user/confirmCode', {
     userPhone: phone.value,
-    smsCode: code.value
+    smsCode: code.value,
+    deviceToken: generateDeviceId(),
+    platform: '2'
   }).then(r => {
     console.log(r)
     if (r.data.accessToken)
       userStore.setToken(r.data.accessToken)
   })
+}
+
+const handler = (e:Event) => {
+  e.preventDefault();
+  switch (status.value) {
+    case 0:
+      requestCode()
+      return;
+    case 1:
+      confirmCode()
+      return;
+    default:
+      break;
+  }
 }
 
 watch(userStore, store => {
@@ -85,18 +102,18 @@ watch(userStore, store => {
 </script>
 
 <template>
-  <div class="wrap">
+  <form class="wrap" @submit="handler">
     <p>{{ phone }}</p>
     <PhoneInput v-model="phone" :disabled="status !== 0"/>
-    <Button v-if="status === 0" variant="primary" @click="requestCode">Запросить код</Button>
+    <Button v-if="status === 0" variant="primary">Запросить код</Button>
     <template v-if="status === 1">
       <input
           v-model="code"
           placeholder="Код"
       />
-      <Button variant="primary" @click="confirmCode">Отправить</Button>
+      <Button variant="primary">Отправить</Button>
     </template>
-  </div>
+  </form>
 </template>
 
 <style lang="scss" scoped>

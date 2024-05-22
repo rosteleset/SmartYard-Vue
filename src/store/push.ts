@@ -51,7 +51,8 @@ export const usePushStore = defineStore("push", () => {
                 .then((registration) => {
                     getToken(registration)
                         .then(token => {
-                            request('user/registerPushToken', {pushToken: token, platform: "android"})
+                            request('user/registerPushToken', {pushToken: token, platform: "web"})
+
                         })
                     navigator.serviceWorker.addEventListener("message", (event) => {
                         if (event.data.type === "FCM_MESSAGE")

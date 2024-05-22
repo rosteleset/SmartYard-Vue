@@ -15,7 +15,6 @@ const useApi = () => {
             baseURL: SERVER_URL,
             headers: {
                 Authorization: `Bearer ${userStore.token}`,
-                DeviceId: userStore.deviceId,
                 "Content-Type": "application/json",
             },
         })

@@ -2,7 +2,6 @@ import {onMounted, ref} from "vue";
 import {Client} from "../types/user";
 import {defineStore} from "pinia";
 import useApi from "../hooks/useApi";
-import generateDeviceId from "@/lib/generateDeviceId.ts";
 import {useRouter} from "vue-router";
 
 const LOCAL_STORAGE_TOKEN_KEY = "jwt-token";
@@ -10,7 +9,6 @@ const LOCAL_STORAGE_TOKEN_KEY = "jwt-token";
 export const useUserStore = defineStore("user", () => {
     const {get} = useApi();
     const router = useRouter();
-    const deviceId = ref(generateDeviceId());
     const isLoaded = ref(false);
     const isAuth = ref(false);
 
@@ -61,7 +59,6 @@ export const useUserStore = defineStore("user", () => {
         isLoaded,
         isAuth,
         token,
-        deviceId,
         setToken,
         logout
     };
