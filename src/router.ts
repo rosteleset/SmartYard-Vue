@@ -10,6 +10,11 @@ const routes: RouteRecordRaw[] = [
         path: "/",
         name: "Auth",
         component: Auth,
+        beforeEnter: (() => {
+            const userStore = useUserStore();
+            if (userStore.isAuth)
+                return {name: "AddressesList"};
+        })
     },
     {
         path: `/addresses`,

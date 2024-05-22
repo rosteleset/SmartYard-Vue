@@ -55,7 +55,10 @@ const handler = (e:Event) => {
   }
 }
 
+// const checkAuth = () => {}
+
 watch(userStore, store => {
+  console.log(store)
   if (store.isAuth)
     router.push('/addresses')
 })

@@ -9,19 +9,19 @@ import {useConfigStore} from "@/store/config";
 import CamerasList from "@/components/CamerasList.vue";
 import NotFound from "@/components/NotFound.vue";
 
-const { houseId } = defineProps<{
+const {houseId} = defineProps<{
   houseId?: string;
 }>();
 
-const { config } = useConfigStore();
-const { getAddressByHouseId } = useAddressesStore();
+const {config} = useConfigStore();
+const {getAddressByHouseId} = useAddressesStore();
 
 const columns = computed<number>(() => config["columnsCount"] || 4);
 const invalidHouseId = houseId && getAddressByHouseId(houseId) === undefined; //проверка на наличие дома если в роутрере указан houseId
 // Состояния открытости в компактном режиме
 const isOpen = ref(false);
 
-const { cameras } = useCameras({ houseId });
+const {cameras} = useCameras({houseId});
 
 const handleToggle = (open: boolean) => {
   isOpen.value = open;
@@ -29,22 +29,22 @@ const handleToggle = (open: boolean) => {
 </script>
 
 <template>
-  <template v-if="!invalidHouseId">
+  <template v-if="invalidHouseId">
+    <NotFound/>
+  </template>
+  <template v-else-if="cameras.length > 0">
     <Label
-      :icon="CameraIcon"
-      :alt="$t('addresses.cameras')"
-      :text="$t('addresses.cameras')"
-      @toggle="handleToggle"
+        :icon="CameraIcon"
+        :alt="$t('addresses.cameras')"
+        :text="$t('addresses.cameras')"
+        @toggle="handleToggle"
     />
     <Transition name="cameras">
       <div v-if="isOpen">
-        <CamerasList :cameras="cameras" />
-        <Map :cameras="cameras" />
+        <CamerasList :cameras="cameras"/>
+        <Map :cameras="cameras"/>
       </div>
     </Transition>
-  </template>
-  <template v-else>
-    <NotFound/>
   </template>
 </template>
 
@@ -70,6 +70,7 @@ const handleToggle = (open: boolean) => {
 .cameras-leave-active {
   transition: 0.5s ease;
 }
+
 .cameras-enter-from,
 .cameras-leave-to {
   opacity: 0;
