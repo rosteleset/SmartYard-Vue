@@ -52,13 +52,15 @@ export const usePushStore = defineStore("push", () => {
                     getToken(registration)
                         .then(token => {
                             request('user/registerPushToken', {pushToken: token, platform: "web"})
-
                         })
+                    // в случае клика по пушу
                     navigator.serviceWorker.addEventListener("message", (event) => {
                         if (event.data.type === "FCM_MESSAGE")
                             onPush(event.data.msg)
                     });
+                    // в случае получения окном фокуса
                     window.addEventListener("focus", () => onFocus(registration));
+                    // в случае если окно в фокусе
                     onMessage(messaging, onPush);
                 })
         }
