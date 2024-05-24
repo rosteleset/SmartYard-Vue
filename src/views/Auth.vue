@@ -22,7 +22,6 @@ const requestCode = () => {
     userPhone: phone.value,
     method
   }).then(r => {
-    console.log(r)
     if (r.data.method === method)
       status.value = 1;
   })
@@ -35,7 +34,6 @@ const confirmCode = () => {
     deviceToken: generateDeviceId(),
     platform: '2'
   }).then(r => {
-    console.log(r)
     if (r.data.accessToken)
       userStore.setToken(r.data.accessToken)
   })
@@ -58,7 +56,6 @@ const handler = (e:Event) => {
 // const checkAuth = () => {}
 
 watch(userStore, store => {
-  console.log(store)
   if (store.isAuth)
     router.push('/addresses')
 })

@@ -42,7 +42,6 @@ const useApi = () => {
             const response = await axiosInstance.value.post(path, body);
             return response.data;
         } catch (error: any) {
-            console.log(axiosInstance)
             onError(error);
             throw error;
         }

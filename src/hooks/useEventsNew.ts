@@ -28,7 +28,6 @@ const useEvents = (
 
     const getEvents = async (day: EventDay) => {
         try {
-            console.log("getEvents", day)
             const result: Event[] = []
             for (const flatId of flatIds.value) {
                 const response = await get<Event[]>(`address/plog`, {flatId, day})

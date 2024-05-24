@@ -12,7 +12,6 @@ const {getAddressByHouseId, getClientsByHouseId} = useAddressesStore();
 const {t} = useLocale();
 const building = getAddressByHouseId(houseId);
 const clients = getClientsByHouseId(houseId);
-console.log(clients.value)
 // Вычисляемое свойство для добавления заголовков клиентов
 const clientsWithTitles = computed(() =>
     clients.value.map((client) => ({

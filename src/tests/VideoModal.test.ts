@@ -51,7 +51,6 @@ describe('VideoModal.vue', () => {
     })
 
     it('creates a player on mounted', async () => {
-        // console.log(wrapper.vm.player)
         expect(wrapper.vm.player).toBeDefined()
     })
     //
