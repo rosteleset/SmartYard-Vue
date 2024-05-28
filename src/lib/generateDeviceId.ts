@@ -1,12 +1,17 @@
 function generateDeviceId() {
-    let navigator_info = window.navigator;
-    let screen_info = window.screen;
-    let uid: string = ""
-    uid += navigator_info.userAgent.replace(/\D+/g, '');
-    uid += screen_info.height || '';
-    uid += screen_info.width || '';
-    uid += screen_info.pixelDepth || '';
-    return uid;
+    const navigator_info = window.navigator;
+    const screen_info = window.screen;
+    const userAgent = navigator_info.userAgent;
+    const platform = navigator_info.platform;
+    const language = navigator_info.language;
+    const screenWidth = screen_info.width;
+    const screenHeight = screen_info.height;
+    const colorDepth = screen_info.colorDepth;
+
+    // Объединяем параметры в одну строку
+    const data = `${userAgent}-${platform}-${language}-${screenWidth}x${screenHeight}-${colorDepth}`;
+
+    return BigInt(data.replace(/\D+/g, '')).toString(16)
 }
 
 export default generateDeviceId
