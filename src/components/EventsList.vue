@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import EventsListDay from "@/components/EventsListDay.vue";
-import { useEventsStore } from "@/store/events";
-import { Client } from "@/types/user";
+import {Client} from "@/types/user";
+import useEvents, {eventsHook} from "@/hooks/useEvents.ts";
+import {inject} from "vue";
 
-const { clients } = defineProps<{
+const {clients} = defineProps<{
   clients: Client[];
 }>();
-
-const eventsStore = useEventsStore();
-eventsStore.flatIds = clients.map((client) => client.flatId); // инициализация стора
+const events: eventsHook = inject("events") || useEvents(clients.map((client) => client.flatId))
+const {days} = events
 </script>
 
 <template>
-  <EventsListDay v-for="day in eventsStore.days" :day="day" :key="day.day" />
+  <EventsListDay v-for="day in days" :day="day" :key="day.day"/>
 </template>
 
 <style scoped lang="scss">
