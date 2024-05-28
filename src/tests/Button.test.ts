@@ -1,47 +1,59 @@
-import Button from "@/components/Button.vue";
-import { mount } from "@vue/test-utils";
-import { expect, test } from "vitest";
+import { mount } from '@vue/test-utils'
+import { describe, it, expect } from 'vitest'
+import Button from '@/components/Button.vue'
 
-test("рендерит кнопку с правильными классами и свойствами", async () => {
-  const wrapper = mount(Button, {
-    props: {
-      variant: "primary",
-      bordered: true,
-      disabled: false,
-    },
-    slots: {
-      default: "Нажми меня",
-    },
-  });
+describe('Button.vue', () => {
+  it('renders with correct default classes', () => {
+    const wrapper = mount(Button, {
+      props: {
+        variant: 'primary'
+      }
+    })
+    const button = wrapper.find('button')
+    expect(button.classes()).toContain('button-primary')
+  })
 
-  // Проверяем, имеет ли кнопка правильные классы
-  expect(wrapper.classes()).toContain("button");
-  expect(wrapper.classes()).toContain("button-bordered");
-  expect(wrapper.classes()).toContain("button-primary");
+  it('applies the correct variant class', () => {
+    const wrapper = mount(Button, {
+      props: {
+        variant: 'success'
+      }
+    })
+    const button = wrapper.find('button')
+    expect(button.classes()).toContain('button-success')
+  })
 
-  // Проверяем, имеет ли кнопка правильный текст
-  expect(wrapper.text()).toContain("Нажми меня");
+  it('applies the bordered class when bordered is true', () => {
+    const wrapper = mount(Button, {
+      props: {
+        variant: 'error',
+        bordered: true
+      }
+    })
+    const button = wrapper.find('button')
+    expect(button.classes()).toContain('button-error')
+    expect(button.classes()).toContain('button-bordered')
+  })
 
-  // Проверяем, не отключена ли кнопка
-  expect(wrapper.attributes("disabled")).toBeFalsy();
-});
+  it('disables the button when disabled is true', () => {
+    const wrapper = mount(Button, {
+      props: {
+        variant: 'primary',
+        disabled: true
+      }
+    })
+    const button = wrapper.find('button')
+    expect(button.attributes('disabled')).toBeDefined()
+  })
 
-test("эмитирует событие клика при нажатии на кнопку", async () => {
-  const wrapper = mount(Button, {
-    props: {
-      variant: "primary",
-    },
-    slots: {
-      default: "Нажми меня",
-    },
-    global: {
-      plugins: [],
-    },
-  });
-
-  // Симулируем клик по кнопке
-  await wrapper.find(".button").trigger("click");
-
-  // Ожидаем, что будет эмитировано событие клика
-  expect(wrapper.emitted().click).toBeTruthy();
-});
+  it('emits click event when clicked', async () => {
+    const wrapper = mount(Button, {
+      props: {
+        variant: 'primary'
+      }
+    })
+    const button = wrapper.find('button')
+    await button.trigger('click')
+    expect(wrapper.emitted()).toHaveProperty('click')
+  })
+})
