@@ -47,15 +47,12 @@ const selectedClient = computed<OptionProps | undefined>({
     const client = clients.find(
         (client) => client.flatId == events.flatId.value
     );
-    console.log("wtf")
     return {
       id: client?.flatId || "",
       name: client?.flatNumber || "",
     };
   },
   set: (value: OptionProps | undefined) => {
-    console.log(events)
-
     events.flatId.value = value?.id.toString() || undefined
   },
 });
