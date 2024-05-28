@@ -3,6 +3,21 @@ import {mount, VueWrapper} from '@vue/test-utils'
 import VideoModal from '@/components/VideoModal.vue'
 import {Camera} from "@/types/camera.ts";
 import {ref} from "vue";
+import {createTestingPinia} from "@pinia/testing";
+
+const mockTFunction = () => "Translated Text";
+
+const pinia = createTestingPinia({createSpy: vi.fn});
+
+vi.mock('@/hooks/useLocale', () => ({
+    default: () => ({
+        locale: 'en',
+        localizedDayjs: vi.fn().mockImplementation(() => ({
+            format: (fmt: any) => `formatted_time_${fmt}`,
+            isSame: vi.fn().mockReturnValue(true)
+        }))
+    })
+}))
 
 vi.mock('rbt-player', () => ({
     PlayerFactory: {
@@ -18,14 +33,14 @@ vi.mock('rbt-player', () => ({
 }))
 
 vi.mock('@/hooks/useZoom', () => ({
-    useZoom: () => ({
+    default: () => ({
         onDrag: ref(false),
         videoStyles: ref({})
     })
 }))
 
 vi.mock('@/hooks/useRanges', () => ({
-    useRanges: () => ({
+    default: () => ({
         stream: ref([]),
     })
 }))
@@ -42,7 +57,14 @@ describe('VideoModal.vue', () => {
                     token: '123'
                 } as Camera,
                 styles: {  }
-            }
+            },
+            global: {
+                plugins: [pinia],
+                mocks: {
+                    $t: mockTFunction,
+                    $router: {push: vi.fn()},
+                },
+            },
         })
     })
 

@@ -5,7 +5,7 @@ import {nextTick, ref} from 'vue'
 import {Camera} from "@/types/camera.ts";
 
 vi.mock('@/hooks/useLocale', () => ({
-    useLocale: () => ({
+    default: () => ({
         locale: 'en',
         localizedDayjs: vi.fn().mockImplementation(() => ({
             format: (fmt: any) => `formatted_time_${fmt}`,
@@ -14,14 +14,14 @@ vi.mock('@/hooks/useLocale', () => ({
     })
 }))
 
-vi.mock('@/store/config.ts', () => ({
+vi.mock('@/store/config', () => ({
     useConfigStore: () => ({
         getTheme: vi.fn().mockReturnValue('light')
     })
 }))
 
 vi.mock('@/hooks/useRanges', () => ({
-    useRanges: () => ({
+    default: () => ({
         streams: ref([
             {
                 stream: 'stream1',
