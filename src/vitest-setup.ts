@@ -1,6 +1,7 @@
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import {vi} from "vitest";
+import {MessagePayload} from "firebase/messaging";
 
 global.L = L;
 
@@ -39,15 +40,14 @@ vi.mock("@/store/config", () => ({
     }),
 }));
 
-vi.mock("@/store/config", () => ({
-    useAddressesStore: () => ({
-        config: {},
-        notifications: {},
-        names: {},
-        updateConfig: vi.fn(),
-        getTheme: vi.fn(),
-        updateTheme: vi.fn(),
-        sendName: vi.fn()
+vi.mock("@/store/push", () => ({
+    usePushStore: () => ({
+        notifications: [],
+        addNotification: vi.fn(),
+        removeNotification: vi.fn(),
+        call: {} as MessagePayload,
+        setCall: vi.fn(),
+        load: vi.fn()
     }),
 }));
 
