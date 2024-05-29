@@ -2,9 +2,12 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import {vi} from "vitest";
 import {MessagePayload} from "firebase/messaging";
+import {mockTFunction} from "@/tests/__mocks.ts";
+import dayjs from "dayjs";
 
 global.L = L;
 
+// stores
 vi.mock("@/store/user", () => ({
     useUserStore: () => ({
         load: vi.fn(),
@@ -29,7 +32,7 @@ vi.mock("@/store/addresses", () => ({
 }));
 
 vi.mock("@/store/config", () => ({
-    useAddressesStore: () => ({
+    useConfigStore: () => ({
         config: {},
         notifications: {},
         names: {},
@@ -51,4 +54,14 @@ vi.mock("@/store/push", () => ({
     }),
 }));
 
+// hooks
+vi.mock('@/hooks/useLocale', () => ({
+    default: () => ({
+        locale: 'en',
+        changeLocale: vi.fn(),
+        availableLocales: ['en', 'ru'],
+        t: mockTFunction,
+        localizedDayjs: dayjs
+    })
+}))
 
