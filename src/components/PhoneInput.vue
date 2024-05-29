@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import {ref, watch, defineProps, defineEmits} from 'vue';
+import {defineEmits, defineProps, ref, watch} from 'vue';
 
 const props = defineProps<{ modelValue: string }>();
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>();
-
-const phone = ref(props.modelValue);
 
 const replace = (value: string) => {
   let result = value.replace(/\D/g, ''); // Удалить все, кроме цифр
@@ -13,53 +11,59 @@ const replace = (value: string) => {
 }
 
 const applyMask = (event: Event) => {
-  let value = (event.target as HTMLInputElement).value;
-
-  value = replace(value);
-  // Если первая цифра 8, заменить на 7
-
-
-  // Применить маску +7 (###) ###-##-##
-  if (value.length > 1) {
-    if (value.startsWith('8')) {
-      value = '7' + value.slice(1);
-    }
-    if (value.length === 2 && value[0] !== '7')
-      value = '+7 ' + value;
-    else
-      value = '+7 ' + value.slice(1);
-  }
-  if (value.length > 3) {
-    value = value.slice(0, 3) + ' (' + value.slice(3);
-  }
-  if (value.length > 8) {
-    value = value.slice(0, 8) + ') ' + value.slice(8);
-  }
-  if (value.length > 13) {
-    value = value.slice(0, 13) + '-' + value.slice(13);
-  }
-  if (value.length > 16) {
-    value = value.slice(0, 16) + '-' + value.slice(16);
-  }
-
-  phone.value = value;
-  emit('update:modelValue', replace(value));
+  const value = (event.target as HTMLInputElement).value;
+  phone.value = formatPhone(value);
+  emit('update:modelValue', replace(phone.value));
 };
 
-watch(() => props.modelValue, (newValue) => {
-  if (replace(newValue) !== replace(phone.value)) {
-    phone.value = newValue;
+const formatPhone = (value: string) => {
+  let result = replace(value);
+
+  // Применить маску +7 (###) ###-##-##
+  if (result.length > 1) {
+    if (result.startsWith('8')) {
+      result = '7' + result.slice(1);
+    }
+    if (result.length === 2 && result[0] !== '7')
+      result = '+7 ' + result;
+    else
+      result = '+7 ' + result.slice(1);
+  }
+  if (result.length > 3) {
+    result = result.slice(0, 2) + ' (' + result.slice(3);
+  }
+  if (result.length > 7) {
+    result = result.slice(0, 7) + ') ' + result.slice(7);
+  }
+  if (result.length > 12) {
+    result = result.slice(0, 12) + '-' + result.slice(12);
+  }
+  if (result.length > 15) {
+    result = result.slice(0, 15) + '-' + result.slice(15);
+  }
+
+  return result
+}
+
+const phone = ref(formatPhone(props.modelValue));
+
+watch(props, (newValue) => {
+  if (replace(newValue.modelValue) !== replace(phone.value)) {
+    const formatedValue = formatPhone(newValue.modelValue)
+    phone.value = formatedValue;
+    emit('update:modelValue', replace(formatedValue));
   }
 });
+
 </script>
 
 <template>
-    <input
-        v-model="phone"
-        @input="applyMask"
-        placeholder="+7 (XXX) XXX-XX-XX"
-        v-bind="props"
-    />
+  <input
+      v-model="phone"
+      @input="applyMask"
+      placeholder="+7 (XXX) XXX-XX-XX"
+      v-bind="props"
+  />
 </template>
 
 <style scoped lang="scss">
