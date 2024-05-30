@@ -35,7 +35,6 @@ const handleToggle = (open: boolean) => {
   <template v-else-if="cameras.length > 0">
     <Label
         :icon="CameraIcon"
-        :alt="$t('addresses.cameras')"
         :text="$t('addresses.cameras')"
         @toggle="handleToggle"
     />

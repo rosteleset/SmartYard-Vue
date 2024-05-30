@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import {vi} from "vitest";
 import {MessagePayload} from "firebase/messaging";
-import {mockRouter, mockTFunction} from "@/tests/__mocks.ts";
+import {mockNotifications, mockRouter, mockTFunction} from "@/tests/__mocks.ts";
 import dayjs from "dayjs";
 
 global.L = L;
@@ -50,7 +50,7 @@ vi.mock("@/store/config", () => ({
 
 vi.mock("@/store/push", () => ({
     usePushStore: () => ({
-        notifications: [],
+        notifications: mockNotifications,
         addNotification: vi.fn(),
         removeNotification: vi.fn(),
         call: {} as MessagePayload,
@@ -61,7 +61,10 @@ vi.mock("@/store/push", () => ({
 
 // hooks
 vi.mock('vue-router', () => ({
-    useRouter: () => mockRouter
+    useRouter: () => mockRouter,
+    RouterLink: (props: any) => {
+        return `<a href="${props.to}">Input</a>`
+    }
 }))
 
 vi.mock('@/hooks/useLocale', () => ({

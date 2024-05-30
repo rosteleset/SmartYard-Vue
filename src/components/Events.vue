@@ -29,7 +29,6 @@ const handleToggle = (open: boolean) => {
 <template>
   <Label
       :icon="eventIcon"
-      :alt="$t('addresses.events')"
       :text="$t('addresses.events')"
       @toggle="handleToggle"
   />

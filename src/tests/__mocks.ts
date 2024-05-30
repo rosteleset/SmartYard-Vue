@@ -2,7 +2,7 @@ import {vi} from "vitest";
 import {createTestingPinia} from "@pinia/testing";
 
 const pinia = createTestingPinia({createSpy: vi.fn});
-export const mockTFunction = (text:string) => `Translated Text ${text}`;
+export const mockTFunction = (text: string) => `Translated Text ${text}`;
 export const mockRouter = {push: vi.fn()}
 
 export const defaultGlobal = {
@@ -28,7 +28,7 @@ export const mockCamera = {
     name: 'Test Camera',
     lat: '0.0',
     lon: '0.0',
-    serverType: 'test',
+    serverType: 'flussonic',
     url: 'http://test-url',
     token: 'test-token',
     streams: [
@@ -48,3 +48,16 @@ export const mockCamera = {
         }
     ]
 }
+
+export const mockNotifications = [
+    {
+        messageId: '1',
+        notification: {title: 'Test Title 1', body: 'Test Body 1'},
+        data: {action: 'inbox'},
+    },
+    {
+        messageId: '2',
+        notification: {title: 'Test Title 2', body: 'Test Body 2'},
+        data: {action: 'chat'},
+    },
+]
