@@ -15,6 +15,13 @@ export const defaultGlobal = {
     },
 }
 
+export const mockRanges = [
+    {from: 1625097600, duration: 3600},  // Example range
+    {from: 1625101200, duration: 3600},
+    {from: 1625104800, duration: 7200},
+    {from: 1625112000, duration: 3600}
+]
+
 export const mockCamera = {
     id: 1,
     name: 'Test Camera',
@@ -27,15 +34,15 @@ export const mockCamera = {
         {
             stream: 'stream1',
             ranges: [
-                { from: 1625097600, duration: 3600 },  // Example range
-                { from: 1625101200, duration: 3600 }
+                mockRanges[0],
+                mockRanges[1]
             ]
         },
         {
             stream: 'stream2',
             ranges: [
-                { from: 1625104800, duration: 7200 },
-                { from: 1625112000, duration: 3600 }
+                mockRanges[2],
+                mockRanges[3]
             ]
         }
     ]
