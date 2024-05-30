@@ -2,7 +2,8 @@ import {vi} from "vitest";
 import {createTestingPinia} from "@pinia/testing";
 
 const pinia = createTestingPinia({createSpy: vi.fn});
-export const mockTFunction = () => "Translated Text";
+export const mockTFunction = (text:string) => `Translated Text ${text}`;
+export const mockRouter = {push: vi.fn()}
 
 export const defaultGlobal = {
     plugins: [pinia],
@@ -11,7 +12,7 @@ export const defaultGlobal = {
     },
     mocks: {
         $t: mockTFunction,
-        $router: {push: vi.fn()},
+        $router: mockRouter,
     },
 }
 

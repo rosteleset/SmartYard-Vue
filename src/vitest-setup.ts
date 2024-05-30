@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import {vi} from "vitest";
 import {MessagePayload} from "firebase/messaging";
-import {mockTFunction} from "@/tests/__mocks.ts";
+import {mockRouter, mockTFunction} from "@/tests/__mocks.ts";
 import dayjs from "dayjs";
 
 global.L = L;
@@ -34,12 +34,17 @@ vi.mock("@/store/addresses", () => ({
 vi.mock("@/store/config", () => ({
     useConfigStore: () => ({
         config: {},
-        notifications: {},
+        notifications: {
+            enable: 'f',
+            money: 'f',
+        },
         names: {},
         updateConfig: vi.fn(),
         getTheme: vi.fn(),
         updateTheme: vi.fn(),
-        sendName: vi.fn()
+        sendName: vi.fn(async () => {
+            return new Promise(resolve => setTimeout(resolve, 2000));
+        })
     }),
 }));
 
@@ -55,6 +60,10 @@ vi.mock("@/store/push", () => ({
 }));
 
 // hooks
+vi.mock('vue-router', () => ({
+    useRouter: () => mockRouter
+}))
+
 vi.mock('@/hooks/useLocale', () => ({
     default: () => ({
         locale: 'en',
@@ -65,3 +74,22 @@ vi.mock('@/hooks/useLocale', () => ({
     })
 }))
 
+vi.mock('@/hooks/useSettings', () => ({
+    default: (_flatId: string) => ({
+        settings: {
+            allowDoorCode: 't', // разрешить код открытия двери
+            enableDoorCode: 't', // разрешить код открытия двери
+            doorCode: '0000',
+            CMS: 't', // разрешить КМС
+            VoIP: 't', // разрешить VoIP
+            autoOpen: '', // автооткрытие двери
+            whiteRabbit: "0", // автооткрытие двери
+            paperBill: 't', // печатать бумажные платежки
+            disablePlog: 't', // прекратить "следить" за квартирой
+            hiddenPlog: 't', // показывать журнал только владельцу
+            FRSDisabled: 'f', // отключить распознавание лиц для квартиры
+        },
+        load: vi.fn(),
+        save: vi.fn(),
+    })
+}))
