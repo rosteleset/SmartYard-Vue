@@ -1,14 +1,37 @@
 import {vi} from "vitest";
 import {createTestingPinia} from "@pinia/testing";
+import {Event} from "@/types/events.ts";
+import {defineComponent} from "vue";
+
+export const FakeTransition = defineComponent({
+    emits: ['afterEnter', 'enter'],
+    template: '<div><slot /></div>',
+    setup(_, {emit}) {
+        return {
+            emitAfterEnter() {
+                emit('afterEnter')
+            },
+            emitEnter() {
+                emit('enter')
+            }
+        }
+    },
+})
 
 const pinia = createTestingPinia({createSpy: vi.fn});
 export const mockTFunction = (text: string) => `Translated Text ${text}`;
-export const mockRouter = {push: vi.fn()}
+export const mockRouter = {
+    push: vi.fn(),
+    currentRoute: "",
+    getRoutes: vi.fn(),
+    back: vi.fn()
+}
 
 export const defaultGlobal = {
     plugins: [pinia],
     stubs: {
-        transition: false
+        transition: FakeTransition,
+        teleport: true,
     },
     mocks: {
         $t: mockTFunction,
@@ -61,3 +84,38 @@ export const mockNotifications = [
         data: {action: 'chat'},
     },
 ]
+
+export const mockEvents: Event[] = [
+    {
+        uuid: '1',
+        event: '1',
+        date: '2023-01-01 00:00:00',
+        objectId: 'obj1',
+        objectType: '0',
+        objectMechanizma: '0',
+        mechanizmaDescription: 'Door description',
+        detailX: {
+            flags: ['canLike', 'liked'],
+            face: {left: '10%', top: '10%', width: '50px', height: '50px'},
+        },
+        preview: 'http://example.com/preview.jpg',
+        previewType: 1,
+    },
+    {
+        uuid: '2',
+        event: '2',
+        date: '2023-01-02 00:00:00',
+        objectId: 'obj1',
+        objectType: '0',
+        objectMechanizma: '0',
+        mechanizmaDescription: 'Door description',
+        detailX: {
+            flags: ['canLike', 'liked'],
+            face: {left: '10%', top: '10%', width: '50px', height: '50px'},
+        },
+        preview: 'http://example.com/preview.jpg',
+        previewType: 1,
+    }
+];
+
+export const mockGetEvents = vi.fn().mockImplementation(() => Promise.resolve(mockEvents))

@@ -23,7 +23,7 @@ const isMenuOpen: Ref<boolean> = inject("isMenuOpen") || ref(false);
 const menuList = ref<HTMLElement | null>(null);
 const height = ref("0px");
 
-const isFirst = ref(!!history.state.back);
+const isFirst = ref(!!history.state?.back);
 
 const getRouteName = (route: RouteLocationNormalizedLoaded | RouteRecord) =>
     typeof route.name === "string" ? t(`routes.${route.name}`) : undefined;
@@ -61,7 +61,7 @@ watch(currentRoute, () => {
         <div class="menu" v-if="alwaysMenu || isMenuOpen">
           <div class="menu__list" ref="menuList">
             <RouterLink
-                v-for="route in routes.filter((route) => route.name && route.name !== 'Auth')"
+                v-for="route in routes.filter((item) => item.name && item.name !== 'Auth')"
                 :to="route.path"
             >{{ getRouteName(route) }}
             </RouterLink
@@ -144,6 +144,6 @@ header {
 
 .height-enter-from,
 .height-leave-to {
-  max-height: 0px;
+  max-height: 0;
 }
 </style>

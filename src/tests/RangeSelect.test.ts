@@ -3,28 +3,6 @@ import RangeSelect from '@/components/RangeSelect.vue'
 import {describe, expect, it, vi} from 'vitest'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import {defaultGlobal, mockCamera} from "@/tests/__mocks.ts";
-import {ref} from "vue";
-
-vi.mock('@/hooks/useRanges', () => ({
-    default: () => ({
-        streams: ref([
-            {
-                stream: 'stream1',
-                ranges: [
-                    {from: 1625097600, duration: 3600},  // Example range
-                    {from: 1625101200, duration: 3600}
-                ]
-            },
-            {
-                stream: 'stream2',
-                ranges: [
-                    {from: 1625104800, duration: 7200},
-                    {from: 1625112000, duration: 3600}
-                ]
-            }
-        ])
-    })
-}))
 
 describe('RangeSelect', () => {
     it('renders correctly', () => {

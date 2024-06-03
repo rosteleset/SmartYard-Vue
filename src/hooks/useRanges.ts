@@ -30,6 +30,10 @@ const useRanges = (camera: Camera) => {
             })
     }
     onMounted(() => {
+        axios.get(`${camera.url}/ranges.json`)
+            .then((res) => {
+                console.log('range',res)
+            })
         if (camera.serverType)
             getRbtRanges()
         else

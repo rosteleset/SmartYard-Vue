@@ -6,11 +6,10 @@ const isMenuOpen: Ref<boolean> = inject("isMenuOpen") || ref(false);
 
 </script>
 <template>
-  <button class="nav">
+  <button class="nav" @click="isMenuOpen = !isMenuOpen">
     <svg
       class="toggle-svg"
       :class="{ active: isMenuOpen }"
-      @click="isMenuOpen = !isMenuOpen"
       viewbox="0 0 60 40"
     >
       <g

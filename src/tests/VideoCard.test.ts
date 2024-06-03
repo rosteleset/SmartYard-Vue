@@ -4,17 +4,6 @@ import VideoCard from '@/components/VideoCard.vue';
 import VideoModal from '@/components/VideoModal.vue';
 import {Camera} from '@/types/camera';
 
-// Mocking components and modules
-vi.mock('rbt-player', () => ({
-    PlayerFactory: {
-        createPlayer: vi.fn().mockReturnValue({
-            play: vi.fn(),
-            pause: vi.fn(),
-            onDestroy: vi.fn(),
-        }),
-    },
-}));
-
 describe('VideoCard', () => {
     let mockCamera: Camera;
 

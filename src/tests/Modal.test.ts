@@ -4,10 +4,14 @@ import Modal from '@/components/Modal.vue'
 import {nextTick} from "vue";
 
 describe('Modal', () => {
-    it('renders correctly when open', () => {
+    it('renders correctly when open', async () => {
         const wrapper = mount(Modal, {
             props: {
                 isOpen: true
+
+            },
+            slots: {
+                default:"<div class='test'>test</div>"
             },
             global: {
                 stubs: {
@@ -15,7 +19,11 @@ describe('Modal', () => {
                 },
             },
         })
+
+        await nextTick()
+
         expect(wrapper.find('.modal__overlay').exists()).toBe(true)
+        expect(wrapper.find('.test').exists()).toBe(true)
     })
 
     it('does not render when closed', () => {
@@ -30,6 +38,27 @@ describe('Modal', () => {
             },
         })
         expect(wrapper.find('.modal__overlay').exists()).toBe(false)
+    })
+
+    it('renders correctly when reopen', async () => {
+        const wrapper = mount(Modal, {
+            props: {
+                isOpen: false,
+            },
+            slots: {
+                default:"<div class='test'>test</div>"
+            },
+            global: {
+                stubs: {
+                    teleport: true,
+                },
+            },
+        })
+
+        expect(wrapper.find('.modal__overlay').exists()).toBe(false)
+        await wrapper.setProps({ isOpen: true })
+
+        expect(wrapper.find('.modal__overlay').exists()).toBe(true)
     })
 
     it('renders title when provided', async () => {

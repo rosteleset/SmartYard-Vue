@@ -6,21 +6,6 @@ import {nextTick} from 'vue';
 import {Camera} from '@/types/camera';
 import {defaultGlobal} from "@/tests/__mocks.ts";
 
-// Mocking components and modules
-vi.mock('rbt-player', () => ({
-    PlayerFactory: {
-        createPlayer: vi.fn().mockReturnValue({
-            play: vi.fn(),
-            pause: vi.fn(),
-            getSize: vi.fn(),
-            calculateAspectRatio: vi.fn(),
-            generateStream: vi.fn(),
-            initializeVideoStream: vi.fn(),
-            onDestroy: vi.fn()
-        })
-    }
-}));
-
 vi.mock('@/assets/arrowRight.svg?component', () => ({
     default: {template: '<svg />'},
 }));
@@ -100,15 +85,19 @@ describe('VideoModal', () => {
             props: {
                 camera: mockCamera,
             },
+            global: defaultGlobal,
         });
 
         const videoElement:DOMWrapper<HTMLVideoElement> = wrapper.find('video.video-element');
-        videoElement.element.pause()
 
         await videoElement.trigger('click');
         expect(mockPlayer.play).toHaveBeenCalled();
 
-        await videoElement.element.play()
+        Object.defineProperty(videoElement.element, 'paused', {
+            writable: true,
+            value: false,
+        });
+
         await videoElement.trigger('click');
         expect(mockPlayer.pause).toHaveBeenCalled();
     });
