@@ -1,5 +1,3 @@
-// tests/unit/EventsListItem.spec.ts
-
 import {mount, VueWrapper} from '@vue/test-utils';
 import {describe, expect, it, vi} from 'vitest';
 import EventsListItem from '@/components/EventsListItem.vue';

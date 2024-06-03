@@ -26,6 +26,7 @@ export const mockRouter = {
     getRoutes: vi.fn(),
     back: vi.fn()
 }
+export const mockOpenDoor = vi.fn()
 
 export const defaultGlobal = {
     plugins: [pinia],
@@ -117,5 +118,20 @@ export const mockEvents: Event[] = [
         previewType: 1,
     }
 ];
+
+export const mockClients = [
+    {
+        houseId: 'house1',
+        flatId: 'flat1',
+        address: 'Address 1',
+        services: ['internet'],
+    },
+    {
+        houseId: 'house1',
+        flatId: 'flat2',
+        address: 'Address 2',
+        services: ['phone'],
+    },
+]
 
 export const mockGetEvents = vi.fn().mockImplementation(() => Promise.resolve(mockEvents))

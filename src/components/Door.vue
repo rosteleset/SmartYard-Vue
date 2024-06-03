@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FunctionalComponent, computed } from "vue";
-import openDoor from "@/lib/openDoor.ts";
+import openDoor from "@/lib/openDoor";
 import barrierIcon from "@/assets/barrier.svg?component";
 import entranceIcon from "@/assets/entrance.svg?component";
 import gateIcon from "@/assets/gate.svg?component";

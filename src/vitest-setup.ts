@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import {vi} from "vitest";
 import {MessagePayload} from "firebase/messaging";
-import {mockGetEvents, mockNotifications, mockRanges, mockRouter, mockTFunction} from "@/tests/__mocks.ts";
+import {mockClients, mockGetEvents, mockNotifications, mockRanges, mockRouter, mockTFunction} from "@/tests/__mocks.ts";
 import dayjs from "dayjs";
 import {ref} from "vue";
 import {Camera} from "@/types/camera.ts";
@@ -50,8 +50,8 @@ vi.mock("@/store/addresses", () => ({
         addresses: [],
         load: vi.fn(),
         getAddressByHouseId: vi.fn(),
-        getClientsByHouseId: vi.fn(),
-        getAddressByFlatId: vi.fn()
+        getClientsByHouseId: ()=>ref(mockClients),
+        getAddressByFlatId: vi.fn().mockReturnValue([]),
     }),
 }));
 
