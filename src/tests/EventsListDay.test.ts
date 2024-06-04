@@ -1,5 +1,3 @@
-// tests/unit/EventsListDay.spec.ts
-
 import {mount} from '@vue/test-utils';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import EventsListDay from '@/components/EventsListDay.vue';

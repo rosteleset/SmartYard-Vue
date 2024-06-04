@@ -1,4 +1,3 @@
-// tests/unit/CustomControls.spec.ts
 import {mount} from '@vue/test-utils';
 import {describe, expect, it, vi} from 'vitest';
 import CustomControls from '@/components/CustomControls.vue';

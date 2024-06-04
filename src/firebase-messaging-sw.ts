@@ -34,6 +34,7 @@ const firebaseApp = getFirebaseApp();
 const messaging = getMessaging(firebaseApp);
 
 onBackgroundMessage(messaging, (payload) => {
+    console.log(payload)
     if (payload.notification) {
         // payload.notification.image = "/icon.png"
     } else if (payload.data?.server) {
@@ -48,6 +49,4 @@ onBackgroundMessage(messaging, (payload) => {
     return payload;
 });
 
-
-
-
+console.log("sw ok")

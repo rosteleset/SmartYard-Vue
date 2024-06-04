@@ -1,5 +1,4 @@
 import {vi} from "vitest";
-import {createTestingPinia} from "@pinia/testing";
 import {Event} from "@/types/events.ts";
 import {defineComponent} from "vue";
 
@@ -18,7 +17,7 @@ export const FakeTransition = defineComponent({
     },
 })
 
-const pinia = createTestingPinia({createSpy: vi.fn});
+// const pinia = createTestingPinia({createSpy: vi.fn});
 export const mockTFunction = (text: string) => `Translated Text ${text}`;
 export const mockRouter = {
     push: vi.fn(),
@@ -29,7 +28,7 @@ export const mockRouter = {
 export const mockOpenDoor = vi.fn()
 
 export const defaultGlobal = {
-    plugins: [pinia],
+    // plugins: [pinia],
     stubs: {
         transition: FakeTransition,
         teleport: true,
@@ -134,4 +133,11 @@ export const mockClients = [
     },
 ]
 
+export const mockAddress = {
+    houseId: 'house1',
+    address: 'house1',
+    cctv: 2,
+}
+
 export const mockGetEvents = vi.fn().mockImplementation(() => Promise.resolve(mockEvents))
+export const mockGetAddressByHouseId = vi.fn().mockImplementation((houseId: string) => houseId === mockAddress.houseId ? mockAddress : undefined)

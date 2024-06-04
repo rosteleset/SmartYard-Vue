@@ -1,8 +1,19 @@
 import {mount} from '@vue/test-utils'
-import {describe, expect, it} from 'vitest'
+import {describe, expect, it, vi} from 'vitest'
 import Push from '@/components/Push.vue'
 import {defaultGlobal, mockNotifications} from "@/tests/__mocks.ts";
+import {MessagePayload} from "firebase/messaging";
 
+vi.mock("@/store/push", () => ({
+    usePushStore: () => ({
+        notifications: mockNotifications,
+        addNotification: vi.fn(),
+        removeNotification: vi.fn(),
+        call: {} as MessagePayload,
+        setCall: vi.fn(),
+        load: vi.fn()
+    }),
+}));
 
 describe('Push', () => {
     it('renders notifications', () => {

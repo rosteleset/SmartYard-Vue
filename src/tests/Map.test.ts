@@ -1,32 +1,15 @@
 import {mount} from '@vue/test-utils'
-import {describe, expect, it, vi} from 'vitest'
+import {describe, expect, it} from 'vitest'
 import Map from '@/components/Map.vue'
 import VideoModal from '@/components/VideoModal.vue'
 import {defaultGlobal, mockCamera} from "@/tests/__mocks.ts";
-
-vi.mock('@vue-leaflet/vue-leaflet', () => ({
-    LMap: {template: '<div class="leaflet-map"><slot /></div>'},
-    LTileLayer: {template: '<div></div>'},
-    LMarker: {
-        template: '<div class="leaflet-marker" ref="marker"><slot /></div>',
-        mounted() {
-            (this as any).$refs.marker._icon = (this as any).$refs.marker; // Добавляем свойство _icon
-        }
-    },
-
-    LIcon: {template: '<div><slot /></div>'},
-}))
-vi.mock('vue-leaflet-markercluster', () => ({
-    LMarkerClusterGroup: {template: '<div><slot /></div>'},
-}))
 
 describe('Map', () => {
     const cameras = [
         mockCamera,
         {...{id: 2}, ...mockCamera}
     ]
-
-
+    
     it('renders map and markers', () => {
         const wrapper = mount(Map, {
             props: {cameras},

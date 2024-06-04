@@ -1,5 +1,3 @@
-// tests/unit/FacesListItem.spec.ts
-
 import { mount } from '@vue/test-utils';
 import { describe, it, expect, vi } from 'vitest';
 import FacesListItem from '@/components/FacesListItem.vue';

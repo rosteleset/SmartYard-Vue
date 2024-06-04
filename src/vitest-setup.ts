@@ -1,8 +1,15 @@
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import {vi} from "vitest";
-import {MessagePayload} from "firebase/messaging";
-import {mockClients, mockGetEvents, mockNotifications, mockRanges, mockRouter, mockTFunction} from "@/tests/__mocks.ts";
+import {
+    mockCamera,
+    mockClients,
+    mockGetAddressByHouseId,
+    mockGetEvents,
+    mockRanges,
+    mockRouter,
+    mockTFunction
+} from "@/tests/__mocks.ts";
 import dayjs from "dayjs";
 import {ref} from "vue";
 import {Camera} from "@/types/camera.ts";
@@ -31,6 +38,22 @@ vi.mock('vue-router', () => ({
     }
 }))
 
+vi.mock('@vue-leaflet/vue-leaflet', () => ({
+    LMap: {template: '<div class="leaflet-map"><slot /></div>'},
+    LTileLayer: {template: '<div></div>'},
+    LMarker: {
+        template: '<div class="leaflet-marker" ref="marker"><slot /></div>',
+        mounted() {
+            (this as any).$refs.marker._icon = (this as any).$refs.marker; // Добавляем свойство _icon
+        }
+    },
+
+    LIcon: {template: '<div><slot /></div>'},
+}))
+vi.mock('vue-leaflet-markercluster', () => ({
+    LMarkerClusterGroup: {template: '<div><slot /></div>'},
+}))
+
 // stores
 vi.mock("@/store/user", () => ({
     useUserStore: () => ({
@@ -49,7 +72,7 @@ vi.mock("@/store/addresses", () => ({
         isLoaded: true,
         addresses: [],
         load: vi.fn(),
-        getAddressByHouseId: vi.fn(),
+        getAddressByHouseId: mockGetAddressByHouseId,
         getClientsByHouseId: ()=>ref(mockClients),
         getAddressByFlatId: vi.fn().mockReturnValue([]),
     }),
@@ -72,16 +95,7 @@ vi.mock("@/store/config", () => ({
     }),
 }));
 
-vi.mock("@/store/push", () => ({
-    usePushStore: () => ({
-        notifications: mockNotifications,
-        addNotification: vi.fn(),
-        removeNotification: vi.fn(),
-        call: {} as MessagePayload,
-        setCall: vi.fn(),
-        load: vi.fn()
-    }),
-}));
+
 
 // hooks
 vi.mock('@/hooks/useApi', () => ({
@@ -166,5 +180,11 @@ vi.mock('@/hooks/useEventNames', () => ({
                 default: 'Unknown Event',
             },
         },
+    }),
+}));
+
+vi.mock('@/hooks/useCameras', () => ({
+    default: () => ({
+        cameras:[mockCamera]
     }),
 }));
