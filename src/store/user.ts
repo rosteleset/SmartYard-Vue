@@ -1,7 +1,7 @@
-import {onMounted, ref} from "vue";
-import {Client} from "../types/user";
+import {getCurrentInstance, onMounted, ref} from "vue";
+import {Client} from "@/types/user";
 import {defineStore} from "pinia";
-import useApi from "../hooks/useApi";
+import useApi from "@/hooks/useApi";
 import {useRouter} from "vue-router";
 
 const LOCAL_STORAGE_TOKEN_KEY = "jwt-token";
@@ -11,7 +11,7 @@ export const useUserStore = defineStore("user", () => {
     const router = useRouter();
     const isLoaded = ref(false);
     const isAuth = ref(false);
-    const error = ref<string>();
+    const error = ref<string | null>(null);
 
 
     const clients = ref<Client[]>([]);
@@ -19,45 +19,50 @@ export const useUserStore = defineStore("user", () => {
         localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY) || ""
     );
 
-    const load = () => {
+    const load = async () => {
 
-        if (!token.value) return isLoaded.value = true;
+        if (!token.value) {
+            isLoaded.value = true
+            return;
+        }
 
-        // вынес отдельно для обратной совместимости
-        get<Client[]>("address/getSettingsList")
-            .then((clientsResponse) => {
-                clients.value = clientsResponse;
-                isLoaded.value = true;
-                isAuth.value = true;
-            })
-            .catch((_error) => {
-                const code = _error.response?.data?.code
-                if (code === 401) {
-                    isLoaded.value = true;
-                    isAuth.value = false;
-                }
-                else {
-                    error.value = _error.message;
-                }
-            })
+        try {
+            clients.value = await get<Client[]>("address/getSettingsList");
+            isLoaded.value = true;
+            isAuth.value = true;
+        } catch (_error: any) {
+            const code = _error.response?.data?.code
+            isLoaded.value = true;
+            if (code === 401) {
+                isAuth.value = false;
+            } else {
+                error.value = _error.message;
+            }
+        }
     };
 
-    const setToken = (_token: string) => {
-        localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, _token);
+    const setToken = (_token: string | null) => {
         token.value = _token;
-        if (_token)
-            load()
+        if (_token) {
+            localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, _token);
+            return load()
+        } else {
+            localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY);
+            return Promise.resolve();
+        }
     };
 
     const logout = async () => {
         // await request('user/registerPushToken', {pushToken: ""})
-        setToken("")
+        await setToken("")
         clients.value = []
         isAuth.value = false
         await router.push('/')
     }
 
-    onMounted(load);
+    if (getCurrentInstance()) {
+        onMounted(load)
+    }
 
     return {
         load,
