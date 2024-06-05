@@ -1,13 +1,14 @@
 import {defineStore} from "pinia";
 import {onMounted, ref} from "vue";
-import {getMessaging, MessagePayload, onMessage} from "firebase/messaging"
+import {getMessaging, MessagePayload, onMessage, Messaging} from "firebase/messaging"
 import {getFirebaseApp, getToken} from "@/firebase.ts";
 import useApi from "@/hooks/useApi.ts";
+import {FirebaseApp} from "firebase/app";
 
 export const usePushStore = defineStore("push", () => {
     const {request} = useApi();
-    const firebaseApp = getFirebaseApp();
-    const messaging = getMessaging(firebaseApp);
+    const firebaseApp = ref<FirebaseApp>();
+    const messaging = ref<Messaging>();
 
     const notifications = ref<MessagePayload[]>([])
     const call = ref<MessagePayload>()
@@ -40,25 +41,32 @@ export const usePushStore = defineStore("push", () => {
 
 
     onMounted(() => {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(
-                import.meta.env.MODE === 'production' ? 'firebase-messaging-sw.js' : 'dev-sw.js?dev-sw', {
-                    scope: './',
-                    type: import.meta.env.MODE === 'production' ? 'classic' : 'module'
-                }
-            )
-                .then((registration) => {
-                    getToken(registration)
-                        .then(token => {
-                            request('user/registerPushToken', {pushToken: token, platform: "android"})
-                        })
-                    navigator.serviceWorker.addEventListener("message", (event) => {
-                        if (event.data.type === "FCM_MESSAGE")
-                            onPush(event.data.msg)
-                    });
-                    window.addEventListener("focus", () => onFocus(registration));
-                    onMessage(messaging, onPush);
-                })
+        try {
+            firebaseApp.value = getFirebaseApp()
+            messaging.value = getMessaging(firebaseApp.value)
+            if ('serviceWorker' in navigator && messaging.value) {
+                navigator.serviceWorker.register(
+                    import.meta.env.MODE === 'production' ? 'firebase-messaging-sw.js' : 'dev-sw.js?dev-sw', {
+                        scope: './',
+                        type: import.meta.env.MODE === 'production' ? 'classic' : 'module'
+                    }
+                )
+                    .then((registration) => {
+                        getToken(registration)
+                            .then(token => {
+                                request('user/registerPushToken', {pushToken: token, platform: "android"})
+                            })
+                        navigator.serviceWorker.addEventListener("message", (event) => {
+                            if (event.data.type === "FCM_MESSAGE")
+                                onPush(event.data.msg)
+                        });
+                        window.addEventListener("focus", () => onFocus(registration));
+                        if (messaging.value)
+                            onMessage(messaging.value, onPush);
+                    })
+            }
+        } catch (e) {
+            console.log(e)
         }
     })
 
