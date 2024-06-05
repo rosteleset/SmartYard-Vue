@@ -1,8 +1,8 @@
 import {defineStore} from "pinia";
-import {onMounted, reactive, ref, watch} from "vue";
-import {Names, Notifications} from "@/types/user.ts";
-import useApi from "@/hooks/useApi.ts";
-import {useUserStore} from "@/store/user.ts";
+import {getCurrentInstance, onMounted, ref, watch} from "vue";
+import {Names, Notifications} from "@/types/user";
+import useApi from "@/hooks/useApi";
+import {useUserStore} from "@/store/user";
 
 // Интерфейс для хранилища конфигурации
 interface ConfigStore {
@@ -34,7 +34,7 @@ export const useConfigStore = defineStore(STORE_NAME, () => {
     const notifications = ref<Notifications>({});
     const names = ref<Names>({} as Names);
 
-    reactive(config);
+    // reactive(config);
     // Функция для обновления конфигурации
     const updateConfig = (params: ConfigStore) => {
         config.value = {
@@ -79,7 +79,9 @@ export const useConfigStore = defineStore(STORE_NAME, () => {
         }
     })
 
-    onMounted(updateTheme)
+    if (getCurrentInstance()) {
+        onMounted(updateTheme)
+    }
 
     return {
         config,

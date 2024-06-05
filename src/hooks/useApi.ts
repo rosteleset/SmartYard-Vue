@@ -1,8 +1,8 @@
 import axios, {AxiosError} from "axios";
 import {computed} from "vue";
-import {useUserStore} from "../store/user";
-import {usePushStore} from "@/store/push.ts";
-import {SERVER_URL} from "@/lib/const.ts";
+import {useUserStore} from "@/store/user";
+import {usePushStore} from "@/store/push";
+import {SERVER_URL} from "@/lib/const";
 
 
 const useApi = () => {
