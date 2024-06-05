@@ -28,22 +28,23 @@ describe('users store', () => {
         vi.clearAllMocks()
     })
 
-    it('Инициализация состояния', () => {
+    it('Initialization of state', () => {
         // Проверить, что состояние isLoaded, isAuth и error правильно инициализируются при создании стора.
         expect(store.isAuth).toBe(false)
         expect(store.isLoaded).toBe(false)
         expect(store.error).toBe(null)
-
     })
 
-    it("Без токена", async () => {
+    it("Without token", async () => {
+        // Проверить, что метод load устанавливает isLoaded в true даже если token отсутствует.
         await store.load();
 
         expect(store.isLoaded).toBe(true);
         expect(store.isAuth).toBe(false);
     })
 
-    it("С токеном", async () => {
+    it("With token", async () => {
+        // Проверить, что метод load корректно работает с валидным токеном и обновляет состояние клиентов и isAuth.
         const fakeClients: Client[] = [];
         mockGet.mockResolvedValue(fakeClients);
 
@@ -53,7 +54,8 @@ describe('users store', () => {
         expect(store.isAuth).toBe(true);
     })
 
-    it("C невалидным токеном", async () => {
+    it("With invalid token", async () => {
+        // Проверить, что метод load корректно обрабатывает ошибку 401 и устанавливает isAuth в false.
         mockGet.mockRejectedValueOnce({message: "auth error", response: {data: {code: 401}}})
 
         await store.setToken("invalid-token");
@@ -63,7 +65,8 @@ describe('users store', () => {
         expect(store.error).toBe(null)
     })
 
-    it("С другой ошибкой", async () => {
+    it("With other error", async () => {
+        // Проверить, что метод load корректно обрабатывает другие ошибки и устанавливает сообщение об ошибке в error.
         mockGet.mockRejectedValueOnce(new Error('Server error'))
 
         await store.load()
@@ -73,13 +76,15 @@ describe('users store', () => {
         expect(store.error).toBe('Server error')
     })
 
-    it("Установка токена", () => {
+    it("Setting token", () => {
+        // Проверить, что метод setToken корректно сохраняет токен в localStorage и состоянии стора.
         store.setToken("new-token");
         expect(localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)).toBe("new-token");
         expect(store.token).toBe("new-token");
     })
 
-    it("Выход из системы", async () => {
+    it("Logout", async () => {
+        // Проверить, что метод logout корректно очищает состояние стора и перенаправляет на главную страницу.
         await store.logout();
         expect(localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)).toBe(null);
         expect(store.clients).toEqual([]);

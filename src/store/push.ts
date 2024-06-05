@@ -1,9 +1,9 @@
 import {defineStore} from "pinia";
 import {ref, watch} from "vue";
 import {getMessaging, MessagePayload, onMessage} from "firebase/messaging"
-import {getFirebaseApp, getToken} from "@/firebase.ts";
-import useApi from "@/hooks/useApi.ts";
-import {useUserStore} from "@/store/user.ts";
+import {getFirebaseApp, getToken} from "@/firebase";
+import useApi from "@/hooks/useApi";
+import {useUserStore} from "@/store/user";
 
 export const usePushStore = defineStore("push", () => {
     const userStore = useUserStore();
@@ -40,29 +40,25 @@ export const usePushStore = defineStore("push", () => {
         call.value = payload
     }
 
-    const load = () => {
+    const load = async () => {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(
+            let registration = await navigator.serviceWorker.register(
                 import.meta.env.MODE === 'production' ? 'firebase-messaging-sw.js' : 'dev-sw.js?dev-sw', {
                     scope: './',
                     type: import.meta.env.MODE === 'production' ? 'classic' : 'module'
                 }
-            )
-                .then((registration) => {
-                    getToken(registration)
-                        .then(token => {
-                            request('user/registerPushToken', {pushToken: token, platform: "android"})
-                        })
-                    // в случае клика по пушу
-                    navigator.serviceWorker.addEventListener("message", (event) => {
-                        if (event.data.type === "FCM_MESSAGE")
-                            onPush(event.data.msg)
-                    });
-                    // в случае получения окном фокуса
-                    window.addEventListener("focus", () => onFocus(registration));
-                    // в случае если окно в фокусе
-                    onMessage(messaging, onPush);
-                })
+            );
+
+            const token: string = await getToken(registration)
+
+            await request('user/registerPushToken', {pushToken: token, platform: "android"})
+
+            navigator.serviceWorker.addEventListener("message", (event) => {
+                if (event.data.type === "FCM_MESSAGE")
+                    onPush(event.data.msg)
+            });
+            window.addEventListener("focus", () => onFocus(registration));
+            onMessage(messaging, onPush);
         }
     }
 
