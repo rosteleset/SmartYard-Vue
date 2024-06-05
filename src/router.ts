@@ -80,7 +80,7 @@ const router = createRouter({
 // ожидание загрузки данных пользователя
 router.beforeEach(async (_to, _from, next) => {
     const userStore = useUserStore();
-    if (userStore.isLoaded) next();
+    if (userStore.isLoaded || userStore.error) next();
     const awaitLoad = async () => {
         return new Promise((resolve) => {
             const unwatch = watch(

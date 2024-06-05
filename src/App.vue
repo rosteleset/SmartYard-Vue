@@ -22,12 +22,16 @@ provide("isMenuOpen", isMenuOpen);
   <template v-if="userStore.isLoaded && userStore.isAuth">
     <Call/>
   </template>
+
   <router-view v-slot="{ Component }">
     <Transition name="route" mode="out-in">
       <div class="content" :key="$route.fullPath">
         <div class="container">
+          <template v-if="userStore.error">
+            <div class="global-error">УПС</div>
+          </template>
           <component
-              v-if="isLoaded && Component"
+              v-else-if="userStore.isLoaded && Component"
               :is="Component"
           />
         </div>

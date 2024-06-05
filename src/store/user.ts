@@ -11,6 +11,7 @@ export const useUserStore = defineStore("user", () => {
     const router = useRouter();
     const isLoaded = ref(false);
     const isAuth = ref(false);
+    const error = ref<string>();
 
 
     const clients = ref<Client[]>([]);
@@ -19,10 +20,6 @@ export const useUserStore = defineStore("user", () => {
     );
 
     const load = () => {
-        const loaded = (auth: boolean) => {
-            isLoaded.value = true;
-            isAuth.value = auth;
-        }
 
         if (!token.value) return isLoaded.value = true;
 
@@ -30,10 +27,18 @@ export const useUserStore = defineStore("user", () => {
         get<Client[]>("address/getSettingsList")
             .then((clientsResponse) => {
                 clients.value = clientsResponse;
-                loaded(true)
+                isLoaded.value = true;
+                isAuth.value = true;
             })
-            .catch(() => {
-                loaded(false)
+            .catch((_error) => {
+                const code = _error.response?.data?.code
+                if (code === 401) {
+                    isLoaded.value = true;
+                    isAuth.value = false;
+                }
+                else {
+                    error.value = _error.message;
+                }
             })
     };
 
@@ -59,6 +64,7 @@ export const useUserStore = defineStore("user", () => {
         clients,
         isLoaded,
         isAuth,
+        error,
         token,
         setToken,
         logout

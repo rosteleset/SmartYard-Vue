@@ -14,7 +14,6 @@ export const usePushStore = defineStore("push", () => {
     const notifications = ref<MessagePayload[]>([])
     const call = ref<MessagePayload>()
 
-    console.log(firebaseApp)
     const onFocus = (serviceWorker: ServiceWorkerRegistration) => {
         serviceWorker.getNotifications().then(notifications => {
             for (const notification of notifications) {
@@ -52,7 +51,6 @@ export const usePushStore = defineStore("push", () => {
                 .then((registration) => {
                     getToken(registration)
                         .then(token => {
-                            console.log(token)
                             request('user/registerPushToken', {pushToken: token, platform: "android"})
                         })
                     // в случае клика по пушу
