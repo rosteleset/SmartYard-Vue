@@ -8,7 +8,7 @@ import {nextTick} from 'vue';
 vi.mock('@/hooks/useApi');
 vi.mock('vue-router')
 
-describe('useConfigStore', () => {
+describe('config store', () => {
     beforeEach(() => {
         setActivePinia(createPinia());
         localStorage.clear();

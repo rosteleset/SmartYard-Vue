@@ -1,8 +1,8 @@
 import {defineStore} from "pinia";
 import {computed, ref, watch} from "vue";
-import useApi from "../hooks/useApi";
-import {Building} from "../types/building";
-import {useUserStore} from "./user";
+import useApi from "@/hooks/useApi";
+import {Building} from "@/types/building";
+import {useUserStore} from "@/store/user";
 
 export const useAddressesStore = defineStore("addresses", () => {
     const userStore = useUserStore();
@@ -11,9 +11,7 @@ export const useAddressesStore = defineStore("addresses", () => {
     const addresses = ref<Building[]>([]);
 
     const load = () => {
-        // if (!userStore.isAuth)
-        //     return isLoaded.value = true;
-        get<Building[]>("address/getAddressList")
+        return get<Building[]>("address/getAddressList")
             .then((response) => {
                 addresses.value = response;
                 isLoaded.value = true;
