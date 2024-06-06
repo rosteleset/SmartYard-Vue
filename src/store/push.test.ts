@@ -10,6 +10,7 @@ vi.mock('@/hooks/useApi')
 vi.mock('@/firebase')
 vi.mock('firebase/messaging')
 vi.mock('vue-router')
+vi.mock("@/store/user");
 
 describe("push store", () => {
     let store: ReturnType<(typeof usePushStore)>

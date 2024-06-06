@@ -4,11 +4,13 @@ import {useConfigStore} from '@/store/config';
 import useApi from '@/hooks/useApi';
 import {useUserStore} from '@/store/user';
 import {nextTick} from 'vue';
+import mockedStore from "@/mocks/mockedStore.ts";
 
 vi.mock('@/hooks/useApi');
 vi.mock('vue-router')
 
 describe('config store', () => {
+
     beforeEach(() => {
         setActivePinia(createPinia());
         localStorage.clear();
@@ -59,7 +61,7 @@ describe('config store', () => {
             request: vi.fn()
         });
 
-        const userStore = useUserStore();
+        const userStore = mockedStore(useUserStore);
         const store = useConfigStore();
 
         await userStore.setToken("valid-token")
