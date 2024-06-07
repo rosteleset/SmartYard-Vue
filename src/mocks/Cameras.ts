@@ -54,10 +54,10 @@ const mockCameras: Camera[] = [
         name: 'Kitchen Camera',
         lat: '34.0526',
         lon: '-118.2441',
-        serverType: 'NVR',
+        serverType: '',
         hlsMode: 'disabled',
         hasSound: true,
-        url: 'http://example.com/kitchen.m3u8',
+        url: 'http://camera2/stream2',
         token: 'mno345token'
     }
 ];
