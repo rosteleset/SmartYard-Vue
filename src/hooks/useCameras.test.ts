@@ -3,7 +3,7 @@ import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {flushPromises, mount} from '@vue/test-utils';
 import useCameras from './useCameras';
 import useApi from './useApi';
-import {mockCameras} from "@/mocks/Camera.ts";
+import {mockCameras} from "@/mocks/Cameras.ts";
 
 // Мокируем useApi
 vi.mock('./useApi');

@@ -1,15 +1,20 @@
 import {beforeEach, describe, expect, it, vi} from "vitest";
-import {ComponentPublicInstance, defineComponent, h} from "vue";
-import useEvents from "@/hooks/useEvents.ts";
+import {defineComponent, h} from "vue";
 import useFaces from "@/hooks/useFaces.ts";
-import {mount, VueWrapper} from "@vue/test-utils";
+import {flushPromises, mount} from "@vue/test-utils";
 import useApi from "@/hooks/useApi.ts";
+import {mockFaces} from "@/mocks/Faces.ts";
 
 vi.mock('./useApi');
 
-const mockGet = vi.fn().mockReturnValue(Promise.resolve({data: []}));
+const mockGet = vi.fn().mockImplementation((flatId?: string) => {
+    if (flatId !== undefined)
+        return Promise.resolve(mockFaces)
+    else
+        return Promise.resolve([])
+});
 
-type TestWrapper<T> = VueWrapper<ComponentPublicInstance & T>
+const mockRequest = vi.fn()
 
 const TestComponent = defineComponent({
     props: {
@@ -24,21 +29,58 @@ const TestComponent = defineComponent({
 });
 
 describe('useFaces', () => {
-    let wrapper: TestWrapper<Partial<typeof TestComponent>>;
 
     beforeEach(() => {
         (useApi as any).mockReturnValue({
-            get: mockGet
+            get: mockGet,
+            request: mockRequest
         });
+    })
 
-        wrapper = mount(TestComponent, {
+    it('useFaces initializes with empty array of faces', async () => {
+        const wrapper = mount(TestComponent)
+        expect(wrapper.vm.faces).toHaveLength(0)
+        await flushPromises();
+        expect(wrapper.vm.faces).toHaveLength(0)
+    })
+
+    // Загрузка лиц при предоставлении flatId
+    it('useFaces loads faces when flatId is provided', async () => {
+        const wrapper = mount(TestComponent, {
             props: {
                 flatId: 'flat1'
             }
         })
-    })
+        await flushPromises();
 
-    it('useFaces initializes with empty array of faces', () => {
-        expect(wrapper)
-    })
+        expect(wrapper.vm.faces).toEqual(mockFaces);
+    });
+
+    // Добавление нового лица
+    it('useFaces adds a new face', async () => {
+        mockRequest.mockResolvedValue({faceId: 'newFace'});
+        const wrapper = mount(TestComponent);
+        await flushPromises();
+
+        expect(await wrapper.vm.add('event1', 'test')).toEqual('newFace');
+        expect(mockRequest).toHaveBeenCalledWith('frs/like', {event: 'event1', comment: 'test'});
+    });
+
+    // Удаление лица
+    it('useFaces removes a face', async () => {
+        const wrapper = mount(TestComponent, {
+            props: {
+                flatId: 'flat1'
+            }
+        })
+        await flushPromises();
+
+        await wrapper.vm.remove({event: 'event1', faceId: 'face1', flatId: 'flat1'})
+
+        expect(mockRequest).toHaveBeenCalledWith('frs/disLike', {
+            event: 'event1',
+            flatId: 'flat1',
+            faceId: 'face1'
+        });
+    });
 })
