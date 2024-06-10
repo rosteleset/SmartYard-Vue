@@ -6,6 +6,10 @@ const pinia = createTestingPinia({createSpy: vi.fn});
 
 export const mockTFunction = (text: string) => `Translated ${text}`;
 
+export const FakeComponent = defineComponent({
+    template: '<div><slot /></div>'
+})
+
 export const FakeTransition = defineComponent({
     emits: ['afterEnter', 'enter'],
     template: '<div><slot /></div>',
