@@ -1,19 +1,17 @@
 import {beforeEach, describe, expect, it, vi} from "vitest";
-import {mount, VueWrapper} from "@vue/test-utils";
+import {mount} from "@vue/test-utils";
 import Address from "@/components/Address.vue";
 import {mockBuildings} from "@/mocks/Building.ts";
 import Cameras from "@/components/Cameras.vue";
 import Door from "@/components/Door.vue";
 import Events from "@/components/Events.vue";
 import {defaultGlobal} from "@/mocks/__mockedGlobal.ts";
-import {ComponentPublicInstance} from "vue";
 import {Building} from "@/types/building.ts";
+import TestWrapper from "@/mocks/TestWrapper.ts";
 
 vi.mock('@/components/Cameras.vue')
 vi.mock('@/components/Door.vue')
 vi.mock('@/components/Events.vue')
-
-type TestWrapper<T> = VueWrapper<ComponentPublicInstance & T>
 
 describe("Address", () => {
     let building: Building;
