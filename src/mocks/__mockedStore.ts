@@ -2,7 +2,7 @@ import {Store, StoreDefinition} from "pinia";
 import {Mock} from "vitest";
 import {ComputedRef} from "vue";
 
-function mockedStore<TStoreDef extends () => unknown>(
+function __mockedStore<TStoreDef extends () => unknown>(
     useStore: TStoreDef
 ): TStoreDef extends StoreDefinition<
         infer Id,
@@ -29,4 +29,4 @@ function mockedStore<TStoreDef extends () => unknown>(
     return useStore() as any
 }
 
-export default mockedStore
+export default __mockedStore

@@ -4,7 +4,7 @@ import {createPinia, setActivePinia} from "pinia";
 import useApi from "@/hooks/useApi.ts";
 import {useUserStore} from "@/store/user";
 import {getCurrentInstance, nextTick} from "vue";
-import mockedStore from "@/mocks/mockedStore.ts";
+import __mockedStore from "@/mocks/__mockedStore.ts";
 
 // Мокирование зависимостей
 vi.mock('@/hooks/useApi')
@@ -22,7 +22,7 @@ describe('addresses store', () => {
         setActivePinia(createPinia());
         (useApi as Mock).mockReturnValue({get: mockGet});
         store = useAddressesStore(createPinia());
-        userStore = mockedStore(useUserStore);
+        userStore = __mockedStore(useUserStore);
     });
 
     // Очистка моков после каждого теста

@@ -4,7 +4,7 @@ import {useConfigStore} from '@/store/config';
 import useApi from '@/hooks/useApi';
 import {useUserStore} from '@/store/user';
 import {nextTick} from 'vue';
-import mockedStore from "@/mocks/mockedStore.ts";
+import __mockedStore from "@/mocks/__mockedStore.ts";
 
 vi.mock('@/hooks/useApi');
 vi.mock('vue-router')
@@ -61,7 +61,7 @@ describe('config store', () => {
             request: vi.fn()
         });
 
-        const userStore = mockedStore(useUserStore);
+        const userStore = __mockedStore(useUserStore);
         const store = useConfigStore();
 
         await userStore.setToken("valid-token")
