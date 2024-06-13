@@ -10,7 +10,9 @@ export const mockEvents: Event[] = [
         mechanizmaDescription: 'Front Door',
         event: '1',
         previewType: 0,
-        detailX: {}
+        detailX: {
+            flags:['canLike']
+        }
     },
     {
         date: '2024-06-02 11:00:00',
@@ -21,6 +23,8 @@ export const mockEvents: Event[] = [
         mechanizmaDescription: 'Back Door',
         event: '2',
         previewType: 1,
-        detailX: {}
+        detailX: {
+            flags:['canDislike']
+        }
     }
 ];

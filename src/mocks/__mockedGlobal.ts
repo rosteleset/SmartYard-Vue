@@ -11,7 +11,7 @@ export const FakeComponent = defineComponent({
 })
 
 export const FakeTransition = defineComponent({
-    emits: ['afterEnter', 'enter'],
+    emits: ['afterEnter', 'enter', 'afterLeave', 'leave'],
     template: '<div><slot /></div>',
     setup(_, {emit}) {
         return {
@@ -20,7 +20,13 @@ export const FakeTransition = defineComponent({
             },
             emitEnter() {
                 emit('enter')
-            }
+            },
+            emitAfterLeave() {
+                emit('afterLeave')
+            },
+            emitLeave() {
+                emit('leave')
+            },
         }
     },
 })
@@ -32,7 +38,7 @@ export const defaultGlobal = {
         $router: {push: vi.fn()},
     },
     stubs: {
-        transition: FakeTransition,
+        // transition: false,
         teleport: true,
     },
 }
