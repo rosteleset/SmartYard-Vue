@@ -19,7 +19,6 @@ vi.mock('@/assets/information.svg?component', () => ({
         template: '<svg></svg>'
     }
 }));
-// vi.mock('@/components/Button.vue')
 vi.mock('@/components/ImageWithFace.vue')
 
 describe('EventsListItem', () => {
