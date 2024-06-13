@@ -153,6 +153,7 @@ watch(settings, (newSettings) => {
 
       <div class="faces-block">
         <Button
+            id="facesButton"
             v-if="settings.FRSDisabled === 'f'"
             variant="primary"
             @click="openFacesHandler"
