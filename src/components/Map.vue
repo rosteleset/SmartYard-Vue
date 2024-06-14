@@ -53,7 +53,7 @@ const onReady = (e: Map) => {
 
 // Обработчик события клика на маркере камеры
 const handler = (event: any, camera: Camera) => {
-  if (event.target) {
+  if (event.target && event.target._icon) {
     const rect = event.target._icon.getBoundingClientRect();
     styles.value = {
       top: `${rect?.top}px`,
@@ -119,15 +119,19 @@ const handler = (event: any, camera: Camera) => {
   .marker-cluster div {
     background-color: $blue;
   }
+
   .marker-cluster-small {
     background-color: transparentize($blue, .8);
   }
+
   .marker-cluster-medium {
     background-color: transparentize($blue, .6);
   }
+
   .marker-cluster-large {
     background-color: $blue;
   }
+
   .map-icon {
     &__container {
       box-sizing: border-box;

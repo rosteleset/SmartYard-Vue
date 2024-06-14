@@ -1,4 +1,3 @@
-// Cameras.spec.ts
 import {flushPromises, mount, VueWrapper} from '@vue/test-utils'
 import {describe, expect, it, Mock, vi} from 'vitest'
 import Cameras from '@/components/Cameras.vue'
