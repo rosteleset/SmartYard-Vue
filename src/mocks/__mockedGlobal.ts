@@ -38,7 +38,8 @@ export const defaultGlobal = {
         $router: {push: vi.fn()},
     },
     stubs: {
-        // transition: false,
+        transition: true,
         teleport: true,
+        RouterLink: true
     },
 }

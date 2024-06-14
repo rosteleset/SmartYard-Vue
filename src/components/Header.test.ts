@@ -5,6 +5,7 @@ import GoBack from "@/assets/goBack.svg"
 
 import {defaultGlobal} from "@/mocks/__mockedGlobal.ts";
 import TestWrapper from "@/mocks/TestWrapper.ts";
+import {ref} from "vue";
 
 // Mock useLocale
 vi.mock('@/hooks/useLocale', () => ({
@@ -27,7 +28,7 @@ const router = vi.hoisted(() => ({
     RouteRecord: vi.fn(),
     useRouter: () => ({
         push: vi.fn(),
-        currentRoute: "",
+        currentRoute: ref(""),
         getRoutes: vi.fn().mockReturnValue([]),
         back: vi.fn()
     }),
@@ -48,6 +49,7 @@ describe('Header', () => {
     let wrapper: TestWrapper<Partial<typeof Header>>;
 
     beforeEach(() => {
+
         wrapper = mount(Header, {
             global: {
                 provide: {
@@ -65,7 +67,6 @@ describe('Header', () => {
     it('shows go back button when isFirst is true', async () => {
         (wrapper.vm as any).isFirst = true
         await flushPromises()
-        console.log(wrapper.html())
         expect(wrapper.findComponent(GoBack).exists()).toBe(true);
     });
 

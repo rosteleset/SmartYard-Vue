@@ -5,7 +5,7 @@ import {watch} from "vue";
 
 const BASE_PATH = import.meta.env.VITE_BASE_PATH || '/';
 
-const routes: RouteRecordRaw[] = [
+export const routes: RouteRecordRaw[] = [
     {
         path: "/",
         name: "Auth",
