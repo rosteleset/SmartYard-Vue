@@ -40,7 +40,7 @@ const mount = () => {
     if (!_camera.serverType)
       _camera['serverType'] = 'flussonic'
     player.value = PlayerFactory.createPlayer({
-      camera:_camera,
+      camera: _camera,
       videoElement: videoElement.value,
       previewElement: previewElement.value,
       autoplay: config.watchmanMode,
