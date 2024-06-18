@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 import PlayIcon from "../assets/play.svg?component";
 import SettingsIcon from "../assets/settings.svg?component";
-import { FormatedRange } from "../types/camera";
+import {FormatedRange} from "../types/camera";
 
 // Определение свойств
-const { videoElement, range } = defineProps<{
+const {videoElement, range} = defineProps<{
   videoElement: HTMLVideoElement;
   range: FormatedRange;
 }>();
@@ -24,10 +24,10 @@ watch(range, () => {
   currentTime.value = minValue;
 });
 watch(
-  () => videoElement.currentTime,
-  (newTime) => {
-    currentTime.value = newTime;
-  }
+    () => videoElement.currentTime,
+    (newTime) => {
+      currentTime.value = newTime;
+    }
 );
 
 // Вычисляемые свойства
@@ -37,7 +37,7 @@ const maxValue = computed(() => {
 
 const timeDisplayLeft = computed(() => {
   const newValue = Number(
-    ((currentTime.value - minValue) * 100) / (maxValue.value - minValue)
+      ((currentTime.value - minValue) * 100) / (maxValue.value - minValue)
   );
   const newPosition = 10 - newValue * 0.2;
   return `calc(${newValue}% + (${newPosition}px))`;
@@ -50,8 +50,8 @@ const progress = computed(() => {
 const handleSliderInput = () => {
   if (range) {
     const newTime = Math.min(
-      maxValue.value,
-      Math.max(minValue, currentTime.value)
+        maxValue.value,
+        Math.max(minValue, currentTime.value)
     );
     videoElement.currentTime = newTime;
   }
@@ -80,33 +80,33 @@ onUnmounted(() => {
 <template>
   <div class="custom-controls">
     <button class="button" @click="emits('pause')">
-      <PlayIcon />
+      <PlayIcon/>
     </button>
     <div class="wrap">
       <input
-        type="range"
-        class="custom-slider"
-        :min="minValue"
-        :max="maxValue"
-        :step="stepValue"
-        v-model="currentTime"
-        @input="handleSliderInput"
-        @mousedown="onDragStart"
-        @mouseup="onDragEnd"
-        :style="{
+          type="range"
+          class="custom-slider"
+          :min="minValue"
+          :max="maxValue"
+          :step="stepValue"
+          v-model="currentTime"
+          @input="handleSliderInput"
+          @mousedown="onDragStart"
+          @mouseup="onDragEnd"
+          :style="{
           background: `linear-gradient(to right, #298BFF ${progress}%, #ccc ${progress}%)`,
         }"
       />
       <div
-        class="time-display"
-        :class="{ visible: isDraggable }"
-        :style="{ left: timeDisplayLeft }"
+          class="time-display"
+          :class="{ visible: isDraggable }"
+          :style="{ left: timeDisplayLeft }"
       >
         {{ dayjs(range.date).add(currentTime, "seconds").format("HH:mm:ss") }}
       </div>
     </div>
     <button class="button">
-      <SettingsIcon />
+      <SettingsIcon/>
     </button>
   </div>
 </template>
@@ -122,10 +122,12 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   gap: 12px;
+
   .wrap {
     position: relative;
     width: 100%;
   }
+
   .custom-slider {
     width: 100%;
     cursor: pointer;
@@ -133,14 +135,17 @@ onUnmounted(() => {
     outline: none;
     border-radius: 12px;
     height: 8px;
+
     &::-webkit-slider-runnable-track {
       height: 12px;
       border-radius: 12px;
     }
+
     &::-moz-range-track {
       height: 12px;
       border-radius: 12px;
     }
+
     &::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -152,6 +157,7 @@ onUnmounted(() => {
       box-shadow: 0 0 2px 4px #298bff;
       transition: 0.5s;
     }
+
     &::-moz-range-thumb {
       height: 12px;
       width: 12px;
@@ -160,15 +166,18 @@ onUnmounted(() => {
       border: 4px solid #298bff;
       transition: 0.5s;
     }
+
     &:active {
       &::-webkit-slider-thumb {
         box-shadow: 0 0 0 4px #298bff;
       }
+
       &::-moz-range-thumb {
         border-width: 6px;
       }
     }
   }
+
   .time-display {
     position: absolute;
     top: -42px; /* Отступ от ползунка вверх */
@@ -179,6 +188,7 @@ onUnmounted(() => {
     border-radius: 12px;
     opacity: 0;
     transition: opacity 0.5s ease;
+
     &.visible {
       opacity: 1;
     }
@@ -196,6 +206,7 @@ onUnmounted(() => {
     justify-content: center;
     padding: 0;
     cursor: pointer;
+
     svg {
       max-width: 70%;
       max-height: 70%;

@@ -73,14 +73,18 @@ const drawFaceRectangle = (
 
 // Отрисовка изображения и создание слушателя при монтировании компонента
 onMounted(() => {
-  img.onload = () => {
-    updateCanvasSize();
-  };
-  img.onerror = () => error.value = true;
+  try {
+    img.onload = () => {
+      updateCanvasSize();
+    };
+    img.onerror = () => error.value = true;
 
-  img.src = imageUrl;
-  window.addEventListener("resize", updateCanvasSize);
-  updateCanvasSize();
+    img.src = imageUrl;
+    window.addEventListener("resize", updateCanvasSize);
+    updateCanvasSize();
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 // Удаление слушателя перед размонтированием компонента

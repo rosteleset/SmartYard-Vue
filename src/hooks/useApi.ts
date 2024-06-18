@@ -1,8 +1,8 @@
 import axios, {AxiosError} from "axios";
 import {computed} from "vue";
-import {useUserStore} from "../store/user";
-import {usePushStore} from "@/store/push.ts";
-import {SERVER_URL} from "@/lib/const.ts";
+import {useUserStore} from "@/store/user";
+import {usePushStore} from "@/store/push";
+import {SERVER_URL} from "@/lib/const";
 
 
 const useApi = () => {
@@ -15,7 +15,6 @@ const useApi = () => {
             baseURL: SERVER_URL,
             headers: {
                 Authorization: `Bearer ${userStore.token}`,
-                DeviceId: userStore.deviceId,
                 "Content-Type": "application/json",
             },
         })
@@ -53,7 +52,7 @@ const useApi = () => {
         try {
             const body = JSON.stringify(params);
             const response = await axiosInstance.value.post(path, body);
-            return response.data.data;
+            return response.data?.data;
         } catch (error: any) {
             onError(error);
             throw error;

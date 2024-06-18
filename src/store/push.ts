@@ -1,14 +1,15 @@
 import {defineStore} from "pinia";
-import {onMounted, ref} from "vue";
-import {getMessaging, MessagePayload, onMessage, Messaging} from "firebase/messaging"
-import {getFirebaseApp, getToken} from "@/firebase.ts";
-import useApi from "@/hooks/useApi.ts";
-import {FirebaseApp} from "firebase/app";
+import {ref, watch} from "vue";
+import {getMessaging, MessagePayload, onMessage} from "firebase/messaging"
+import {getFirebaseApp, getToken} from "@/firebase";
+import useApi from "@/hooks/useApi";
+import {useUserStore} from "@/store/user";
 
 export const usePushStore = defineStore("push", () => {
+    const userStore = useUserStore();
     const {request} = useApi();
-    const firebaseApp = ref<FirebaseApp>();
-    const messaging = ref<Messaging>();
+    const firebaseApp = getFirebaseApp();
+    const messaging = getMessaging(firebaseApp);
 
     const notifications = ref<MessagePayload[]>([])
     const call = ref<MessagePayload>()
@@ -39,37 +40,32 @@ export const usePushStore = defineStore("push", () => {
         call.value = payload
     }
 
+    const load = async () => {
+        if ('serviceWorker' in navigator) {
+            let registration = await navigator.serviceWorker.register(
+                import.meta.env.MODE === 'production' ? 'firebase-messaging-sw.js' : 'dev-sw.js?dev-sw', {
+                    scope: './',
+                    type: import.meta.env.MODE === 'production' ? 'classic' : 'module'
+                }
+            );
 
-    onMounted(() => {
-        try {
-            firebaseApp.value = getFirebaseApp()
-            messaging.value = getMessaging(firebaseApp.value)
-            if ('serviceWorker' in navigator && messaging.value) {
-                navigator.serviceWorker.register(
-                    import.meta.env.MODE === 'production' ? 'firebase-messaging-sw.js' : 'dev-sw.js?dev-sw', {
-                        scope: './',
-                        type: import.meta.env.MODE === 'production' ? 'classic' : 'module'
-                    }
-                )
-                    .then((registration) => {
-                        getToken(registration)
-                            .then(token => {
-                                request('user/registerPushToken', {pushToken: token, platform: "android"})
-                            })
-                        navigator.serviceWorker.addEventListener("message", (event) => {
-                            if (event.data.type === "FCM_MESSAGE")
-                                onPush(event.data.msg)
-                        });
-                        window.addEventListener("focus", () => onFocus(registration));
-                        if (messaging.value)
-                            onMessage(messaging.value, onPush);
-                    })
-            }
-        } catch (e) {
-            console.log(e)
+            const token: string = await getToken(registration)
+
+            await request('user/registerPushToken', {pushToken: token, platform: "android"})
+
+            navigator.serviceWorker.addEventListener("message", (event) => {
+                if (event.data.type === "FCM_MESSAGE")
+                    onPush(event.data.msg)
+            });
+            window.addEventListener("focus", () => onFocus(registration));
+            onMessage(messaging, onPush);
         }
+    }
+
+    watch(userStore, store => {
+        if (store.isAuth)
+            load()
     })
 
-
-    return {notifications, addNotification, removeNotification, call, setCall}
+    return {notifications, addNotification, removeNotification, call, setCall, load}
 })

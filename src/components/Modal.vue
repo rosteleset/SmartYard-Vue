@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {nextTick, onMounted, ref} from "vue";
 import closeIcon from "@/assets/close.svg?component";
 import {watch} from "vue";
 
@@ -15,17 +15,20 @@ const close = () => {
   emit("onClose");
 };
 
-const initClose = () => {
-  if (bodyVisible.value)
-    bodyVisible.value = false;
-  else
-    close()
+const initClose = async () => {
+  bodyVisible.value = false;
+  await nextTick()
+  close()
+  // setTimeout(close, 500)
 };
 watch(
     () => props.isOpen,
-    () => {
-      if (props.isOpen) document.body.classList.add("scroll-block");
-      else document.body.classList.remove("scroll-block");
+    async () => {
+      if (props.isOpen) {
+        document.body.classList.add("scroll-block");
+        await nextTick()
+        bodyVisible.value = true
+      } else document.body.classList.remove("scroll-block");
     }
 );
 
@@ -37,9 +40,9 @@ onMounted(() => {
 
 <template>
   <teleport to="body">
-    <Transition name="fade" @enter="bodyVisible = true">
+    <Transition name="fade">
       <div v-if="isOpen" class="modal__overlay" @click="initClose">
-        <Transition name="modal" @leave="close">
+        <Transition name="modal">
           <div v-if="bodyVisible" class="modal" @click.stop>
             <div class="modal__header">
               <h3 v-if="title">{{ title }}</h3>

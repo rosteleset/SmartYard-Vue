@@ -4,7 +4,6 @@ import ArrowIcon from "@/assets/arrowRight.svg?component";
 
 const props = defineProps<{
   icon: FunctionalComponent;
-  alt: String;
   text: String;
 }>();
 

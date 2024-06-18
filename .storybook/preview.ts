@@ -19,7 +19,6 @@ import "dayjs/locale/en";
 import "dayjs/locale/ru";
 import {useConfigStore} from "../src/store/config";
 import {addons} from "@storybook/addons";
-import {useEventsStore} from "../src/store/events";
 
 
 setup((app) => {
@@ -28,7 +27,6 @@ setup((app) => {
     app.mixin({
         /* My mixin */
     });
-    useEventsStore()
     store.state.value = {
         ...store.state.value,
         user: {

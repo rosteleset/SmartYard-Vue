@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import Select, {OptionProps} from "@/components/Select.vue";
 import useEventNames from "@/hooks/useEventNames.ts";
-import {useEventsStore} from "@/store/events.ts";
 import {Client} from "@/types/user.ts";
-import {computed} from "vue";
+import {computed, inject} from "vue";
+import useEvents, {eventsHook} from "@/hooks/useEvents.ts";
 
 const {clients} = defineProps<{
   clients: Client[];
 }>();
+
+const events: eventsHook = inject("events") || useEvents([])
 
 const clientsOptions = computed<OptionProps[]>(() =>
     clients.map((client) => ({
@@ -15,7 +17,6 @@ const clientsOptions = computed<OptionProps[]>(() =>
       name: client.flatNumber || client.flatId,
     }))
 );
-const eventsStore = useEventsStore();
 const {eventNames} = useEventNames();
 const types = computed<OptionProps[]>(() => {
   return Object.entries(eventNames.value)
@@ -25,27 +26,26 @@ const types = computed<OptionProps[]>(() => {
 
 const selectedType = computed<OptionProps | undefined>({
   get: () => {
-    if (
-        eventsStore.eventTypes.length === 0 ||
-        eventsStore.eventTypes.length > 1
-    )
-      return undefined;
+    if (events.eventType.value === undefined)
+      return events.eventType.value;
     return {
-      id: eventsStore.eventTypes[0],
-      name: eventNames.value[eventsStore.eventTypes[0]],
+      id: events.eventType.value,
+      name: eventNames.value[events.eventType.value],
     };
   },
   set: (value: OptionProps | undefined) => {
-    if (value === undefined) eventsStore.eventTypes = [];
-    else eventsStore.eventTypes = [value.id.toString()];
+    if (value === undefined) events.eventType.value = value;
+    else events.eventType.value = value.id.toString();
   },
 });
+
 const selectedClient = computed<OptionProps | undefined>({
   get: () => {
-    if (eventsStore.flatIds.length === 0 || eventsStore.flatIds.length > 1)
-      return undefined;
+    // return undefined
+    if (events.flatId.value === undefined)
+      return events.flatId.value;
     const client = clients.find(
-        (client) => client.flatId == eventsStore.flatIds[0]
+        (client) => client.flatId == events.flatId.value
     );
     return {
       id: client?.flatId || "",
@@ -53,9 +53,7 @@ const selectedClient = computed<OptionProps | undefined>({
     };
   },
   set: (value: OptionProps | undefined) => {
-    if (value === undefined)
-      eventsStore.flatIds = clients.map((client) => client.flatId);
-    else eventsStore.flatIds = [value.id.toString()];
+    events.flatId.value = value?.id.toString() || undefined
   },
 });
 </script>

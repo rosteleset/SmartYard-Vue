@@ -1,0 +1,92 @@
+// Мок массив Clients
+import {Client} from "@/types/user.ts";
+
+const mockClients: Client[] = [
+    {
+        clientId: 1,
+        clientName: "John Doe",
+        contractName: "JD123",
+        flatOwner: "t",
+        contractOwner: "t",
+        hasGates: "f",
+        houseId: "1",
+        flatId: "1A",
+        flatNumber: "101",
+        hasPlog: "t",
+        address: "123 Main St",
+        services: ["internet", "iptv", "domophone"],
+        lcab: "12345",
+        roommates: [
+            {
+                phone: "123-456-7890",
+                timezone: -5,
+                expire: "2023-12-31",
+                type: "inner",
+            },
+        ],
+    },
+    {
+        clientId: 2,
+        clientName: "Jane Smith",
+        contractName: "JS456",
+        flatOwner: "f",
+        contractOwner: "t",
+        hasGates: "t",
+        houseId: "1",
+        flatId: "2B",
+        flatNumber: "102",
+        hasPlog: "f",
+        address: "124 Main St",
+        services: ["internet", "cctv", "gsm"],
+        lcab: "67890",
+        roommates: [
+            {
+                phone: "098-765-4321",
+                timezone: 1,
+                expire: "2024-05-15",
+                type: "outer",
+            },
+        ],
+    },
+    {
+        clientId: 3,
+        clientName: "Alice Johnson",
+        contractName: "AJ789",
+        flatOwner: "t",
+        contractOwner: "f",
+        hasGates: "f",
+        houseId: "1",
+        flatId: "3C",
+        flatNumber: "103",
+        hasPlog: "t",
+        address: "125 Main St",
+        services: ["internet", "iptv", "ctv", "phone"],
+        lcab: "11223",
+        roommates: [],
+    },
+    {
+        clientId: 4,
+        clientName: "Bob Brown",
+        contractName: "BB101",
+        flatOwner: "f",
+        contractOwner: "t",
+        hasGates: "t",
+        houseId: "1",
+        flatId: "4D",
+        flatNumber: "104",
+        hasPlog: "f",
+        address: "126 Main St",
+        services: ["internet", "cctv", "domophone"],
+        lcab: "44556",
+        roommates: [
+            {
+                phone: "111-222-3333",
+                timezone: 0,
+                expire: "2023-11-30",
+                type: "owner",
+            },
+        ],
+    },
+];
+
+export default mockClients;

@@ -1,37 +1,37 @@
 <script setup lang="ts">
 import EventsListItem from "@/components/EventsListItem.vue";
 import useLocale from "@/hooks/useLocale";
-import { useEventsStore } from "@/store/events";
-import { Event, EventDay } from "@/types/events.ts";
-import { useElementVisibility, watchOnce } from "@vueuse/core";
-import { computed } from "vue";
-import { ref, watch } from "vue";
+import {Event, EventDay} from "@/types/events.ts";
+import {useElementVisibility} from "@vueuse/core";
+import {computed, inject, ref, watch} from "vue";
+import useEvents, {eventsHook} from "@/hooks/useEvents.ts";
 
-const { day } = defineProps<{
+const {day} = defineProps<{
   day: EventDay;
 }>();
+const {getEvents, flatId, eventType}: eventsHook = inject("events") || useEvents([])
 
-const eventsStore = useEventsStore();
-const { localizedDayjs } = useLocale();
+const {localizedDayjs} = useLocale();
 const localizedText = computed(() =>
-  localizedDayjs.value(day.day).format("dddd, D MMMM")
+    localizedDayjs.value(day.day).format("dddd, D MMMM")
 );
 const events = ref<Event[]>([]);
 const target = ref(null);
 const targetIsVisible = useElementVisibility(target);
 const isEmpty = ref(false);
 
-watchOnce(targetIsVisible, (isVisible) => {
-  if (isVisible)
-    eventsStore.getEvents(day).then((_events) => {
+watch(targetIsVisible, (isVisible) => {
+  if (isVisible && events.value.length === 0)
+    getEvents(day).then((_events) => {
       events.value = _events;
       if (_events.length === 0) isEmpty.value = true;
     });
 });
-watch(eventsStore, () => {
+watch([flatId, eventType], () => {
   isEmpty.value = false;
+  events.value = []
   if (targetIsVisible.value)
-    eventsStore.getEvents(day).then((_events) => (events.value = _events));
+    getEvents(day).then((_events) => (events.value = _events));
 });
 </script>
 <template>
@@ -40,7 +40,7 @@ watch(eventsStore, () => {
       <div class="day-label" ref="target">{{ localizedText }}</div>
       <TransitionGroup appear name="events">
         <div v-for="event in events" :key="event.uuid">
-          <EventsListItem :event="event" />
+          <EventsListItem :event="event"/>
         </div>
       </TransitionGroup>
     </div>
@@ -53,6 +53,7 @@ watch(eventsStore, () => {
   margin-top: 24px;
   margin-bottom: 12px;
 }
+
 /* 1. declare transition */
 .events-move,
 .events-enter-active,

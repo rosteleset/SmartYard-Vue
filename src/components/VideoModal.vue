@@ -51,7 +51,6 @@ watch(currentRange, () => {
 });
 
 onMounted(() => {
-  console.log(props)
   document.body.classList.add("scroll-block");
 
   if (videoElement.value) {

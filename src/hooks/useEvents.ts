@@ -1,58 +1,82 @@
-import { Ref, computed, onMounted, ref, watch } from "vue";
-import { Event, EventDay } from "../types/events";
+import {computed, onMounted, Ref, ref, watch} from "vue";
+import {Event, EventDay} from "../types/events";
 import useApi from "./useApi";
 
-export interface EventStoreItem {
-  date: EventDay;
-  events: Event[];
+export type eventsHook = {
+    getEvents: (day: EventDay) => Promise<Event[]>;
+    days: Ref<Array<EventDay>>;
+    flatId: Ref<string | undefined>;
+    eventType: Ref<string | undefined>;
 }
 
 const useEvents = (
-  flatIds: Ref<string[]>,
-  eventType?: Ref<string | undefined>
-) => {
-  const { get } = useApi();
-  const eventsMap = ref<{ [key: string]: Event[] }>({});
+    flatIds: string[]
+): eventsHook => {
+    const {get} = useApi();
 
-  const events = computed(() =>
-    Object.keys(eventsMap.value).map((key) => ({
-      date: key,
-      events: eventsMap.value[key].filter(
-        (event) => !eventType?.value || event.event === eventType?.value
-      ),
-    }))
-  );
+    // private
+    const _days = ref<EventDay[]>([])
 
-  const load = async () => {
-    await Promise.all(
-      flatIds.value.map((flatId) =>
-        get<EventDay[]>("address/plogDays", { flatId }).then((days) => {
-          if (days) days.forEach((day) => (eventsMap.value[day.day] = []));
-        })
-      )
-    );
+    // public
+    const flatId = ref<string>()
+    const eventType = ref<string>();
 
-    await Promise.all(
-      flatIds.value.map((flatId) =>
-        Promise.all(
-          Object.keys(eventsMap.value).map((day) =>
-            get<Event[]>("address/plog", { flatId, day }).then(
-              (_events) => _events && eventsMap.value[day]?.push(..._events)
-            )
-          )
-        )
-      )
-    );
-  };
+    const days = computed(() => _days.value)
 
-  onMounted(load);
-  watch(flatIds, load);
+    const loadDays = async () => {
+        const result: EventDay[] = [];
+        const flats = flatId.value ? [flatId.value] : flatIds
+        for (const flatId of flats) {
+            try {
+                const response = await get<EventDay[]>(`address/plogDays`, {
+                    flatId,
+                    events: eventType.value
+                });
 
-  return {
-    events,
-    eventsMap,
-    load,
-  };
+                result.push(...response);
+            } catch (_error) {
+            }
+        }
+        const uniqueEventsArray = result.filter(
+            (event, index, self) =>
+                index === self.findIndex((t) => t.day === event.day)
+        );
+        _days.value = uniqueEventsArray.sort(
+            (a, b) => new Date(b.day).getTime() - new Date(a.day).getTime()
+        );
+    }
+
+    const getEvents = async (day: EventDay) => {
+        const result: Event[] = [];
+
+        const _flats = flatId.value ? [flatId.value] : flatIds
+        for (const flatId of _flats) {
+            try {
+                const response = await get<Event[]>(`address/plog`, {
+                    flatId:flatId,
+                    day: day.day,
+                });
+
+                result.push(...response);
+            } catch (_error) {
+            }
+        }
+
+        return result.filter(
+            (event) =>
+                !eventType.value || eventType.value === event.event
+        );
+    }
+
+    onMounted(loadDays)
+    watch([flatId, eventType], loadDays)
+
+    return {
+        flatId,
+        eventType,
+        days,
+        getEvents
+    };
 };
 
 export default useEvents;

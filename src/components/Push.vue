@@ -24,7 +24,7 @@ const handler = (notification: MessagePayload) => {
 
 <template>
   <div class="list">
-    <div v-for="message in push.notifications" :key="message.messageId" class="item" @click="handler(message)">
+    <div v-for="message in push.notifications" :key="message.messageId" class="item" :class="`item-${message.messageId}`" @click="handler(message)">
       <CloseIcon class="close-icon" @click.stop="push.removeNotification(message)"/>
       <p class="title">{{ message.notification?.title }}</p>
       <p class="message">{{ message.notification?.body }}</p>

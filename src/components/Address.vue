@@ -11,7 +11,7 @@ import convertSettingsBoolean from "@/lib/convertSettingsBoolean.ts";
 const {building} = defineProps<{ building: Building }>();
 
 // Предоставление houseId через инъекцию
-provide("houseId", building.houseId);
+// provide("houseId", building.houseId);
 
 </script>
 

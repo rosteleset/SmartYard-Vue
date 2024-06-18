@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import {ref} from "vue";
 import Switch from "@/components/Switch.vue";
-import { useUserStore } from "@/store/user";
 import convertSettingsBoolean from "@/lib/convertSettingsBoolean";
+import {useConfigStore} from "@/store/config.ts";
 
-const { notifications } = useUserStore();
+const { notifications } = useConfigStore();
 
 const notificationsEnable = ref(
   notifications.enable && convertSettingsBoolean(notifications.enable)

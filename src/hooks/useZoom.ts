@@ -80,6 +80,7 @@ const useZoom = (videoElement: Ref<HTMLVideoElement | null>) => {
 
         value?.addEventListener("mousedown", startDrag);
     });
+
     onUnmounted(() => {
         videoElement.value?.removeEventListener("wheel", handleScroll);
     });
