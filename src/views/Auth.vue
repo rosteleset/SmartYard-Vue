@@ -15,6 +15,7 @@ const router = useRouter();
 const phone = ref<string>("")
 const code = ref<string>("")
 const status = ref<number>(0);
+const outgoingPhone = ref<string>()
 
 const requestCode = () => {
   const method = 'sms';
@@ -22,8 +23,12 @@ const requestCode = () => {
     userPhone: phone.value,
     method
   }).then(r => {
-    if (r.data.method === method)
+    if (r.data.method === 'sms')
       status.value = 1;
+    if (r.data.method === 'outgoingCall') {
+      status.value = 2;
+      outgoingPhone.value = r.data.confirmationNumbers[0]
+    }
   })
 }
 
@@ -39,7 +44,18 @@ const confirmCode = () => {
   })
 }
 
-const handler = (e:Event) => {
+const confirmCall = () => {
+  request('/user/checkPhone', {
+    userPhone: phone.value,
+    deviceToken: generateDeviceId(),
+    platform: '2'
+  }).then(r => {
+    if (r.data.accessToken)
+      userStore.setToken(r.data.accessToken)
+  })
+}
+
+const handler = (e: Event) => {
   e.preventDefault();
   switch (status.value) {
     case 0:
@@ -47,6 +63,9 @@ const handler = (e:Event) => {
       return;
     case 1:
       confirmCode()
+      return;
+    case 2:
+      confirmCall()
       return;
     default:
       break;
@@ -113,6 +132,10 @@ watch(userStore, store => {
       />
       <Button variant="primary">Отправить</Button>
     </template>
+    <template v-if="status === 2">
+      <p class="phone">Позвоните на номер: <a :href="`tel:${outgoingPhone}`">{{ outgoingPhone }}</a> для подтверждения</p>
+      <Button variant="primary">Продолжить</Button>
+    </template>
   </form>
 </template>
 
@@ -128,6 +151,11 @@ watch(userStore, store => {
     padding: 12px;
     font-size: 24px;
     text-align: center;
+  }
+
+  .phone {
+    text-align: center;
+    font-size: 24px;
   }
 }
 </style>
