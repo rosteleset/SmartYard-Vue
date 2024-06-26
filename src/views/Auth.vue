@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import {ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import Button from "@/components/Button.vue";
 import PhoneInput from "@/components/PhoneInput.vue";
 import useApi from "@/hooks/useApi.ts";
 import {useUserStore} from "@/store/user.ts";
 import {useRouter} from "vue-router";
 import generateDeviceId from "@/lib/generateDeviceId.ts";
+import debounce from "@/lib/debounce.ts";
 
+const authType = import.meta.env.VITE_AUTH_TYPE
 const userStore = useUserStore()
 const {request} = useApi()
 
@@ -79,13 +81,12 @@ watch(userStore, store => {
     router.push('/addresses')
 })
 
-// const userStore = useUserStore();
-// const addressesStore = useAddressesStore();
-// const { axiosInstance } = useApi();
-// const router = useRouter();
+// for token
+const {axiosInstance} = useApi();
 
-// const status = ref<string>();
-// const inputType = ref("password");
+const tokenStatus = ref<string>();
+const inputType = ref("password");
+const token = ref("")
 // const tt = computed({
 //   get() {
 //     return userStore.token || "";
@@ -95,33 +96,51 @@ watch(userStore, store => {
 //     userStore.setToken(value);
 //   },
 // });
-//
-// const handler = () => router.push(`/addresses`);
-//
-// const validate = () => {
-//   axiosInstance.value
-//     .post("user/ping")
-//     .then((res) => {
-//       status.value = res.status === 204 ? "Valid token" : "Hmm";
-//       if (res.status === 204) {
-//         userStore.load();
-//         addressesStore.load();
-//       }
-//     })
-//     .catch((err: any) => {
-//       userStore.error = err.message;
-//       status.value =
-//         err.response.status === 401 ? "Invalid token" : "Server error";
-//     });
-// };
-//
-// const debouncedValidate = debounce(validate, 500);
+
+const validate = () => {
+  axiosInstance.value
+      .post("user/ping")
+      .then((res) => {
+        tokenStatus.value = res.status === 204 ? "Valid token" : "Hmm";
+        if (res.status === 204) {
+          userStore.load();
+        }
+      })
+      .catch((err: any) => {
+        tokenStatus.value =
+            err.response.status === 401 ? "Invalid token" : "Server error";
+      });
+};
+
+const debouncedValidate = debounce(validate, 1000);
+
 
 // onMounted(validate);
 </script>
 
 <template>
-  <form class="wrap" @submit="handler">
+  <template v-if="authType === 'token'">
+    <div class="wrap">
+      <input
+          :type="inputType"
+          v-model="token"
+          @focusin="inputType = 'text'"
+          @focusout="inputType = 'password'"
+          @input="debouncedValidate"
+      />
+      <Button
+          v-if="tokenStatus"
+          :variant="tokenStatus === 'Valid token' ? 'success' : 'error'"
+      >{{ tokenStatus }}
+      </Button
+      >
+      <Button v-if="tokenStatus === 'Valid token'" @click="router.push('/addresses')" variant="primary"
+      >К адресам
+      </Button
+      >
+    </div>
+  </template>
+  <form v-else class="wrap" @submit="handler">
     <p>{{ phone }}</p>
     <PhoneInput v-model="phone" :disabled="status !== 0"/>
     <Button v-if="status === 0" variant="primary">Запросить код</Button>
@@ -133,7 +152,8 @@ watch(userStore, store => {
       <Button variant="primary">Отправить</Button>
     </template>
     <template v-if="status === 2">
-      <p class="phone">Позвоните на номер: <a :href="`tel:${outgoingPhone}`">{{ outgoingPhone }}</a> для подтверждения</p>
+      <p class="phone">Позвоните на номер: <a :href="`tel:${outgoingPhone}`">{{ outgoingPhone }}</a> для подтверждения
+      </p>
       <Button variant="primary">Продолжить</Button>
     </template>
   </form>
