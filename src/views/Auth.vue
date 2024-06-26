@@ -99,7 +99,7 @@ const token = ref("")
 
 const validate = () => {
   axiosInstance.value
-      .post("user/ping")
+      .post("user/ping", {}, {headers: {Authorization: `Bearer ${token.value}`}})
       .then((res) => {
         tokenStatus.value = res.status === 204 ? "Valid token" : "Hmm";
         if (res.status === 204) {
