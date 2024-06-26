@@ -28,8 +28,8 @@ export const useUserStore = defineStore("user", () => {
 
         try {
             clients.value = await get<Client[]>("address/getSettingsList");
-            isLoaded.value = true;
             isAuth.value = true;
+            isLoaded.value = true;
         } catch (_error: any) {
             const code = _error.response?.data?.code
             isLoaded.value = true;

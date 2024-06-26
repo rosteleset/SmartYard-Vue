@@ -2,14 +2,14 @@
 import {useAddressesStore} from "@/store/addresses";
 import AddressesListItem from "@/components/AddressesListItem.vue";
 
-const { addresses } = useAddressesStore();
+const addressesStore = useAddressesStore();
 </script>
 
 <template>
   <AddressesListItem
-    v-for="item in addresses"
-    :key="item.houseId"
-    :building="item"
+      v-for="item in addressesStore.addresses"
+      :key="item.houseId"
+      :building="item"
   />
 </template>
 

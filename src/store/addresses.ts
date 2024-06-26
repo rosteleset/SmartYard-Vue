@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {computed, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import useApi from "@/hooks/useApi";
 import {Building} from "@/types/building";
 import {useUserStore} from "@/store/user";
@@ -10,15 +10,15 @@ export const useAddressesStore = defineStore("addresses", () => {
     const isLoaded = ref(false);
     const addresses = ref<Building[]>([]);
 
-    const load = () => {
-        return get<Building[]>("address/getAddressList")
-            .then((response) => {
-                addresses.value = response;
-                isLoaded.value = true;
-            })
-            .catch(() => {
-                isLoaded.value = true;
-            });
+    const load = async () => {
+        if (!userStore.isAuth)
+            return
+        try {
+            addresses.value = await get<Building[]>("address/getAddressList");
+            isLoaded.value = true;
+        } catch (e) {
+            isLoaded.value = true;
+        }
     };
 
     const getAddressByHouseId = (houseId: string): Building | undefined => {
@@ -39,10 +39,8 @@ export const useAddressesStore = defineStore("addresses", () => {
         return client && getAddressByHouseId(client.houseId);
     };
 
-    watch(userStore, store => {
-        if (store.isAuth)
-            load()
-    })
+    watch(userStore, load)
+    onMounted(load)
 
     return {
         isLoaded,
