@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onMounted, ref, watch} from "vue";
+import {ref, watch} from "vue";
 import Button from "@/components/Button.vue";
 import PhoneInput from "@/components/PhoneInput.vue";
 import useApi from "@/hooks/useApi.ts";
