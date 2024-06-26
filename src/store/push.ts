@@ -34,7 +34,12 @@ export const usePushStore = defineStore("push", () => {
         notifications.value.push(payload)
     }
     const removeNotification = (notification: MessagePayload) => {
+        try {
         notifications.value = notifications.value.filter(m => m.messageId !== notification.messageId)
+
+        } catch (e) {
+            console.log(e)
+        }
     }
     const setCall = (payload?: MessagePayload) => {
         call.value = payload

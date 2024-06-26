@@ -3,7 +3,7 @@ import {onUnmounted, ref, StyleValue, watch} from "vue";
 import {useConfigStore} from "@/store/config";
 import {Camera} from "@/types/camera";
 import VideoModal from "@/components/VideoModal.vue";
-import {Player, PlayerFactory} from "rbt-player";
+import {Player, PlayerFactory} from "@/lib/player";
 import {useElementVisibility} from "@vueuse/core";
 
 const {camera, index} = defineProps<{ camera: Camera; index?: number }>();
@@ -13,6 +13,7 @@ const previewContainer = ref<HTMLVideoElement>();
 const previewElement = ref<HTMLVideoElement>();
 const videoElement = ref<HTMLVideoElement>();
 const isOpen = ref(false);
+const isError = ref(false)
 const styles = ref<StyleValue>();
 const targetIsVisible = useElementVisibility(previewContainer);
 const timer = ref<NodeJS.Timeout>()
@@ -31,6 +32,8 @@ const openHandler = () => {
 }
 
 const closeHandler = () => (isOpen.value = false);
+
+const errorHandler = () => (isError.value = true)
 
 const mount = () => {
   if (!videoElement.value)
@@ -82,14 +85,17 @@ onUnmounted(dismount)
     <video
         autoplay
         ref="previewElement"
-        class="video__preview"
+        :class="`video__preview ${isError ? 'video__error':''}`"
         v-on:click="openHandler"
+        v-on:error="errorHandler"
     />
     <video
         muted
         ref="videoElement"
         class="video__player"
         v-on:click="openHandler"
+        v-on:error="errorHandler"
+
     />
     <div v-if="index" class="number">{{ index }}</div>
 
@@ -125,6 +131,10 @@ onUnmounted(dismount)
     &.active {
       z-index: 2;
     }
+  }
+
+  &__error {
+    background: black;
   }
 }
 

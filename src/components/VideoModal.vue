@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Player, PlayerFactory} from "rbt-player";
+import {Player, PlayerFactory} from "@/lib/player";
 import {onMounted, onUnmounted, ref, StyleValue, watch} from "vue";
 import ArrowIcon from "@/assets/arrowRight.svg?component";
 import useZoom from "@/hooks/useZoom";
@@ -141,8 +141,8 @@ onUnmounted(() => {
     position: relative;
     // z-index: 2;
     display: block;
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
   }
 

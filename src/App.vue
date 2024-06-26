@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import {computed, provide, ref} from "vue";
+import {provide, ref} from "vue";
 import Header from "@/components/Header.vue";
-import {useAddressesStore} from "@/store/addresses";
 import {useUserStore} from "@/store/user";
 import Push from "@/components/Push.vue";
 import Call from "@/components/Call.vue";
 
-const addressesStore = useAddressesStore();
 const userStore = useUserStore();
 
-const isLoaded = computed(() => userStore.isLoaded);
 
 const isMenuOpen = ref(false);
 provide("isMenuOpen", isMenuOpen);

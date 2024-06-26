@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import {provide} from "vue";
-
 import Cameras from "@/components/Cameras.vue";
 import Door from "@/components/Door.vue";
 import Events from "@/components/Events.vue";
