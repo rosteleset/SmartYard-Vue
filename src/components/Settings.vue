@@ -3,14 +3,13 @@ import SettingsDetails from "@/components/SettingsDetails.vue";
 import SettingsNotifications from "@/components/SettingsNotifications.vue";
 import SettingsOther from "@/components/SettingsOther.vue";
 
-
 </script>
 
 <template>
   <div class="container">
-    <SettingsDetails />
-    <SettingsNotifications />
-    <SettingsOther />
+    <SettingsDetails/>
+    <SettingsNotifications/>
+    <SettingsOther/>
   </div>
 </template>
 

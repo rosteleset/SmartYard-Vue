@@ -3,6 +3,7 @@ import {Client} from "@/types/user";
 import {defineStore} from "pinia";
 import useApi from "@/hooks/useApi";
 import {useRouter} from "vue-router";
+import {deleteToken} from "@/firebase";
 
 const LOCAL_STORAGE_TOKEN_KEY = "jwt-token";
 
@@ -54,6 +55,7 @@ export const useUserStore = defineStore("user", () => {
 
     const logout = async () => {
         // await request('user/registerPushToken', {pushToken: ""})
+        await deleteToken()
         await setToken("")
         clients.value = []
         isAuth.value = false

@@ -1,5 +1,5 @@
 import {initializeApp} from "firebase/app";
-import {getMessaging, getToken as messagingGetToken} from "firebase/messaging";
+import {deleteToken as messagingDeleteToken, getMessaging, getToken as messagingGetToken} from "firebase/messaging";
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -21,4 +21,10 @@ const getToken = async (registration: ServiceWorkerRegistration) => {
     })
 }
 
-export {getFirebaseApp, getToken};
+const deleteToken = async () => {
+    const messaging = getMessaging(getFirebaseApp());
+
+    return await messagingDeleteToken(messaging)
+}
+
+export {getFirebaseApp, getToken, deleteToken};

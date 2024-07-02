@@ -20,10 +20,10 @@ const status = ref<number>(0);
 const outgoingPhone = ref<string>()
 
 const requestCode = () => {
-  const method = 'sms';
+  // const method = 'sms';
   request('/user/requestCode', {
     userPhone: phone.value,
-    method
+    method: authType
   }).then(r => {
     if (r.data.method === 'sms')
       status.value = 1;
