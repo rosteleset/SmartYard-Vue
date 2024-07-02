@@ -103,7 +103,7 @@ const validate = () => {
       .then((res) => {
         tokenStatus.value = res.status === 204 ? "Valid token" : "Hmm";
         if (res.status === 204) {
-          userStore.load();
+          userStore.setToken(token.value)
         }
       })
       .catch((err: any) => {
