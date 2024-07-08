@@ -33,12 +33,13 @@ export const usePushStore = defineStore("push", () => {
     const addNotification = (payload: MessagePayload) => {
         notifications.value.push(payload)
     }
-    const removeNotification = (notification: MessagePayload) => {
+
+    const removeNotification = (messageId: string) => {
         try {
-        notifications.value = notifications.value.filter(m => m.messageId !== notification.messageId)
+            notifications.value = notifications.value.filter(m => m.messageId !== messageId)
 
         } catch (e) {
-            console.log(e)
+            console.warn(e)
         }
     }
     const setCall = (payload?: MessagePayload) => {
@@ -49,14 +50,14 @@ export const usePushStore = defineStore("push", () => {
         if ('serviceWorker' in navigator) {
             let registration = await navigator.serviceWorker.register(
                 import.meta.env.MODE === 'production' ? 'firebase-messaging-sw.js' : 'dev-sw.js?dev-sw', {
-                    scope: './',
+                    scope: `.${import.meta.env.VITE_BASE_PATH}/`,
                     type: import.meta.env.MODE === 'production' ? 'classic' : 'module'
                 }
             );
 
             const token: string = await getToken(registration)
 
-            await request('user/registerPushToken', {pushToken: token, platform: "android"})
+            await request('user/registerPushToken', {pushToken: token, platform: "web"})
 
             navigator.serviceWorker.addEventListener("message", (event) => {
                 if (event.data.type === "FCM_MESSAGE")

@@ -22,6 +22,7 @@ const useApi = () => {
 
     const onError = (error: AxiosError<any>) => {
         if (error.response?.data?.name && error.response?.data?.message) {
+            const uuid = crypto.randomUUID()
             const notification = {
                 title: error.response.data.name,
                 body: error.response.data.message
@@ -30,8 +31,11 @@ const useApi = () => {
                 notification,
                 from: 'system',
                 collapseKey: '',
-                messageId: crypto.randomUUID(),
+                messageId: uuid,
             })
+            setTimeout(() => {
+                push.removeNotification(uuid)
+            },5000)
         }
     }
 

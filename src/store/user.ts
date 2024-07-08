@@ -8,7 +8,7 @@ import {deleteToken} from "@/firebase";
 const LOCAL_STORAGE_TOKEN_KEY = "jwt-token";
 
 export const useUserStore = defineStore("user", () => {
-    const {get} = useApi();
+    const {get, request} = useApi();
     const router = useRouter();
     const isLoaded = ref(false);
     const isAuth = ref(false);
@@ -54,7 +54,7 @@ export const useUserStore = defineStore("user", () => {
     };
 
     const logout = async () => {
-        // await request('user/registerPushToken', {pushToken: ""})
+        await request('user/registerPushToken', {pushToken: "",platform: "web"})
         await deleteToken()
         await setToken("")
         clients.value = []

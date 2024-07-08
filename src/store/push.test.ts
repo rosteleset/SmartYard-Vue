@@ -50,7 +50,7 @@ describe("push store", () => {
         const payload2 = {messageId: '2', data: {action: 'test2'}, from: 'test', collapseKey: 'test'};
         store.addNotification(payload1);
         store.addNotification(payload2);
-        store.removeNotification(payload1);
+        store.removeNotification(payload1.messageId);
         expect(store.notifications).not.toContainEqual(payload1);
         expect(store.notifications).toContainEqual(payload2);
     })

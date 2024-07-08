@@ -58,6 +58,6 @@ describe('Push', () => {
         const closeIcons = wrapper.findAllComponents(CloseIcon);
 
         await closeIcons[0].trigger('click');
-        expect(pushStore.removeNotification).toHaveBeenCalledWith(pushStore.notifications[0]);
+        expect(pushStore.removeNotification).toHaveBeenCalledWith(pushStore.notifications[0].messageId);
     });
 });
