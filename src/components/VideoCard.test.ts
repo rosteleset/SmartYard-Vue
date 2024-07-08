@@ -14,7 +14,7 @@ const {createPlayer} = vi.hoisted(() => ({
     }),
 }));
 
-vi.mock('rbt-player', () => ({
+vi.mock('@/lib/player', () => ({
     PlayerFactory: {
         createPlayer
     },

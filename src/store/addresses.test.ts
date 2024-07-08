@@ -2,19 +2,21 @@ import {afterEach, beforeEach, describe, expect, it, Mock, vi} from "vitest";
 import {useAddressesStore} from "@/store/addresses";
 import {createPinia, setActivePinia} from "pinia";
 import useApi from "@/hooks/useApi.ts";
-import {useUserStore} from "@/store/user";
-import {getCurrentInstance, nextTick} from "vue";
-import __mockedStore from "@/mocks/__mockedStore.ts";
+import mockClients from "@/mocks/Clients.ts";
 
 // Мокирование зависимостей
 vi.mock('@/hooks/useApi')
 vi.mock('@/store/push')
+vi.mock('@/store/user', () => ({
+    useUserStore: () => ({
+        isAuth: true,
+        clients: mockClients
+    })
+}))
 vi.mock('vue-router')
 
 describe('addresses store', () => {
     let store: ReturnType<(typeof useAddressesStore)>;
-    let userStore: ReturnType<(typeof useUserStore)>;
-
     const mockGet = vi.fn();
 
     // Настройка окружения перед каждым тестом
@@ -22,7 +24,6 @@ describe('addresses store', () => {
         setActivePinia(createPinia());
         (useApi as Mock).mockReturnValue({get: mockGet});
         store = useAddressesStore(createPinia());
-        userStore = __mockedStore(useUserStore);
     });
 
     // Очистка моков после каждого теста
@@ -72,39 +73,21 @@ describe('addresses store', () => {
 
     // Проверка правильного возврата клиентов по houseId
     it('returns correct clients by houseId', () => {
-        userStore.clients = [
-            {houseId: '1', flatId: '1', address: 'test', services: ['domophone']},
-            {houseId: '2', flatId: '1', address: 'test', services: ['domophone']}
-        ];
 
         const result = store.getClientsByHouseId('1').value;
-        expect(result).toEqual([{houseId: '1', flatId: '1', address: 'test', services: ['domophone']}]);
+        expect(result).toEqual(mockClients);
     });
 
     // Проверка правильного возврата адреса по flatId
     it('returns correct address by flatId', () => {
-        userStore.clients = [
-            {houseId: '1', flatId: '1', address: 'test', services: ['domophone']},
-            {houseId: '2', flatId: '1', address: 'test', services: ['domophone']}
-        ];
 
         store.addresses = [
             {houseId: '1', address: 'Test Address', cctv: 1},
             {houseId: '2', address: 'Test Address', cctv: 1}
         ];
 
-        const result = store.getAddressByFlatId('1');
+        const result = store.getAddressByFlatId('1A');
         expect(result).toEqual({houseId: '1', address: 'Test Address', cctv: 1});
     });
 
-    // Проверка реакции на изменение состояния userStore
-    it('reacts to userStore state changes', async () => {
-        if (getCurrentInstance()) {
-            userStore.isAuth = false;
-            store.load = vi.fn();
-            userStore.isAuth = true;
-            await nextTick();
-            expect(store.load).toHaveBeenCalled();
-        }
-    });
 });

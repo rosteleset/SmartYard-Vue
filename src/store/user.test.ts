@@ -8,6 +8,7 @@ import {useRouter} from "vue-router";
 vi.mock('@/hooks/useApi')
 vi.mock('@/store/push')
 vi.mock('vue-router')
+vi.mock('@/firebase')
 
 const LOCAL_STORAGE_TOKEN_KEY = "jwt-token";
 
@@ -15,11 +16,12 @@ describe('users store', () => {
     let store: ReturnType<(typeof useUserStore)>
 
     const mockGet = vi.fn();
+    const mockRequest = vi.fn();
     const mockPush = vi.fn();
 
     beforeEach(() => {
         setActivePinia(createPinia());
-        (useApi as Mock).mockReturnValue({get: mockGet});
+        (useApi as Mock).mockReturnValue({get: mockGet, request: mockRequest});
         (useRouter as Mock).mockReturnValue({push: mockPush});
         store = useUserStore();
     })
