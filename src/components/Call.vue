@@ -27,8 +27,10 @@ interface Call {
 
 const push = usePushStore()
 
+const SERVER_URL = import.meta.env.VITE_SERVER_URL
+
 const call = computed(() => push.call ? {...{}, ...push.call.data} as Call : undefined)
-const image = computed(() => call.value ? `https://rbt-demo.lanta.me/mobile/call/live/${call.value.hash}` : undefined)
+const image = computed(() => call.value ? `${SERVER_URL}/call/live/${call.value.hash}` : undefined)
 </script>
 
 <template>
@@ -36,7 +38,10 @@ const image = computed(() => call.value ? `https://rbt-demo.lanta.me/mobile/call
     <div v-if="call" class="wrap">
       <img :src="image" alt="call" class="image"/>
       <div class="flex">
-        <Button v-if="call.domophoneId" variant="success" @click="openDoor(Number(call.domophoneId))">{{ $t('call.open') }}</Button>
+        <Button v-if="call.domophoneId" variant="success" @click="openDoor(Number(call.domophoneId))">{{
+            $t('call.open')
+          }}
+        </Button>
         <Button variant="error" @click="push.setCall">{{ $t('call.ignore') }}</Button>
       </div>
     </div>
