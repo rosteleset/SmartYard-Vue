@@ -94,14 +94,14 @@ watch(settings, (newSettings) => {
         />
       </template>
       <!-- Для FRSDisabled значение инвертируем -->
-      <template v-if="settings.FRSDisabled !== undefined">
-        {{ $t("settings.FRSDisabled") }}
-        <Switch
-            :modelValue="!convertSettingsBoolean(settings.FRSDisabled)"
-            @update:modelValue="update('FRSDisabled', $event)"
-            :disabled="client?.flatOwner === 'f'"
-        />
-      </template>
+<!--      <template v-if="settings.FRSDisabled !== undefined">-->
+<!--        {{ $t("settings.FRSDisabled") }}-->
+<!--        <Switch-->
+<!--            :modelValue="!convertSettingsBoolean(settings.FRSDisabled)"-->
+<!--            @update:modelValue="update('FRSDisabled', $event)"-->
+<!--            :disabled="client?.flatOwner === 'f'"-->
+<!--        />-->
+<!--      </template>-->
       <template v-if="settings.whiteRabbit !== undefined">
         <div>{{ $t("settings.whiteRabbit") }}</div>
         <Switch
