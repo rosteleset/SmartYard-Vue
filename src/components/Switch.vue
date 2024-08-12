@@ -2,6 +2,7 @@
 const {label} = defineProps<{
   label?: string;
   justify?: string;
+  disabled?: boolean;
 }>();
 
 const model = defineModel<boolean>();
@@ -11,8 +12,8 @@ const model = defineModel<boolean>();
   <div class="toggle-switch__container" :style="justify && { justifyContent: justify }">
     <div v-if="label" class="toggle-switch__label">{{ label }}</div>
     <label class="toggle-switch" :class="{ 'toggle-switch--checked': model }">
-      <input type="checkbox" v-model="model"/>
-      <span class="toggle-switch__slider"></span>
+      <input type="checkbox" v-model="model" :disabled="disabled"/>
+      <span class="toggle-switch__slider" :class="disabled ? 'disabled':''"></span>
     </label>
   </div>
 </template>
@@ -49,6 +50,11 @@ const model = defineModel<boolean>();
     background-color: #ccc;
     transition: 0.4s;
     border-radius: 34px;
+
+    &.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
 
     &:before {
       position: absolute;
