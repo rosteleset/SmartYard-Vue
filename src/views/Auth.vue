@@ -7,6 +7,7 @@ import {useUserStore} from "@/store/user.ts";
 import {useRouter} from "vue-router";
 import generateDeviceId from "@/lib/generateDeviceId.ts";
 import debounce from "@/lib/debounce.ts";
+import QrCode from "@/components/QrCode.vue";
 
 const authType = import.meta.env.VITE_AUTH_TYPE
 const userStore = useUserStore()
@@ -74,8 +75,6 @@ const handler = (e: Event) => {
   }
 }
 
-// const checkAuth = () => {}
-
 watch(userStore, store => {
   if (store.isAuth)
     router.push('/addresses')
@@ -87,15 +86,6 @@ const {axiosInstance} = useApi();
 const tokenStatus = ref<string>();
 const inputType = ref("password");
 const token = ref("")
-// const tt = computed({
-//   get() {
-//     return userStore.token || "";
-//   },
-//   set(value: string) {
-//     debouncedValidate();
-//     userStore.setToken(value);
-//   },
-// });
 
 const validate = () => {
   axiosInstance.value
@@ -114,11 +104,10 @@ const validate = () => {
 
 const debouncedValidate = debounce(validate, 1000);
 
-
-// onMounted(validate);
 </script>
 
 <template>
+
   <template v-if="authType === 'token'">
     <div class="wrap">
       <input
@@ -151,8 +140,12 @@ const debouncedValidate = debounce(validate, 1000);
       <Button variant="primary">Отправить</Button>
     </template>
     <template v-if="status === 2">
-      <p class="phone">Позвоните на номер: <a :href="`tel:${outgoingPhone}`">{{ outgoingPhone }}</a> для подтверждения
+      <p class="phone">Позвоните на номер: <a :href="`tel:${outgoingPhone}`">{{ outgoingPhone }}</a> или отсканируйте
+        код для подтверждения.
       </p>
+      <div class="qr">
+        <QrCode :text="`tel:${outgoingPhone}`"/>
+      </div>
       <Button variant="primary">Продолжить</Button>
     </template>
   </form>
@@ -175,6 +168,12 @@ const debouncedValidate = debounce(validate, 1000);
   .phone {
     text-align: center;
     font-size: 24px;
+  }
+
+  .qr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>
