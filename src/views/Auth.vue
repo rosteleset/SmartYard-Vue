@@ -141,7 +141,6 @@ const debouncedValidate = debounce(validate, 1000);
     </div>
   </template>
   <form v-else class="wrap" @submit="handler">
-    <p>{{ phone }}</p>
     <PhoneInput v-model="phone" :disabled="status !== 0"/>
     <Button v-if="status === 0" variant="primary">Запросить код</Button>
     <template v-if="status === 1">
