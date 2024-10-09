@@ -8,7 +8,6 @@ import Button from "@/components/Button.vue";
 import Switch from "@/components/Switch.vue";
 import convertSettingsBoolean from "@/lib/convertSettingsBoolean";
 import {useRouter} from "vue-router";
-import {useUserStore} from "@/store/user.ts";
 
 // определение свойств
 const {flatId} = defineProps<{
@@ -17,10 +16,7 @@ const {flatId} = defineProps<{
 
 // использование настроек
 const {settings, save} = useSettings(flatId);
-const {clients} = useUserStore()
 const router = useRouter();
-
-const client = computed(() => clients.find(client => client.flatId === flatId))
 
 // установка значения doorCode
 const doorCode = ref(settings.value?.doorCode);
@@ -93,15 +89,7 @@ watch(settings, (newSettings) => {
             @update:modelValue="update('VoIP', $event)"
         />
       </template>
-      <!-- Для FRSDisabled значение инвертируем -->
-<!--      <template v-if="settings.FRSDisabled !== undefined">-->
-<!--        {{ $t("settings.FRSDisabled") }}-->
-<!--        <Switch-->
-<!--            :modelValue="!convertSettingsBoolean(settings.FRSDisabled)"-->
-<!--            @update:modelValue="update('FRSDisabled', $event)"-->
-<!--            :disabled="client?.flatOwner === 'f'"-->
-<!--        />-->
-<!--      </template>-->
+
       <template v-if="settings.whiteRabbit !== undefined">
         <div>{{ $t("settings.whiteRabbit") }}</div>
         <Switch
