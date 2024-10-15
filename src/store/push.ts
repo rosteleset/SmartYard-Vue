@@ -8,8 +8,10 @@ import {useUserStore} from "@/store/user";
 export const usePushStore = defineStore("push", () => {
     const userStore = useUserStore();
     const {request} = useApi();
+
     const firebaseApp = getFirebaseApp();
-    const messaging = getMessaging(firebaseApp);
+    const isSecureOrLocalhost = window.location.protocol === 'https:' || window.location.hostname === 'localhost';
+    const messaging = (isSecureOrLocalhost ? getMessaging(firebaseApp) : null);
 
     const notifications = ref<MessagePayload[]>([])
     const call = ref<MessagePayload>()
@@ -47,24 +49,29 @@ export const usePushStore = defineStore("push", () => {
     }
 
     const load = async () => {
-        if ('serviceWorker' in navigator) {
-            let registration = await navigator.serviceWorker.register(
-                import.meta.env.MODE === 'production' ? 'firebase-messaging-sw.js' : 'dev-sw.js?dev-sw', {
-                    scope: `.${import.meta.env.VITE_BASE_PATH}/`,
-                    type: import.meta.env.MODE === 'production' ? 'classic' : 'module'
-                }
-            );
+        try {
+            if ('serviceWorker' in navigator) {
+                let registration = await navigator.serviceWorker.register(
+                    import.meta.env.MODE === 'production' ? 'firebase-messaging-sw.js' : 'dev-sw.js?dev-sw', {
+                        scope: `.${import.meta.env.VITE_BASE_PATH}/`,
+                        type: import.meta.env.MODE === 'production' ? 'classic' : 'module'
+                    }
+                );
 
-            const token: string = await getToken(registration)
+                const token: string = await getToken(registration)
 
-            await request('user/registerPushToken', {pushToken: token, platform: "web"})
+                await request('user/registerPushToken', {pushToken: token, platform: "web"})
 
-            navigator.serviceWorker.addEventListener("message", (event) => {
-                if (event.data.type === "FCM_MESSAGE")
-                    onPush(event.data.msg)
-            });
-            window.addEventListener("focus", () => onFocus(registration));
-            onMessage(messaging, onPush);
+                navigator.serviceWorker.addEventListener("message", (event) => {
+                    if (event.data.type === "FCM_MESSAGE")
+                        onPush(event.data.msg)
+                });
+                window.addEventListener("focus", () => onFocus(registration));
+                if (messaging !== null)
+                    onMessage(messaging, onPush);
+            }
+        } catch (e) {
+            console.warn(e)
         }
     }
 

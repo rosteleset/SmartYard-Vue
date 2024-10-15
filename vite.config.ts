@@ -30,6 +30,7 @@ export default defineConfig(({mode}) => {
                 srcDir: "src",
                 filename: "firebase-messaging-sw.ts",
                 strategies: "injectManifest",
+                scope:BASE_PATH,
                 injectRegister: false,
                 manifest: false,
                 injectManifest: {
