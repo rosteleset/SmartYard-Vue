@@ -98,7 +98,7 @@ onUnmounted(() => {
           :player="player"
           :videoElement="videoElement"
           :range="currentRange"
-          @pause="player?.pause()"
+          @pause="playPause"
       />
       <SpeedControl v-if="videoElement" :videoElement="videoElement"/>
       <div class="info" :class="{ open: isOpenInfo }">

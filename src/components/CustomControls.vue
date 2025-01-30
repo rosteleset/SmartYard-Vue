@@ -4,6 +4,8 @@ import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 import PlayIcon from "../assets/play.svg?component";
 import SettingsIcon from "../assets/settings.svg?component";
 import {FormatedRange} from "../types/camera";
+import DoubleRangeSlider from "@/components/DoubleRangeSlider.vue";
+
 
 // Определение свойств
 const {videoElement, range} = defineProps<{
@@ -18,9 +20,10 @@ const minValue = 0;
 const stepValue = 1;
 const currentTime = ref(minValue);
 const isDraggable = ref(false);
+const downloadMode = ref(false)
 
 // Обработчики событий
-watch(range, () => {
+watch(()=>range, () => {
   currentTime.value = minValue;
 });
 watch(
@@ -49,11 +52,10 @@ const progress = computed(() => {
 
 const handleSliderInput = () => {
   if (range) {
-    const newTime = Math.min(
+    videoElement.currentTime = Math.min(
         maxValue.value,
         Math.max(minValue, currentTime.value)
     );
-    videoElement.currentTime = newTime;
   }
 };
 
@@ -82,7 +84,10 @@ onUnmounted(() => {
     <button class="button" @click="emits('pause')">
       <PlayIcon/>
     </button>
-    <div class="wrap">
+    <div v-if="downloadMode" class="wrap">
+      <DoubleRangeSlider :maxValue="range.from + range.duration"/>
+    </div>
+    <div v-if="!downloadMode" class="wrap">
       <input
           type="range"
           class="custom-slider"
@@ -105,7 +110,7 @@ onUnmounted(() => {
         {{ dayjs(range.date).add(currentTime, "seconds").format("HH:mm:ss") }}
       </div>
     </div>
-    <button class="button">
+    <button class="button no-border" @click="downloadMode = !downloadMode">
       <SettingsIcon/>
     </button>
   </div>
@@ -213,6 +218,9 @@ onUnmounted(() => {
       fill: #298bff;
       widows: unset;
       height: unset;
+    }
+    &.no-border {
+      border:none;
     }
   }
 
