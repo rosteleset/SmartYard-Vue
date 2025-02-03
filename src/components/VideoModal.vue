@@ -98,6 +98,7 @@ onUnmounted(() => {
           :player="player"
           :videoElement="videoElement"
           :range="currentRange"
+          :camera="camera"
           @pause="playPause"
       />
       <SpeedControl v-if="videoElement" :videoElement="videoElement"/>

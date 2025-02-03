@@ -2,18 +2,26 @@
 import dayjs from "dayjs";
 import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 import PlayIcon from "../assets/play.svg?component";
-import SettingsIcon from "../assets/settings.svg?component";
-import {FormatedRange} from "../types/camera";
-import DoubleRangeSlider from "@/components/DoubleRangeSlider.vue";
+import DownloadIcon from "../assets/download.svg?component";
+import CloseIcon from "../assets/close.svg?component";
+import {Camera, FormatedRange} from "../types/camera";
+import DownloadSlider from "@/components/DownloadSlider.vue";
+import useApi from "@/hooks/useApi.ts";
+import {usePushStore} from "@/store/push.ts";
 
 
 // Определение свойств
-const {videoElement, range} = defineProps<{
+const {videoElement, camera, range} = defineProps<{
   videoElement: HTMLVideoElement;
+  camera: Camera;
   range: FormatedRange;
 }>();
 
 const emits = defineEmits(["pause"]);
+
+const api = useApi()
+const push = usePushStore()
+
 
 // Константы
 const minValue = 0;
@@ -23,15 +31,9 @@ const isDraggable = ref(false);
 const downloadMode = ref(false)
 
 // Обработчики событий
-watch(()=>range, () => {
+watch(() => range, () => {
   currentTime.value = minValue;
 });
-watch(
-    () => videoElement.currentTime,
-    (newTime) => {
-      currentTime.value = newTime;
-    }
-);
 
 // Вычисляемые свойства
 const maxValue = computed(() => {
@@ -69,6 +71,10 @@ const onDragEnd = () => {
 
 const updateTime = () => {
   if (!isDraggable.value) currentTime.value = videoElement.currentTime;
+  if (downloadMode.value) {
+    if (currentTime.value >= downloadEnd.value || currentTime.value <= downloadStart.value)
+      videoElement.currentTime = downloadStart.value;
+  }
 };
 
 onMounted(() => {
@@ -78,6 +84,44 @@ onMounted(() => {
 onUnmounted(() => {
   videoElement.removeEventListener("timeupdate", updateTime);
 });
+
+const downloadStart = ref(0)
+const downloadEnd = ref(range?.duration)
+
+const openDownload = () => {
+  if (!downloadMode.value) {
+    downloadStart.value = currentTime.value;
+    downloadEnd.value = currentTime.value + (60 * 10);
+    downloadMode.value = true;
+  } else {
+    downloadMode.value = false;
+  }
+}
+
+const downloadHandler = () => {
+  const from = dayjs(range.date).add(downloadStart.value, "second").format("YYYY-MM-DD HH:mm:ss");
+  const to = dayjs(range.date).add(downloadEnd.value, "second").format("YYYY-MM-DD HH:mm:ss");
+
+  api.get('/cctv/recPrepare', {id: camera.id, from, to})
+      .then(res => api.get('/cctv/recDownload', {id: res}))
+      .then(res => {
+        console.log(res)
+        const uuid = crypto.randomUUID()
+        const notification = {
+          title: "Видео готовится",
+          body: "Как только процесс закончится, вам придет сообщение в чат. В зависимости от длины видео процесс загрузки может занять от нескольких минут до нескольких часов."
+        }
+        push.addNotification({
+          notification,
+          from: 'system',
+          collapseKey: '',
+          messageId: uuid,
+        })
+        setTimeout(() => {
+          push.removeNotification(uuid)
+        }, 5000)
+      })
+}
 </script>
 <template>
   <div class="custom-controls">
@@ -85,7 +129,13 @@ onUnmounted(() => {
       <PlayIcon/>
     </button>
     <div v-if="downloadMode" class="wrap">
-      <DoubleRangeSlider :maxValue="range.from + range.duration"/>
+      <DownloadSlider
+          :range="range"
+          :lowerValue="downloadStart"
+          :upperValue="downloadEnd"
+          @update:lowerValue="val => downloadStart = val"
+          @update:upperValue="val => downloadEnd = val"
+      />
     </div>
     <div v-if="!downloadMode" class="wrap">
       <input
@@ -110,8 +160,12 @@ onUnmounted(() => {
         {{ dayjs(range.date).add(currentTime, "seconds").format("HH:mm:ss") }}
       </div>
     </div>
-    <button class="button no-border" @click="downloadMode = !downloadMode">
-      <SettingsIcon/>
+    <button v-if="downloadMode" class="button no-border" @click="downloadHandler">
+      <DownloadIcon/>
+    </button>
+    <button class="button no-border" @click="openDownload">
+      <DownloadIcon v-if="!downloadMode"/>
+      <CloseIcon v-else/>
     </button>
   </div>
 </template>
@@ -219,8 +273,9 @@ onUnmounted(() => {
       widows: unset;
       height: unset;
     }
+
     &.no-border {
-      border:none;
+      border: none;
     }
   }
 

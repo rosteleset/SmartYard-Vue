@@ -49,7 +49,7 @@ const handler = (notification: MessagePayload) => {
   padding: 24px;
   border-radius: 12px;
   margin-bottom: 12px;
-  min-width: 300px;
+  width: 300px;
   box-shadow: 0 0 12px 3px var(--color-background);
   cursor: pointer;
 

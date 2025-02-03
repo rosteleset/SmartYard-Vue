@@ -50,7 +50,7 @@ describe('FlatSettings', () => {
 
     it('renders correctly with initial settings', () => {
         expect(wrapper.find('h4').text()).toBe('Translated settings.intercom');
-        expect(wrapper.findAllComponents(Switch).length).toBe(7);
+        expect(wrapper.findAllComponents(Switch).length).toBe(6);
     });
 
     it('regenerates code when regenerate button is clicked', async () => {

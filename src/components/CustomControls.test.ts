@@ -4,6 +4,11 @@ import {beforeEach, describe, expect, it, vi} from 'vitest'
 import CustomControls from '@/components/CustomControls.vue'
 import dayjs from 'dayjs'
 import {mockFormatedRanges} from "@/mocks/Streams.ts";
+import {mockCameras} from "@/mocks/Cameras.ts";
+
+const mockPushStore = {
+    addNotification: vi.fn()
+}
 
 // Mock the icons
 vi.mock('../assets/play.svg?component', () => ({
@@ -20,6 +25,13 @@ vi.mock('../assets/settings.svg?component', () => ({
     },
 }))
 
+vi.mock('@/store/push', () => ({
+    usePushStore: () => mockPushStore
+}))
+
+vi.mock('@/hooks/useApi.ts');
+
+
 describe('CustomControls', () => {
     let videoElementMock: HTMLVideoElement
 
@@ -35,6 +47,7 @@ describe('CustomControls', () => {
         const wrapper = mount(CustomControls, {
             props: {
                 videoElement: videoElementMock,
+                camera:mockCameras[0],
                 range,
             },
         })
@@ -46,6 +59,8 @@ describe('CustomControls', () => {
         const wrapper = mount(CustomControls, {
             props: {
                 videoElement: videoElementMock,
+                camera:mockCameras[0],
+
                 range,
             },
         })
@@ -59,6 +74,8 @@ describe('CustomControls', () => {
         const wrapper = mount(CustomControls, {
             props: {
                 videoElement: videoElementMock,
+                camera:mockCameras[0],
+
                 range,
             },
         });
@@ -75,6 +92,8 @@ describe('CustomControls', () => {
         const wrapper = mount(CustomControls, {
             props: {
                 videoElement: videoElementMock,
+                camera:mockCameras[0],
+
                 range,
             },
         })
@@ -90,6 +109,8 @@ describe('CustomControls', () => {
         const wrapper = mount(CustomControls, {
             props: {
                 videoElement: videoElementMock,
+                camera:mockCameras[0],
+
                 range,
             },
         })
