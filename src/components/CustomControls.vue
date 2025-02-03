@@ -247,6 +247,7 @@ const downloadHandler = () => {
     border-radius: 12px;
     opacity: 0;
     transition: opacity 0.5s ease;
+    font-size: 12px;
 
     &.visible {
       opacity: 1;

@@ -235,7 +235,6 @@ const getTime = (value: number) => {
   top: -42px; /* Расстояние над слайдером */
   transform: translateX(-50%);
   background-color: var(--color-background, #000);
-  color: #fff;
   padding: 6px;
   border-radius: 12px;
   font-size: 12px;
