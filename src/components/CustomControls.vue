@@ -8,6 +8,7 @@ import {Camera, FormatedRange} from "../types/camera";
 import DownloadSlider from "@/components/DownloadSlider.vue";
 import useApi from "@/hooks/useApi.ts";
 import {usePushStore} from "@/store/push.ts";
+import useLocale from "@/hooks/useLocale.ts";
 
 
 // Определение свойств
@@ -21,7 +22,7 @@ const emits = defineEmits(["pause"]);
 
 const api = useApi()
 const push = usePushStore()
-
+const {t} = useLocale();
 
 // Константы
 const minValue = 0;
@@ -108,8 +109,8 @@ const downloadHandler = () => {
         console.log(res)
         const uuid = crypto.randomUUID()
         const notification = {
-          title: "Видео готовится",
-          body: "Как только процесс закончится, вам придет сообщение в чат. В зависимости от длины видео процесс загрузки может занять от нескольких минут до нескольких часов."
+          title: t('global.video_in_progress'),
+          body: t('global.video_in_progress_description'),
         }
         push.addNotification({
           notification,

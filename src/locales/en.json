@@ -1,6 +1,8 @@
 {
   "global": {
-    "more": "Expand"
+    "more": "Expand",
+    "video_in_progress": "Video in progress",
+    "video_in_progress_description": "As soon as the process is over, you will receive a message in the chat. Depending on the length of the video, the download process can take anywhere from a few minutes to several hours."
   },
   "addresses": {
     "cameras": "Cameras",
@@ -41,14 +43,21 @@
     "reset-code": "Reset code",
     "guest-access": "guest access for an hour",
     "frs": "Face control",
-    "details": "contact details",
+    "details": "Contact details",
     "name": "name",
     "patronymic": "patronymic",
     "phone": "phone",
     "save": "Save",
-    "notifications": "notifications",
+    "notifications": "Notifications",
     "show-notifications": "Show notifications",
-    "show-money-notifications": "Notify of low funds"
+    "show-money-notifications": "Notify of low funds",
+    "other": "Application settings",
+    "language": "Language",
+    "theme": "Theme",
+    "cols": "Number of columns",
+    "logout": "Logout",
+    "watchmanMode": "Watchman mode",
+    "always_menu": "Permanent menu"
   },
   "routes": {
     "AddressesList": "Addresses",
@@ -64,5 +73,15 @@
   "locales": {
     "ru": "Russian",
     "en": "English"
+  },
+  "themes": {
+    "auto": "Auto",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "call": {
+    "answer": "Answer",
+    "ignore": "Ignore",
+    "open": "Open"
   }
 }
