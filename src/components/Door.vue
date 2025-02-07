@@ -18,14 +18,16 @@ const iconMap: Record<Domophone["icon"], FunctionalComponent> = {
 const Icon = computed(() => iconMap[props.data.icon]);
 
 const handlerOpen = () => {
-  openDoor(props.data.domophoneId);
+  console.log(props.data);
+  
+  openDoor(props.data.domophoneId, props.data.doorId);
 };
 </script>
 
 <template>
   <div class="door">
     <div class="door__icon">
-      <Icon class="icon"/>
+      <Icon class="icon" />
     </div>
     <div class="door__label">{{ props.data.name }}</div>
     <button @click="handlerOpen">{{ $t("addresses.open") }}</button>
@@ -69,7 +71,8 @@ const handlerOpen = () => {
     }
   }
 }
+
 .icon {
-    fill: var(--color-text);
+  fill: var(--color-text);
 }
 </style>

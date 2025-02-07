@@ -1,14 +1,14 @@
-import {getCurrentInstance, onMounted, ref} from "vue";
-import {Client} from "@/types/user";
-import {defineStore} from "pinia";
+import { getCurrentInstance, onMounted, ref } from "vue";
+import { Client } from "@/types/user";
+import { defineStore } from "pinia";
 import useApi from "@/hooks/useApi";
-import {useRouter} from "vue-router";
-import {deleteToken} from "@/firebase";
+import { useRouter } from "vue-router";
+import { deleteToken } from "@/firebase";
 
 const LOCAL_STORAGE_TOKEN_KEY = "jwt-token";
 
 export const useUserStore = defineStore("user", () => {
-    const {get, request} = useApi();
+    const { get, request } = useApi();
     const router = useRouter();
     const isLoaded = ref(false);
     const isAuth = ref(false);
@@ -54,8 +54,9 @@ export const useUserStore = defineStore("user", () => {
     };
 
     const logout = async () => {
-        await request('user/registerPushToken', {pushToken: "",platform: "web"})
-        await deleteToken()
+        await request('user/registerPushToken', { pushToken: "", platform: "web" })
+        deleteToken()
+            .catch(e => console.warn(e))
         await setToken("")
         clients.value = []
         isAuth.value = false
