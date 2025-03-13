@@ -1,6 +1,13 @@
 # Smartyard Web
 
-Smartyard Web - это веб-приложение, построенное с использованием Vue.js для [вашей цели]. Этот README содержит информацию о том, как настроить проект и другие соответствующие детали.
+Smartyard Web - это веб-версия приложения "Теледом"
+
+### Главный экран 
+![screenshot_1](/screenshots/screenshot_1.png?raw=true)
+![screenshot_1](/screenshots/screenshot_2.png?raw=true)
+### Камеры 
+![screenshot_1](/screenshots/screenshot_3.png?raw=true)
+![screenshot_1](/screenshots/screenshot_4.png?raw=true)
 
 ## Содержание
 - [Установка](#установка)
