@@ -103,9 +103,9 @@ npm run dev
 - `VITE_BASE_PATH`: Базовый путь, который используется для префикса всех маршрутов. 
 - `VITE_SERVER_URL`: URL сервера для выполнения API запросов.
 - `VITE_TMP_TOKEN`: Временный токен для аутентификации.
-- `VITE_TILE_SERVER`: URL сервера тайлов.
 - `VITE_CRS`: Система координат.
 - `VITE_DEFAULT_LOCALE`: Язык по умолчанию для приложения.
+- `VITE_AUTH_TYPE` : Тип авторизации (`outgoingCall`, `sms` или `token`)
 - `VITE_DEV_PROXY_TARGET`: полный url для проксирования запросов в dev моде 
 - `VITE_DEV_PROXY_PREFIX`: префикс для проксирования запросов в dev моде
 
