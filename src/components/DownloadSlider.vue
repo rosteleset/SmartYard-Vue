@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue';
 import { FormatedRange } from "@/types/camera.ts";
 import dayjs from "dayjs";
+import { computed, ref, watch } from 'vue';
 
 interface Props {
   range: FormatedRange;
