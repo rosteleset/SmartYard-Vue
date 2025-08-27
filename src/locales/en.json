@@ -63,7 +63,8 @@
     "AddressesList": "Addresses",
     "Settings": "Settings",
     "CityCameras": "Cameras",
-    "Chat": "Notifications"
+    "Chat": "Notifications",
+    "Auth": ""
   },
   "faces": {
     "delete-face": "Delete this face",

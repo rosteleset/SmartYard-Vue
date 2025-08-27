@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import {ref, watch} from "vue";
+import { onMounted, ref, watch } from "vue";
 import Button from "@/components/Button.vue";
 import PhoneInput from "@/components/PhoneInput.vue";
 import useApi from "@/hooks/useApi.ts";
-import {useUserStore} from "@/store/user.ts";
-import {useRouter} from "vue-router";
+import { useUserStore } from "@/store/user.ts";
+import { useRouter } from "vue-router";
 import generateDeviceId from "@/lib/generateDeviceId.ts";
 import debounce from "@/lib/debounce.ts";
 import QrCode from "@/components/QrCode.vue";
 
 const authType = import.meta.env.VITE_AUTH_TYPE
 const userStore = useUserStore()
-const {request} = useApi()
+const { request } = useApi()
 
 const router = useRouter();
 
@@ -19,6 +19,7 @@ const phone = ref<string>("")
 const code = ref<string>("")
 const status = ref<number>(0);
 const outgoingPhone = ref<string>()
+const mask = ref<string>("")
 
 const requestCode = () => {
   // const method = 'sms';
@@ -81,7 +82,7 @@ watch(userStore, store => {
 })
 
 // for token
-const {axiosInstance} = useApi();
+const { axiosInstance } = useApi();
 
 const tokenStatus = ref<string>();
 const inputType = ref("password");
@@ -89,20 +90,28 @@ const token = ref("")
 
 const validate = () => {
   axiosInstance.value
-      .post("user/ping", {}, {headers: {Authorization: `Bearer ${token.value}`}})
-      .then((res) => {
-        tokenStatus.value = res.status === 204 ? "Valid token" : "Hmm";
-        if (res.status === 204) {
-          userStore.setToken(token.value)
-        }
-      })
-      .catch((err: any) => {
-        tokenStatus.value =
-            err.response.status === 401 ? "Invalid token" : "Server error";
-      });
+    .post("user/ping", {}, { headers: { Authorization: `Bearer ${token.value}` } })
+    .then((res) => {
+      tokenStatus.value = res.status === 204 ? "Valid token" : "Hmm";
+      if (res.status === 204) {
+        userStore.setToken(token.value)
+      }
+    })
+    .catch((err: any) => {
+      tokenStatus.value =
+        err.response.status === 401 ? "Invalid token" : "Server error";
+    });
 };
 
 const debouncedValidate = debounce(validate, 1000);
+
+onMounted(() => {
+  axiosInstance.value
+    .post('/user/phonePattern')
+    .then(res => {
+      mask.value = res.data.data || "+7 ### ###-##-##"
+    })
+});
 
 </script>
 
@@ -110,33 +119,19 @@ const debouncedValidate = debounce(validate, 1000);
 
   <template v-if="authType === 'token'">
     <div class="wrap">
-      <input
-          :type="inputType"
-          v-model="token"
-          @focusin="inputType = 'text'"
-          @focusout="inputType = 'password'"
-          @input="debouncedValidate"
-      />
-      <Button
-          v-if="tokenStatus"
-          :variant="tokenStatus === 'Valid token' ? 'success' : 'error'"
-      >{{ tokenStatus }}
-      </Button
-      >
-      <Button v-if="tokenStatus === 'Valid token'" @click="router.push('/addresses')" variant="primary"
-      >К адресам
-      </Button
-      >
+      <input :type="inputType" v-model="token" @focusin="inputType = 'text'" @focusout="inputType = 'password'"
+        @input="debouncedValidate" />
+      <Button v-if="tokenStatus" :variant="tokenStatus === 'Valid token' ? 'success' : 'error'">{{ tokenStatus }}
+      </Button>
+      <Button v-if="tokenStatus === 'Valid token'" @click="router.push('/addresses')" variant="primary">К адресам
+      </Button>
     </div>
   </template>
   <form v-else class="wrap" @submit="handler">
-    <PhoneInput v-model="phone" :disabled="status !== 0"/>
+    <PhoneInput v-model="phone" :disabled="status !== 0" :mask="mask" />
     <Button v-if="status === 0" variant="primary">Запросить код</Button>
     <template v-if="status === 1">
-      <input
-          v-model="code"
-          placeholder="Код"
-      />
+      <input v-model="code" placeholder="Код" />
       <Button variant="primary">Отправить</Button>
     </template>
     <template v-if="status === 2">
@@ -144,7 +139,7 @@ const debouncedValidate = debounce(validate, 1000);
         код для подтверждения.
       </p>
       <div class="qr">
-        <QrCode :text="`tel:${outgoingPhone}`"/>
+        <QrCode :text="`tel:${outgoingPhone}`" />
       </div>
       <Button variant="primary">Продолжить</Button>
     </template>

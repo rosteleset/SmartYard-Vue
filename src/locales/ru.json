@@ -65,7 +65,8 @@
     "AddressesList": "Адреса",
     "Settings": "Настройки",
     "CityCameras": "Камеры",
-    "Chat": "Уведомления"
+    "Chat": "Уведомления",
+    "Auth": ""
   },
   "faces": {
     "delete-face": "Удалить это лицо",

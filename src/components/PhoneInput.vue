@@ -1,70 +1,28 @@
 <script setup lang="ts">
-import {defineEmits, defineProps, ref, watch} from 'vue';
+import { defineEmits, defineProps } from 'vue';
+import { vMaska } from 'maska/vue';
 
-const props = defineProps<{ modelValue: string }>();
+const props = defineProps<{ modelValue: string, mask: string }>();
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>();
 
-const replace = (value: string) => {
-  let result = value.replace(/\D/g, ''); // Удалить все, кроме цифр
-  result = result.slice(0, 11); // Ограничить количество символов 11 цифрами
-  return result;
-}
 
-const applyMask = (event: Event) => {
-  const value = (event.target as HTMLInputElement).value;
-  phone.value = formatPhone(value);
-  emit('update:modelValue', replace(phone.value));
+const onInput = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  const unmaskedValue = input.value.replace(/\D/g, '');
+  emit('update:modelValue', unmaskedValue);
 };
-
-const formatPhone = (value: string) => {
-  let result = replace(value);
-
-  // Применить маску +7 (###) ###-##-##
-  if (result.length > 1) {
-    if (result.startsWith('8')) {
-      result = '7' + result.slice(1);
-    }
-    if (result.length === 2 && result[0] !== '7')
-      result = '+7 ' + result;
-    else
-      result = '+7 ' + result.slice(1);
-  }
-  if (result.length > 3) {
-    result = result.slice(0, 2) + ' (' + result.slice(3);
-  }
-  if (result.length > 7) {
-    result = result.slice(0, 7) + ') ' + result.slice(7);
-  }
-  if (result.length > 12) {
-    result = result.slice(0, 12) + '-' + result.slice(12);
-  }
-  if (result.length > 15) {
-    result = result.slice(0, 15) + '-' + result.slice(15);
-  }
-
-  return result
-}
-
-const phone = ref(formatPhone(props.modelValue));
-
-watch(props, (newValue) => {
-  if (replace(newValue.modelValue) !== replace(phone.value)) {
-    const formatedValue = formatPhone(newValue.modelValue)
-    phone.value = formatedValue;
-    emit('update:modelValue', replace(formatedValue));
-  }
-});
-
 </script>
 
 <template>
-  <input
-      v-model="phone"
-      @input="applyMask"
-      placeholder="+7 (XXX) XXX-XX-XX"
-      v-bind="props"
-  />
+  <input v-model="props.modelValue" v-maska="mask" @input="onInput" :placeholder="mask" class="phone-input" />
 </template>
 
 <style scoped lang="scss">
+.phone-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  font-size: 16px;
+}
 </style>

@@ -7,7 +7,8 @@ describe('PhoneInput', () => {
     it('formats input value correctly', async () => {
         const wrapper = mount(PhoneInput, {
             props: {
-                modelValue: ''
+                modelValue: '',
+                mask:"+7 ### ###-##-##"
             }
         });
 
@@ -21,7 +22,8 @@ describe('PhoneInput', () => {
     it('emits update:modelValue with correct value', async () => {
         const wrapper = mount(PhoneInput, {
             props: {
-                modelValue: ''
+                modelValue: '',
+                mask:"+7 ### ###-##-##"
             }
         });
 
@@ -37,7 +39,8 @@ describe('PhoneInput', () => {
     it('initializes with correct formatted value', async () => {
         const wrapper = mount(PhoneInput, {
             props: {
-                modelValue: '71234567890'
+                modelValue: '71234567890',
+                mask:"+7 ### ###-##-##"
             }
         });
 
