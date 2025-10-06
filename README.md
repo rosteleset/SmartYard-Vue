@@ -57,28 +57,52 @@ npm run dev
 
 Это запустит сервер разработки, предоставленный Vite.
 
-#### NGINX
+## Разворачивание на сервере
 
-Конфигурация Nginx 
+### 1. Сборка проекта
+
+Для подготовки сборки выполните команду:
+
+```
+npm run build
+```
+
+После этого в папке `dist` появится готовая версия приложения для продакшена.
+
+### 2. Загрузка файлов на сервер
+
+Скопируйте содержимое папки `dist` на ваш сервер. Например, с помощью `scp`:
+
+```
+scp -r dist/* user@your_server:/var/www/smartyard
+```
+
+#### 3. Настройка Nginx
+
+Пример конфигурации для домена:
 
 ```
 server {
     listen 80;
     server_name your_domain.com;
 
-    root /path/to/your/parent/directory;
+    root /var/www/smartyard;
     index index.html;
-    
+
     location / {
         try_files $uri $uri/ /index.html;
     }
 }
-```
-Конфигурация Nginx для вложенной директории 
 
 ```
-location /nested_directory {
-    try_files $uri $uri/ /nested_directory/index.html;
+Если приложение разворачивается в поддиректории,  используйте переменную окружения `VITE_BASE_PATH`.
+
+Пример конфигурации для вложенной директории:
+
+```
+location /smart {
+    root /var/www;
+    try_files $uri $uri/ /smart/index.html;
 }
 ```
 
