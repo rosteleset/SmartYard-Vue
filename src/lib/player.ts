@@ -6,7 +6,7 @@ interface Camera {
     serverType: string;
     hlsMode?: string;
     url: string;
-    token: string;
+    token?: string;
 }
 
 interface PlayerParams {
@@ -35,7 +35,6 @@ abstract class Player {
 
     // Конструктор класса Player
     protected constructor(params: PlayerParams) {
-        if (!params.camera.token) throw new Error("no token"); // Проверка наличия токена у камеры
         this.camera = params.camera;
         this.videoElement = params.videoElement;
         this.previewElement = params.previewElement;
