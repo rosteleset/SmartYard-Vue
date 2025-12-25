@@ -160,7 +160,7 @@ npm run dev
 ### 2) Сгенерируй VAPID ключ (обязательно для Web Push)
 - Project settings → Cloud Messaging → Web configuration.
 - Web Push certificates → **Generate key pair**.
-- Сохрани Public key (VAPID). :contentReference[oaicite:1]{index=1}
+- Сохрани Public key (VAPID).
 
 ### 3) Переменные окружения
 Добавь в `.env`:
