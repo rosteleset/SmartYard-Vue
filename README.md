@@ -149,6 +149,31 @@ npm run dev
 
 2. Заполните переменные окружения в файле .env значениями, соответствующими вашей среде разработки.
 
+## Push-уведомления (Firebase Cloud Messaging)
+
+В проекте используется Firebase Cloud Messaging (FCM) для Web Push.
+
+### 1) Добавь Web App
+- Project settings → General → Your apps → Add app → Web (</>).
+- Скопируй конфиг Firebase (apiKey, authDomain, projectId, messagingSenderId, appId и т.д.).
+
+### 2) Сгенерируй VAPID ключ (обязательно для Web Push)
+- Project settings → Cloud Messaging → Web configuration.
+- Web Push certificates → **Generate key pair**.
+- Сохрани Public key (VAPID). :contentReference[oaicite:1]{index=1}
+
+### 3) Переменные окружения
+Добавь в `.env`:
+
+- `VITE_FIREBASE_API_KEY`
+- `VITE_FIREBASE_AUTH_DOMAIN`
+- `VITE_FIREBASE_PROJECT_ID`
+- `VITE_FIREBASE_STORAGE_BUCKET`
+- `VITE_FIREBASE_MESSAGING_SENDER_ID`
+- `VITE_FIREBASE_APP_ID`
+- `VITE_FIREBASE_VAPID_KEY`
+
+
 ## Зависимости
 
 Smartyard Web использует следующие зависимости:
